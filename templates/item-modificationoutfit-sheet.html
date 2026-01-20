@@ -13,7 +13,7 @@
           {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=data.stats isbase=true title="Modification Stats" header=true}}
 
           <h3>Description</h3>
-          {{editor system.description target="system.description"}}
+          {{editor system.description target="system.description" engine="prosemirror"}}
         </div>
 
     </section>

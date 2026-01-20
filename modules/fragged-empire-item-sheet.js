@@ -97,7 +97,7 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
   async manageTrait( itemId)  {
     let itemData = this.object.system.traits.find( item => item._id == itemId);
     let trait = await Item.create(itemData, {temporary: true});   
-    trait.data.origin = "embeddedItem";
+    trait.origin = "embeddedItem";
     new FraggedEmpireItemSheet(trait).render(true);
     console.log("Trait", trait);
   }
@@ -196,20 +196,21 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
     if (this.object.type == "skill" ) {
       let data = event.dataTransfer.getData('text/plain');
       if (data) {
-        let dataItem = JSON.parse( data);
+        let dataItem = JSON.parse(data);
         let item;
+        console.log(dataItem.uuid.replace('Item.',''));
         if (dataItem.pack) {
-          item = await fromUuid(dataItem.id);
+          item = await fromUuid(dataItem.uuid);
         } else {
-          item = game.items.get(dataItem.id )
+          item = game.items.get(dataItem.uuid.replace('Item.',''));
         }
-        console.log("FOUND TRAIT", item, dataItem.id.length);
-        if ( item.data.type == "trait") {
-          let traitArray = duplicate(this.object.data.data.traits);
-          let newItem = duplicate(item.data);
-          newItem._id = randomID( dataItem.id.length );
+        console.log("FOUND TRAIT", item, dataItem.uuid.length);
+        if ( item.type == "trait") {
+          let traitArray = duplicate(this.object.system.traits);
+          let newItem = foundry.utils.duplicate(item);
+          newItem._id = randomID( dataItem.uuid.length );
           traitArray.push( newItem );
-          await this.object.update( { 'data.traits': traitArray} );     
+          await this.object.update( { 'system.traits': traitArray} );     
         }
       }
     }

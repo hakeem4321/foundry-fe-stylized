@@ -146,10 +146,11 @@
                     <span class="competence-label"><a>{{skill.name}}</a></span>
                     <span class="specialisation-label">{{skill.system.trainedValue}}</span>
                     <span class="specialisation-label">{{skill.system.bonus}}</span>
+                    <span class="specialisation-label">{{skill.system.staticmod}}</span>
                     <span class="specialisation-label">{{skill.system.total}}</span>
                     
                     {{#if skill.system.isTrait}}
-                    <span class="specialisation-label tooltip">Trait
+                    <span class="specialisation-label tooltip">
                       <div class="tooltiptext">
                         {{#each skill.system.traits as |trait idx|}}
                         <span>{{trait.name}}</span>
@@ -181,13 +182,14 @@
                     <span class="competence-label"><a>{{skill.name}}</a></span>
                     <span class="specialisation-label">{{skill.system.trainedValue}}</span>
                     <span class="specialisation-label">{{skill.system.bonus}}</span>
+                    <span class="specialisation-label">{{skill.system.staticmod}}</span>
                     <span class="specialisation-label">{{skill.system.total}}</span>
                     {{#if skill.system.isTrait}}
-                    <span class="specialisation-label tooltip">Trait
+                    <span class="specialisation-label tooltip">
                       <div class="tooltiptext">
                         {{#each skill.system.traits as |trait idx|}}
                         <span>{{trait.name}}</span>
-                        <div>{{{trait.system.description}}}
+                        {{!-- <div>{{{trait.system.description}}} --}}
                         </div>
                         {{/each}}
                       </div>
@@ -207,7 +209,7 @@
 
             <div>
 
-              <h3>Spacehship Combat Skills</h3>
+              <h3>Spaceship Combat Skills</h3>
               <ul class="item-list alterne-list">
 
                 {{> "systems/foundry-fe2/templates/partial-skill-list-header.html"}}
@@ -218,9 +220,10 @@
                     <span class="competence-label"><a>{{skill.name}}</a></span>
                     <span class="specialisation-label">{{skill.system.trainedValue}}</span>
                     <span class="specialisation-label">{{skill.system.bonus}}</span>
+                    <span class="specialisation-label">{{skill.system.staticmod}}</span>
                     <span class="specialisation-label">{{skill.system.total}}</span>
                     {{#if skill.system.isTrait}}
-                    <span class="specialisation-label tooltip">Trait
+                    <span class="specialisation-label tooltip">
                       <div class="tooltiptext">
                         {{#each skill.system.traits as |trait idx|}}
                         <span>{{trait.name}}</span>
@@ -580,15 +583,15 @@
           <hr>
           <h3>Biography : </h3>
           <span class="small-editor item-text-long-line">
-            {{editor system.biosystem.description target="system.biosystem.description"}}
+            {{editor system.biosystem.description target="system.biosystem.description" engine="prosemirror"}}
           </span>
           <hr>
           <h3>Notes : </h3>
           <span class="small-editor item-text-long-line">
-            {{editor system.biosystem.notes target="system.biosystem.notes"}}
+            {{editor system.biosystem.notes target="system.biosystem.notes" engine="prosemirror"}}
           </span>
           <hr>
-          {{>"systems/foundry-fe2/templates/editor-notes-gm.html"}}
+          {{>"systems/foundry-fe2/templates/editor-notes-gm.html" engine="prosemirror"}}
         </article>
       </div>
 

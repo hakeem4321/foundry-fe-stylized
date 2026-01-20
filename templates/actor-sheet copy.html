@@ -694,12 +694,12 @@
           <hr>
           <h3>Biography : </h3>
           <div class="form-group editor">
-            {{editor content=system.description target="system.description"}}
+            {{editor content=system.description target="system.description" engine="prosemirror"}}
           </div>
           <hr>
           <h3>Notes : </h3>
           <div class="form-group editor">
-            {{editor content=system.notes target="system.notes"}}
+            {{editor content=system.notes target="system.notes" engine="prosemirror"}}
           </div>
           <hr>
           {{>"systems/foundry-fe2/templates/editor-notes-gm.html"}}

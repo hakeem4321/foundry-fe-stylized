@@ -666,6 +666,8 @@ export class FraggedEmpireActor extends Actor {
         useDedicatedworkshop: false,
         toolsAvailable: skill.system.toolbox || skill.system.useDedicatedworkshop
       }
+      if (skill.system.staticmod) {rollData.bonusMalus += skill.system.staticmod}
+      if (skill.system.toolbox == true) {rollData.useToolbox = true}
       let rollDialog = await FraggedEmpireRoll.create( this, rollData);
       console.log(rollDialog);
       rollDialog.render( true );

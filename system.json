@@ -12,7 +12,7 @@
     "maximum": 13
   },
   "description": "Fragged Empire 2E system for FoundryVTT",
-  "download": "https://github.com/jkknorr/foundry-fe2/releases/download/0.9/foundry-fe2.zip",
+  "download": "https://github.com/jkknorr/foundry-fe2/releases/latest/download/foundry-fe2.zip",
   "esmodules": [
     "modules/fragged-empire-main.js"
   ],
@@ -27,7 +27,7 @@
       "path": "lang/en.json"
     }
   ],
-  "manifest": "https://gitlab.com/jkknorr/foundry-fe2/raw/master/system.json",
+  "manifest": "https://github.com/jkknorr/foundry-fe2/releases/latest/download/system.json",
   "packs": [
     {
       "entity": "Item",

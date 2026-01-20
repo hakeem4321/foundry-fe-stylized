@@ -24,27 +24,21 @@
             <li class="flexrow"><label class="generic-label">Attribute Boost</label>
               <label class="attribute-value checkbox"><input type="text" name="foo" value="{{system.attribute}}" data-dtype="Number" disabled/></label>
             </li>
-            <li class="flexrow"><label class="generic-label">Bonus</label>
-              <label class="attribute-value checkbox"><input type="text" name="system.bonus" value="{{system.bonus}}" data-dtype="Number"/></label>
+            <li class="flexrow"><label class="generic-label">Static Modifier</label>
+              <label class="attribute-value checkbox"><input type="text" name="system.staticmod" value="{{system.staticmod}}" data-dtype="Number"/></label>
             </li>
-            <li class="flexrow"><label class="generic-label">Toolkit ?</label>
-              <label class="attribute-value checkbox"><input type="checkbox" name="system.toolkit" {{checked system.toolkit}}/></label>
-            </li>
-            <li class="flexrow"><label class="generic-label">Toolbox ?</label>
+            <li class="flexrow"><label class="generic-label">Toolbox?</label>
               <label class="attribute-value checkbox"><input type="checkbox" name="system.toolbox" {{checked system.toolbox}}/></label>
             </li>
-            <li class="flexrow"><label class="generic-label">Workshop ?</label>
+            <li class="flexrow"><label class="generic-label">Workshop?</label>
               <label class="attribute-value checkbox"><input type="checkbox" name="system.workshop" {{checked system.workshop}}/></label>
-            </li>
-            <li class="flexrow"><label class="generic-label">Dedicated Workshop ?</label>
-              <label class="attribute-value checkbox"><input type="checkbox" name="system.dedicatedworkshop" {{checked system.dedicatedworkshop}}/></label>
             </li>
           </ul>
 
             {{> "systems/foundry-fe2/templates/skill-traits-section.html"}}
             
           <h3>Description</h3>
-          {{editor system.description target="system.description"}}
+          {{editor system.description target="system.description" engine="prosemirror"}}
         </div>
 
     </section>
