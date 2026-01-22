@@ -48,7 +48,7 @@
           "current": 0,
           "traitId": ""
         },
-        "movement":{ 
+        "mobility":{ 
           "label": "Mobility",
           "value": 0,
           "current": 0,

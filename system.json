@@ -40,10 +40,20 @@
       ],
       "type": "Item"
     },
-        {
+    {
+      "label": "Fragged Empire 2 Tables",
+      "name": "Fragged-Empire-2-Tables",
+      "path": "./packs/fragged-empire-2-tables",
+      "system": "foundry-fe2",
+      "tags": [
+        "tables"
+      ],
+      "type": "RollTable"
+    },
+    {
       "entity": "Item",
       "label": "Fragged Empire 2 Items",
-      "name": "Fragged Empire 2 Items",
+      "name": "Fragged-Empire-2-Items",
       "path": "./packs/item.db",
       "system": "foundry-fe2",
       "tags": [
@@ -58,6 +68,6 @@
   "styles": ["styles/simple.css"],
   "title": "Fragged Empire 2E",
   "url": "https://gitlab.com/jkknorr/foundry-fe2",
-  "version": "1.0",
+  "version": "1.01",
   "background" : "./systems/foundry-fe2/images/ui/FE_Welcome_Page.webp"
 }

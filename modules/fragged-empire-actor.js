@@ -276,7 +276,7 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   async updateWeaponMunitions(weaponId, newValue) {
-    let item = this.items.find( item => item.id == weaponId );
+    let item = this.items.find( item => item._id == weaponId );
     let update = { _id: item.id, "system.munitions": newValue  };
     await this.updateEmbeddedDocuments('Item',[update]);
   }

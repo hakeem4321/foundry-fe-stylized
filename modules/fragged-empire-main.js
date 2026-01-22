@@ -23,6 +23,15 @@ import { FraggedEmpireCombat } from "./fragged-empire-combat.js";
 /************************************************************************************/
 Hooks.once("init", async function () {
   console.log(`Initializing Fragged Empire`);
+  const compTables = await FraggedEmpireUtility.loadCompendium("foundry-fe2.fragged-empire-2-tables");
+
+  game.settings.register("foundry-fe2", "systemMigrationVersion", {
+      name: "System Migration Version",
+      scope: "world",
+      config: false,
+      type: String,
+      default: ""
+  });
 
   /* -------------------------------------------- */
   // preload handlebars templates
@@ -73,7 +82,7 @@ function welcomeMessage() {
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
 /* -------------------------------------------- */
-Hooks.once("ready", function () {
+Hooks.once("ready", async function () {
 
   FraggedEmpireUtility.ready();
 
@@ -85,6 +94,28 @@ Hooks.once("ready", function () {
       user: game.user._id
     });
   }
+
+  if (foundry.utils.isNewerVersion("1.01", game.settings.get("foundry-fe2", "systemMigrationVersion"))) {
+    for (let actor of game.actors) {
+      try {
+        if (actor.type == 'character') {
+          let updateData = foundry.utils.deepClone(actor.toObject());
+          updateData.system.attributes.mobility = updateData.system.attributes.movement;
+          if (!foundry.utils.isEmpty(updateData)) {
+            await actor.update(updateData, { enforceTypes: false });
+            await actor.update({'system.attributes.-=movement':null})
+          }
+        }
+      } catch (error) {
+        error.message = `Failed migration for Actor ${actor.name}: ${error.message} `;
+        console.error(error);
+      }
+    }
+  }
+
+  await game.settings.set("foundry-fe2", "systemMigrationVersion", game.system.version);
+  ui.notifications.notify(`Migration Complete`);
+
   welcomeMessage();
 });
 

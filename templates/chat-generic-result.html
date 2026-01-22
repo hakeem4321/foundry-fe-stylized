@@ -63,7 +63,7 @@
     <li><strong>Total Roll : {{rollTotal}}</strong>
     <li><strong>Target defense: {{targetDefence}}</strong></li>
     {{#if (gt rollTotal targetDefence)}}<li><strong>Attack lands!</strong></li>
-      {{#if (gt weapon.system.statstotal.enddmg.value targetEnd)}}<li><strong>Endurance 0, Critical Hit or Critical Boost!</strong></li>{{/if}}
+      {{#if (gt totalEndDmg targetEnd)}}<li><strong>Endurance 0, Critical Hit or Critical Boost!</strong></li>{{/if}}
     {{/if}}
     <li><strong>Grit re-rolls: {{gritRerollsLeft}} / {{gritRerollsMax}}</strong></li>
     {{#if nbStrongHit}}

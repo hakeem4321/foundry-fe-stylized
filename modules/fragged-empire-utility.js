@@ -187,14 +187,10 @@ export class FraggedEmpireUtility  {
     if ( rollData.mode == 'weapon' || rollData.mode == 'spacecraftweapon') {
       rollData.rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
       rollData.weaponHit = Number(rollData.weapon.system.statstotal.hit.value);
-      console.log(nbDice,rollData.weapon.system.statstotal.hitdice.value)
-      nbDice = Number(rollData.weapon.system.statstotal.hitdice.value);
+      nbDice = Number(rollData.weapon.system.statstotal.hitdice.value.substring(0,1));
     }
     if ( rollData.bMHitDice ) {
-      console.log("Extra hit dice added",rollData.bMHitDice)
       nbDice = nbDice + rollData.bMHitDice 
-    } else {
-      console.log("No extra hit dice found")
     }
     if ( rollData.mode == 'npcfight' ) {
       rollData.rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
@@ -243,10 +239,15 @@ export class FraggedEmpireUtility  {
     
     let actor = game.actors.get(rollData.actorId);
     if (rollData.mode != "skill") {
+      if (rollData.hasGrit != false) {
+        rollData.gritRerollsLeft = actor.system.gritreroll.value
+        rollData.gritRerollsMax = actor.system.gritreroll.max
+      }
       if (rollData.target.type == "npc"){
         rollData.targetDefence = rollData.target.system.fight.defence.value + (rollData.intmod * rollData.cover)
         rollData.targetArmor = rollData.target.system.fight.armour.value
         rollData.targetEnd = rollData.target.system.fight.endurance.value
+        rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.enddmg.value) + Number(actor.system.attributes.focus.current)
         rollData.critDmg = rollData.weapon.system.statstotal.crit.value - rollData.target.system.fight.armour.value
       } else if (rollData.target.type == "spacecraft") {
         rollData.targetDefence = rollData.target.system.fight.defence.total
@@ -259,14 +260,24 @@ export class FraggedEmpireUtility  {
         rollData.targetEnd = rollData.target.system.endurance.value
         rollData.critDmg = rollData.weapon.system.statstotal.crit.value - rollData.target.system.armourbonus.total
         rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.enddmg.value) + Number(actor.system.attributes.focus.current)
-        if (rollData.hasGrit != false) {
-          rollData.gritRerollsLeft = actor.system.gritreroll.value
-          rollData.gritRerollsMax = actor.system.gritreroll.max
-        }
+        console.log('hasGrit',rollData.hasGrit)
+
       }
     }
     
     actor.saveRollData( rollData );
+
+    if (game.modules.get("sequencer")?.active && game.modules.get("JB2A_DnD5e")?.active) {
+      const fxSource = canvas.tokens.controlled[0]
+      const fxTarget = game.user.targets.first();
+
+      new Sequence()
+        .effect()
+            .file("jb2a.bullet")
+            .attachTo(fxSource)
+            .stretchTo(fxTarget, { attachTo: true })
+        .play()
+    }
 
     if (rollData.mode != "skill") {
       if (rollData.munitionsUsed != 0) {
@@ -274,7 +285,7 @@ export class FraggedEmpireUtility  {
           actor.updateShipMunitions(rollData.actorId,rollData.munitionsUsed)
           actor.update
         } else {
-          actor.updateWeaponMunitions(rollData.weapon.id,rollData.munitionsUsed)
+          actor.updateWeaponMunitions(rollData.weapon._id,rollData.munitionsUsed)
           actor.update
         }
       }
@@ -286,18 +297,18 @@ export class FraggedEmpireUtility  {
 
     if (rollData.mode != "skill") {
       if (rollData.target.type == "npc"){
-        if (rollData.weapon.system.statstotal.crit.value >= rollData.target.system.fight.durability.value) {
-        }
+        if (rollData.weapon.system.statstotal.crit.value >= rollData.target.system.fight.durability.value) { }
       } else { if (rollData.target.type == "spacecraft") {
-                if (rollData.weapon.system.statstotal.shielddmg.value >= rollData.target.system.fight.shield.total || rollData.nbStrongHit > 0) {
-                  let table = game.tables.find( t => t.name === 'Spacecraft Hit Location' );
-                  let draw = await table.draw();
-                }
-              } else { if (rollData.weapon.system.statstotal.enddmg.value >= rollData.target.system.endurance.value || rollData.nbStrongHit > 0) {
-                let table = game.tables.find( t => t.name === 'Hit Location' );
-                let draw = await table.draw();
-              }
-            }
+        if (rollData.weapon.system.statstotal.shielddmg.value >= rollData.target.system.fight.shield.total || rollData.nbStrongHit > 0) {
+          let table = game.tables.find( t => t.name === 'Spacecraft Hit Location' );
+          let draw = await table.draw();
+        }
+        } else { 
+          if (rollData.totalEndDmg >= rollData.target.system.endurance.value) {
+            let table = game.tables.find( t => t.name === 'Hit Location' );
+            let draw = await table.draw();
+          }
+        }
       }
     }
   }
