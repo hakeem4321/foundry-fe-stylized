@@ -203,6 +203,7 @@ export class FraggedEmpireActorSheet extends foundry.appv1.sheets.ActorSheet {
     let data = event.dataTransfer.getData('text/plain');
     if (data) {
       let dataItem = JSON.parse( data);
+      console.log("_opDrop firing",dataItem)
       let npc = game.actors.get( dataItem.id);
       if ( npc ) {
         this.actor.addSubActor( dataItem.id);

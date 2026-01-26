@@ -346,11 +346,11 @@ export class FraggedEmpireActor extends Actor {
   }
   /* -------------------------------------------- */
   getEquipmentSlotsUsed() {
-    let equipSlotsNeeded = this.items.filter( item => item.type == 'outfit' || item.type == 'utility' || item.type == 'weapon');
+    let equipSlotsNeeded = this.items.filter( item => item.type == 'outfit' || item.type == 'utility' || item.type == 'weapon' || item.type == 'equipment');
     let equipmentSlotsUsed = 0;
     for (let equip of equipSlotsNeeded) {
       if (!equip.system.equipped) {
-        equipmentSlotsUsed += 1;
+        equipmentSlotsUsed += 2;
       }
     }
     return equipmentSlotsUsed;
@@ -405,7 +405,7 @@ export class FraggedEmpireActor extends Actor {
   }
   /* ------------------------------------------- */
   getEquipments() {
-    return this.items.filter( item => item.type == 'utility' || item.type == 'outfit' || item.type == "weapon" );
+    return this.items.filter( item => item.type == 'utility' || item.type == 'outfit' || item.type == "weapon" || item.type == "equipment");
   }
   
   /* -------------------------------------------- */

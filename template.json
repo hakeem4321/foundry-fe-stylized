@@ -962,7 +962,7 @@
     },
     "equipment": {
       "equipped": false,
-      "weight": 0,
+      "type": "equipment",
       "cost": 0,
       "description": ""
     },
