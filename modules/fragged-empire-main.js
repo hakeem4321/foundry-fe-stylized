@@ -125,6 +125,13 @@ Hooks.once("ready", async function () {
             await actor.update(updateData, { enforceTypes: false });
           }
         }
+        if (actor.type == 'character'){
+          let updateData = foundry.utils.deepClone(actor.toObject());
+          updateData.system.combatordermod = 0;
+          if (!foundry.utils.isEmpty(updateData)) {
+            await actor.update(updateData, { enforceTypes: false });
+          }
+        }
       } catch (error) {
         error.message = `Failed migration for Actor ${actor.name}: ${error.message} `;
         console.error(error);

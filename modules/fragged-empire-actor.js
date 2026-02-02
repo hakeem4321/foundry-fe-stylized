@@ -361,10 +361,6 @@ export class FraggedEmpireActor extends Actor {
     return this.getEquipmentSlotsBase() + this.system.equipmentslots.bonus;
   }
 
-  getCombatOrder() {
-    return this.system.combatorder.base + this.system.combatorder.bonus
-  }
-
   /* -------------------------------------------- */
   getSkillsTraits() { 
     let skills = this.getSkills();
@@ -501,7 +497,7 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   getInitiativeScore( phase)  {
     if ( this.type == 'character') {
-      return this.system.attributes.intelligence.current + (this.system.attributes.reflexes.current/10) + this.system.combatorder.bonus
+      return this.system.attributes.intelligence.current + (this.system.attributes.reflexes.current/10) + this.system.combatordermod
     } else if (this.type == 'spacecraft') {
       if (phase == 1) {
         return this.system.attributes.velocity.current + (this.system.attributes.crew.current/10)

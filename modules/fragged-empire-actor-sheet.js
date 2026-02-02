@@ -182,11 +182,6 @@ export class FraggedEmpireActorSheet extends foundry.appv1.sheets.ActorSheet {
     html.find('.weapons-munitions-label').click(ev => {
       const li = $(ev.currentTarget).parents(".item");
     });
-    html.find('.combatorder.bonus').click(ev => {
-      const li = $(ev.currentTarget).parents(".item");
-
-    });
-
   }
 
   /* -------------------------------------------- */
