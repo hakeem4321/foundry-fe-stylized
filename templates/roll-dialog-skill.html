@@ -1,4 +1,4 @@
-<form class="skill-roll-dialog">
+<div class="skill-roll-dialog">
   <h2 class="dialog-roll-title">{{title}}</h2>
 
   <div class="floxrow">
@@ -33,15 +33,10 @@
     <div class="flexrow">
       <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.BonusMalus"}} : </span>
       <select class="competence-base flexrow" type="text" id="bonusMalus" name="bonusMalus" value="bonusMalus" data-dtype="Number">
-      </select> 
+        {{selectOptions optionsBonusMalus selected=bonusMalus}}
+      </select>
     </div>
 
-    <!-- <div class="flexrow">
-      <span class="competence-base flexrow" >Difficulty : </span>
-      <select class="competence-base flexrow" type="text" id="difficulty" name="difficulty" value="difficulty" data-dtype="Number">
-      </select> 
-    </div> -->
-
   </div>
-  
-</form>
+
+</div>

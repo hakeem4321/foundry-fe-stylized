@@ -24,7 +24,7 @@
   {{/if}}
 </h4>
 
-{{#if (ne mode "skill")}}
+{{#if target}}
   <img class="chat-icon" src="{{target.img}}" alt="{{target.name}}" />
   <h4 class=chat-actor-name>{{target.name}}</h4>
 {{/if}}
@@ -60,14 +60,18 @@
     <li>{{localize "FE2.Chat.Stats.CritDamage"}} : {{critDmg}} ({{weapon.system.statstotal.crit.value}} {{localize "FE2.Chat.Stats.Versus"}} {{targetArmor}})</li>
     {{/if}}
 
-    <li><strong>{{localize "FE2.Chat.Stats.TotalRoll"}} : {{rollTotal}}</strong>
+    <li><strong>{{localize "FE2.Chat.Stats.TotalRoll"}} : {{rollTotal}}</strong></li>
+    {{#if target}}
     <li><strong>{{localize "FE2.Chat.Stats.TargetDefense"}}: {{targetDefence}}</strong></li>
     {{#if (gt rollTotal targetDefence)}}<li><strong>{{localize "FE2.Chat.Results.AttackLands"}}</strong></li>
       {{#if (gt totalEndDmg targetEnd)}}<li><strong>{{localize "FE2.Chat.Results.CriticalHitOrBoost"}}</strong></li>{{/if}}
     {{/if}}
+    {{/if}}
+    {{#if gritRerollsMax}}
     <li><strong>{{localize "FE2.Sheet.Character.GritRerolls"}}: {{gritRerollsLeft}} / {{gritRerollsMax}}</strong></li>
+    {{/if}}
     {{#if nbStrongHit}}
-    <strong> - {{localize "FE2.Chat.Stats.StrongHitsUsed"}}: {{nbStrongHitUsed}} / {{nbStrongHit}}</strong></li>
+    <li><strong>{{localize "FE2.Chat.Stats.StrongHitsUsed"}}: {{nbStrongHitUsed}} / {{nbStrongHit}}</strong></li>
     {{/if}}
   </ul>  
 </div>

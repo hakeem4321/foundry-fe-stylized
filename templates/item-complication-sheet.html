@@ -1,5 +1,5 @@
 
-<form class="{{cssClass}}" autocomplete="off">
+<div class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
         <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
@@ -13,21 +13,15 @@
         <div class="tab" data-group="primary">
           <ul>
             <li class="flexrow"><label class="generic-label">{{localize "FE2.Sheet.Common.Type"}}</label>
-              <select class="competence-base flexrow" type="text" name="data.type" value="{{data.type}}" data-dtype="String">
-                {{#select data.type}}
-                <option value="enemy">{{localize "FE2.Items.Types.Enemy"}}</option>
-                <option value="bounty">{{localize "FE2.Items.Types.Bounty"}}</option>
-                <option value="prejudice">{{localize "FE2.Items.Types.Prejudice"}}</option>
-                <option value="reputation">{{localize "FE2.Items.Types.Reputation"}}</option>
-                <option value="condition">{{localize "FE2.Items.Types.Condition"}}</option>
-                {{/select}}
+              <select class="competence-base flexrow" type="text" name="system.type" value="{{system.type}}" data-dtype="String">
+                {{selectOptions complicationTypeChoices selected=system.type}}
               </select>
               </li>
             <li class="flexrow"><label class="generic-label">{{localize "FE2.Items.Complication.InfluenceLevel"}}</label>
-              <input type="text" name="data.influence" value="{{data.influence}}" data-dtype="String"/>
+              <input type="text" name="system.influence" value="{{system.influence}}" data-dtype="String"/>
             </li>
           </ul>
         </div>
 
     </section>
-</form>
+</div>

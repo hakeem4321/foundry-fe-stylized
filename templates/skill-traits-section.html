@@ -2,11 +2,10 @@
 <ul>
   {{#each system.traits as |trait key|}}
   <li class="item flexrow list-item" data-item-id="{{trait._id}}" data-item-type="traits">
-    <span class="competence-label"><a class="trait-name">{{trait.name}}</a></span>
+    <span class="competence-label"><a data-action="viewTrait">{{trait.name}}</a></span>
     <div class="item-controls">
-      <a class="item-control item-delete" title="{{localize "FE2.Sheet.Common.DeleteItem"}}"><i class="fas fa-trash"></i></a>
+      <a class="item-control" data-action="deleteEmbedded" title="{{localize "FE2.Sheet.Common.DeleteItem"}}"><i class="fas fa-trash"></i></a>
     </div>
-  </li>                  
+  </li>
   {{/each}}
-</ul>          
-</select> 
+</ul>

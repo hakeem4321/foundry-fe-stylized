@@ -1,117 +1,122 @@
 import { FraggedEmpireUtility } from "./fragged-empire-utility.js";
 
-export class FraggedEmpireRoll extends Dialog {
+/**
+ * Roll dialog using DialogV2.wait().
+ * No longer extends Dialog — just a static helper class.
+ */
+export class FraggedEmpireRoll {
 
   /* -------------------------------------------- */
-  static async create(actor, rollData ) {
+  static async create(actor, rollData) {
 
-    let html
-    let options = { classes: ["fraggedempiredialog"], width: 600, height: 320, 'z-index': 99999 };
-    if ( rollData.mode == "skill") {
-      html = await foundry.applications.handlebars.renderTemplate('systems/foundry-fe2/templates/roll-dialog-skill.html', rollData);
-      options.height = 360;
-    } else if (rollData.mode == "weapon") {
-      html = await foundry.applications.handlebars.renderTemplate('systems/foundry-fe2/templates/roll-dialog-weapon.html', rollData);
-      options.height = 460;
-    } else if (rollData.mode == "spacecraftweapon") {
-      html = await foundry.applications.handlebars.renderTemplate('systems/foundry-fe2/templates/roll-dialog-spacecraftweapon.html', rollData);
-    } else if (rollData.mode == "npcfight") {
-      options.height = 360;
-      html = await foundry.applications.handlebars.renderTemplate('systems/foundry-fe2/templates/roll-dialog-npcfight.html', rollData);
-    } else if (rollData.mode == "genericskill") {
-      options.height = 240;
-      html = await foundry.applications.handlebars.renderTemplate('systems/foundry-fe2/templates/roll-dialog-genericskill.html', rollData);
-    } else {
-      html = await foundry.applications.handlebars.renderTemplate('systems/foundry-fe2/templates/roll-dialog-skill.html', rollData);
-    }
-    return new FraggedEmpireRoll(actor, rollData, html, options );
-  }
-
-  /* -------------------------------------------- */
-  constructor(actor, rollData, html, options, close = undefined) {
-    let conf = {
-      title: (rollData.mode == "skill") ? game.i18n.localize("FE2.Chat.Headers.Skill") : game.i18n.localize("FE2.Roll.Buttons.RollTitle"),
-      content: html,
-      buttons: { 
-        roll: {
-            icon: '<i class="fas fa-check"></i>',
-            label: game.i18n.localize("FE2.Roll.Buttons.Roll"),
-            callback: () => { this.roll() } 
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize("FE2.Dialog.Cancel"),
-            callback: () => { this.close() }
-        } },
-      default: "roll",
-      close: close
+    // Build choice objects for dynamic selects
+    if (rollData.weaponSkills) {
+      rollData.weaponSkillChoices = {};
+      for (const skill of rollData.weaponSkills) {
+        rollData.weaponSkillChoices[skill.id] = `${skill.name} (${skill.system.total})`;
+      }
     }
 
-    super(conf, options);
-
-    this.actor = actor;
-    this.rollData = rollData;
-  }
-
-  /* -------------------------------------------- */
-  roll () {
-    FraggedEmpireUtility.rollFraggedEmpire( this.rollData )
-  }
-
-  /* -------------------------------------------- */
-  activateListeners(html) {
-    super.activateListeners(html);
-
-    var dialog = this;
-    function onLoad() {
-    }
-    $(function () { onLoad(); });
-
-    html.find('#bonusMalus').change((event) => {
-      this.rollData.bonusMalus = Number(event.currentTarget.value);
-    });
-    html.find('#bMHitDice').change((event) => {
-      this.rollData.bMHitDice = Number(event.currentTarget.value);
-    });
-    html.find('#useToolbox').change((event) => {
-      this.rollData.useToolbox = event.currentTarget.value == "on";
-    });
-    html.find('#useMunitions').change((event) => {
-      this.rollData.useMunitions = event.currentTarget.checked;
-    });
-    html.find('#munitionsUsed').change((event) => {
-      this.rollData.munitionsUsed = Number(event.currentTarget.value);
-    });
-    html.find('#cover').change((event) => {
-      this.rollData.cover = Number(event.currentTarget.value);
-    });
-    html.find('#useDedicatedworkshop').change((event) => {
-      this.rollData.useDedicatedworkshop = event.currentTarget.value == "on";
-    });
-    html.find('#difficulty').change((event) => {
-      this.rollData.difficulty = Number(event.currentTarget.value);
-    });    
-    html.find('#skillId').change((event) => {
-      console.log(this.rollData.skillID,event.currentTarget.value);
-      this.rollData.skillId = event.currentTarget.value;
-      this.rollData.skill = this.rollData.weaponSkills.find( item => item.id == this.rollData.skillId)
-    });
-    html.find('#skill-spacecraft').change((event) => {
-      this.rollData.skillId = event.currentTarget.value;
-      for (let actor of this.rollData.actorList) {
-        let skill = actor.skills.find( item => item.id == this.rollData.skillId);
-        if (skill) {          
-          skill.system.trainedValue = (skill.system.trained) ? 1 : -2
-          skill.system.total = skill.system.trainedValue + skill.system.bonus;
-          skill.system.isTrait = skill.system.traits.length > 0; 
-          this.rollData.skill = skill;
+    if (rollData.actorList) {
+      rollData.spacecraftSkillChoices = {};
+      for (const a of rollData.actorList) {
+        for (const skill of a.skills) {
+          rollData.spacecraftSkillChoices[skill.id] = `${a.name} - ${skill.name} (${skill.system.total})`;
         }
       }
-    });    
-    html.find('#rof').change((event) => {
-      this.rollData.rofValue = Number(event.currentTarget.value);
-    });
+    }
 
+    if (rollData.mode === "weapon") {
+      rollData.coverChoices = FraggedEmpireUtility.buildCoverChoices();
+    }
+
+    // Determine template
+    let templatePath;
+    if (rollData.mode === "skill") {
+      templatePath = "systems/foundry-fe2/templates/roll-dialog-skill.html";
+    } else if (rollData.mode === "weapon") {
+      templatePath = "systems/foundry-fe2/templates/roll-dialog-weapon.html";
+    } else if (rollData.mode === "spacecraftweapon") {
+      templatePath = "systems/foundry-fe2/templates/roll-dialog-spacecraftweapon.html";
+    } else if (rollData.mode === "npcfight") {
+      templatePath = "systems/foundry-fe2/templates/roll-dialog-npcfight.html";
+    } else if (rollData.mode === "genericskill") {
+      templatePath = "systems/foundry-fe2/templates/roll-dialog-genericskill.html";
+    } else {
+      templatePath = "systems/foundry-fe2/templates/roll-dialog-skill.html";
+    }
+
+    const html = await foundry.applications.handlebars.renderTemplate(templatePath, rollData);
+
+    const title = (rollData.mode === "skill")
+      ? game.i18n.localize("FE2.Chat.Headers.Skill")
+      : game.i18n.localize("FE2.Roll.Buttons.RollTitle");
+
+    return foundry.applications.api.DialogV2.wait({
+      window: { title },
+      classes: ["fraggedempiredialog"],
+      position: { width: 600, height: "auto" },
+      content: html,
+      buttons: [
+        {
+          action: "roll",
+          label: game.i18n.localize("FE2.Roll.Buttons.Roll"),
+          icon: "fas fa-check",
+          callback: () => FraggedEmpireUtility.rollFraggedEmpire(rollData)
+        },
+        {
+          action: "cancel",
+          label: game.i18n.localize("FE2.Dialog.Cancel"),
+          icon: "fas fa-times"
+        }
+      ],
+      render: (event, dialog) => {
+        const el = dialog.element ?? dialog;
+
+        el.querySelector("#bonusMalus")?.addEventListener("change", (e) => {
+          rollData.bonusMalus = Number(e.currentTarget.value);
+        });
+        el.querySelector("#bMHitDice")?.addEventListener("change", (e) => {
+          rollData.bMHitDice = Number(e.currentTarget.value);
+        });
+        el.querySelector("#useToolbox")?.addEventListener("change", (e) => {
+          rollData.useToolbox = e.currentTarget.checked;
+        });
+        el.querySelector("#useMunitions")?.addEventListener("change", (e) => {
+          rollData.useMunitions = e.currentTarget.checked;
+        });
+        el.querySelector("#munitionsUsed")?.addEventListener("change", (e) => {
+          rollData.munitionsUsed = Number(e.currentTarget.value);
+        });
+        el.querySelector("#cover")?.addEventListener("change", (e) => {
+          rollData.cover = Number(e.currentTarget.value);
+        });
+        el.querySelector("#useDedicatedworkshop")?.addEventListener("change", (e) => {
+          rollData.useDedicatedworkshop = e.currentTarget.checked;
+        });
+        el.querySelector("#difficulty")?.addEventListener("change", (e) => {
+          rollData.difficulty = Number(e.currentTarget.value);
+        });
+        el.querySelector("#skillId")?.addEventListener("change", (e) => {
+          rollData.skillId = e.currentTarget.value;
+          rollData.skill = rollData.weaponSkills.find(item => item.id === rollData.skillId);
+        });
+        el.querySelector("#skill-spacecraft")?.addEventListener("change", (e) => {
+          rollData.skillId = e.currentTarget.value;
+          for (let a of rollData.actorList) {
+            let skill = a.skills.find(item => item.id === rollData.skillId);
+            if (skill) {
+              skill.system.trainedValue = (skill.system.trained) ? 1 : -2;
+              skill.system.total = skill.system.trainedValue + skill.system.bonus;
+              skill.system.isTrait = skill.system.traits.length > 0;
+              rollData.skill = skill;
+            }
+          }
+        });
+        el.querySelector("#rof")?.addEventListener("change", (e) => {
+          rollData.rofValue = Number(e.currentTarget.value);
+        });
+      }
+    });
   }
-  
 }

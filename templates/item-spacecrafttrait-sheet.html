@@ -1,5 +1,5 @@
 
-<form class="{{cssClass}}" autocomplete="off">
+<div class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
         <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
@@ -13,39 +13,29 @@
         <div class="tab" data-group="primary">
           <ul>
             <li class="flexrow"><label class="item-sheet-label">{{localize "FE2.Sheet.Common.Type"}}</label>
-              <select class="competence-base flexrow" type="text" name="data.type" value="{{data.type}}" data-dtype="String">
-                {{#select data.type}}
-                <option value="build">{{localize "FE2.Items.Types.Build"}}</option>
-                <option value="npc">{{localize "FE2.Items.Types.NPCBuild"}}</option>
-                <option value="hull">{{localize "FE2.Items.Types.Hull"}}</option>
-                <option value="engines">{{localize "FE2.Items.Types.Engines"}}</option>
-                <option value="crew">{{localize "FE2.Items.Types.Crew"}}</option>
-                <option value="power">{{localize "FE2.Items.Types.Power"}}</option>
-                <option value="cpu">{{localize "FE2.Items.Types.CPU"}}</option>
-                <option value="sensors">{{localize "FE2.Items.Types.Sensors"}}</option>
-                <option value="size">{{localize "FE2.Items.Types.Size"}}</option>
-                {{/select}}
+              <select class="competence-base flexrow" type="text" name="system.type" value="{{system.type}}" data-dtype="String">
+                {{selectOptions spacecraftTraitTypeChoices selected=system.type}}
               </select>
             </li>
           </ul>
           <ul>
             <li class="flexrow"><label class="item-sheet-label">{{localize "FE2.Items.Common.Requirements"}}</label>
               <span class="small-editor item-text-long-line">
-              {{editor system.requirements target="system.requirements" engine="prosemirror"}}
+              <prose-mirror button="true" toggled="true" name="system.requirements" value="{{system.requirements}}">{{{enrichedRequirements}}}</prose-mirror>
               </span>
             </li>
             <li class="flexrow"><label class="item-sheet-label">{{localize "FE2.Items.Common.Benefits"}}</label>
               <span class="small-editor item-text-long-line">
-                {{editor system.benefits target="system.benefits" engine="prosemirror"}}
+                <prose-mirror button="true" toggled="true" name="system.benefits" value="{{system.benefits}}">{{{enrichedBenefits}}}</prose-mirror>
               </span>
             </li>
             <li class="flexrow"><label class="item-sheet-label">{{localize "FE2.Items.Common.Disadvantages"}}</label>
               <span class="small-editor item-text-long-line">
-                {{editor system.disadvantages target="system.disadvantages" engine="prosemirror"}}
+                <prose-mirror button="true" toggled="true" name="system.disadvantages" value="{{system.disadvantages}}">{{{enrichedDisadvantages}}}</prose-mirror>
               </span>
             </li>
           </ul>
         </div>
 
     </section>
-</form>
+</div>

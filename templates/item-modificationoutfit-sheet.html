@@ -1,4 +1,4 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
         <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
@@ -10,11 +10,11 @@
     <section class="sheet-body">
 
         <div class="tab" data-group="primary">
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=data.stats isbase=true title=(localize "FE2.Items.Common.ModificationStats") header=true}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=system.stats isbase=true title=(localize "FE2.Items.Common.ModificationStats") header=true}}
 
           <h3>{{localize "FE2.Sheet.Common.Description"}}</h3>
-          {{editor system.description target="system.description" engine="prosemirror"}}
+          <prose-mirror button="true" toggled="true" name="system.description" value="{{system.description}}">{{{enrichedDescription}}}</prose-mirror>
         </div>
 
     </section>
-</form>
+</div>

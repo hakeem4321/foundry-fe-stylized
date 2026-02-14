@@ -82,33 +82,156 @@ export class FraggedEmpireUtility  {
 
   /* -------------------------------------------- */
   static buildListOptions(min, max) {
-    let options = ""
-    for (let i = min; i <= max; i++) {
-      options += `<option value="${i}">${i}</option>`
-    }
-    return options;
+    return this.createDirectOptionList(min, max);
   }
-  
+
+  /* -------------------------------------------- */
+  // Choice builders for {{selectOptions}} migration
+  /* -------------------------------------------- */
+
+  static buildNPCTypeChoices() {
+    return {
+      henchman: game.i18n.localize("FE2.Sheet.NPC.Henchman"),
+      drone: game.i18n.localize("FE2.Sheet.NPC.Drone"),
+      companion: game.i18n.localize("FE2.Sheet.NPC.Companion")
+    };
+  }
+
+  static buildWeaponTypeChoices() {
+    return {
+      gun: game.i18n.localize("FE2.Items.Types.Gun"),
+      shell: game.i18n.localize("FE2.Items.Types.Shell"),
+      melee: game.i18n.localize("FE2.Items.Types.Melee"),
+      companion: game.i18n.localize("FE2.Items.Types.Companion"),
+      special: game.i18n.localize("FE2.Items.Types.Special")
+    };
+  }
+
+  static buildWeaponTypeWithAllChoices() {
+    return {
+      all: game.i18n.localize("FE2.Items.Types.All"),
+      ...this.buildWeaponTypeChoices()
+    };
+  }
+
+  static buildModificationTypeChoices() {
+    return {
+      weapon: game.i18n.localize("FE2.Items.Types.WeaponModification"),
+      melee: game.i18n.localize("FE2.Items.Types.MeleeModification"),
+      drone: game.i18n.localize("FE2.Items.Types.DroneCompanionModification")
+    };
+  }
+
+  static buildVariationTypeChoices() {
+    return {
+      gun: game.i18n.localize("FE2.Items.Types.GunVariation"),
+      shell: game.i18n.localize("FE2.Items.Types.ShellVariation"),
+      melee: game.i18n.localize("FE2.Items.Types.MeleeVariation"),
+      companion: game.i18n.localize("FE2.Items.Types.CompanionVariation"),
+      special: game.i18n.localize("FE2.Items.Types.SpecialVariation")
+    };
+  }
+
+  static buildTraitTypeChoices() {
+    return {
+      advancement: game.i18n.localize("FE2.Items.Types.Advancement"),
+      attribute: game.i18n.localize("FE2.Items.Types.Attribute"),
+      primaryskill: game.i18n.localize("FE2.Items.Types.PrimarySkill"),
+      personalcombat: game.i18n.localize("FE2.Items.Types.PersonalCombat"),
+      spaceshipcombat: game.i18n.localize("FE2.Items.Types.SpaceshipCombat"),
+      npc: game.i18n.localize("FE2.Items.Types.NPC")
+    };
+  }
+
+  static buildTradeGoodTypeChoices() {
+    return {
+      money: game.i18n.localize("FE2.Items.Types.Money"),
+      loot: game.i18n.localize("FE2.Items.Types.Loot"),
+      freight: game.i18n.localize("FE2.Items.Types.Freight")
+    };
+  }
+
+  static buildPerkTypeChoices() {
+    return {
+      minor: game.i18n.localize("FE2.Items.Perk.Minor"),
+      moderate: game.i18n.localize("FE2.Items.Perk.Moderate"),
+      major: game.i18n.localize("FE2.Items.Perk.Major")
+    };
+  }
+
+  static buildComplicationTypeChoices() {
+    return {
+      minor: game.i18n.localize("FE2.Items.Complication.Minor"),
+      moderate: game.i18n.localize("FE2.Items.Complication.Moderate"),
+      major: game.i18n.localize("FE2.Items.Complication.Major")
+    };
+  }
+
+  static buildSpacecraftPerkTypeChoices() {
+    return {
+      minor: game.i18n.localize("FE2.Items.SpacecraftPerk.Optional"),
+      moderate: game.i18n.localize("FE2.Items.SpacecraftPerk.Automatic")
+    };
+  }
+
+  static buildSpacecraftTraitTypeChoices() {
+    return {
+      build: game.i18n.localize("FE2.Items.Types.Build"),
+      npc: game.i18n.localize("FE2.Items.Types.NPCBuild"),
+      hull: game.i18n.localize("FE2.Items.Types.Hull"),
+      engines: game.i18n.localize("FE2.Items.Types.Engines"),
+      crew: game.i18n.localize("FE2.Items.Types.Crew"),
+      power: game.i18n.localize("FE2.Items.Types.Power"),
+      cpu: game.i18n.localize("FE2.Items.Types.CPU"),
+      sensors: game.i18n.localize("FE2.Items.Types.Sensors"),
+      size: game.i18n.localize("FE2.Items.Types.Size")
+    };
+  }
+
+  static buildResearchGainChoices() {
+    return {
+      none: game.i18n.localize("FE2.Items.Research.None"),
+      secret: game.i18n.localize("FE2.Items.Research.SecretKnowledge"),
+      perk: game.i18n.localize("FE2.Items.Research.MinorPerk")
+    };
+  }
+
+  static buildDifficultyChoices() {
+    return {
+      "0": game.i18n.localize("FE2.Difficulty.None"),
+      "8": game.i18n.localize("FE2.Difficulty.Easy"),
+      "12": game.i18n.localize("FE2.Difficulty.Moderate"),
+      "16": game.i18n.localize("FE2.Difficulty.Difficult"),
+      "18": game.i18n.localize("FE2.Difficulty.VeryDifficult")
+    };
+  }
+
+  static buildCoverChoices() {
+    return {
+      "0": game.i18n.localize("FE2.Roll.Cover.NoCover"),
+      "1": game.i18n.localize("FE2.Roll.Cover.LightCover"),
+      "2": game.i18n.localize("FE2.Roll.Cover.HeavyCover"),
+      "3": game.i18n.localize("FE2.Roll.Cover.EntrenchedCover")
+    };
+  }
+
   /* -------------------------------------------- */
   static async getTraitFromCompendium( itemId) {
-    let trait = game.items.find( item => item.data.type == 'trait' && item.id == itemId );
-    if ( !trait ) { 
-      let traits =  await this.loadCompendium('world.traits', item => item.id == itemId );
+    let trait = game.items.find( item => item.type == 'trait' && item.id == itemId );
+    if ( !trait ) {
+      let traits = await this.loadCompendium('world.traits', item => item.id == itemId );
       let traitsObj = traits.map(i => i.toObject());
       trait = traitsObj[0];
     } else {
-      trait = duplicate( trait);
+      trait = foundry.utils.deepClone( trait);
     }
-
-    console.log("TRAIT", itemId, trait);
     return trait;
   }
 
   /* -------------------------------------------- */
   static async getTraitAttributeList( attr ) {
-    console.log("Searching traits: attr");
-    let traits1 = game.items.filter( item => item.data.type == 'trait' && item.system.subtype == attr );
-    let traits2 = await this.loadCompendium('world.traits', item => item.data.type == 'trait' && item.system.subtype == attr );
+    let traits1 = game.items.filter( item => item.type == 'trait' && item.system.subtype == attr );
+    let traits2 = await this.loadCompendium('world.traits', item => item.type == 'trait' && item.system.subtype == attr );
     return traits1.concat( traits2);
   }
 
@@ -144,7 +267,6 @@ export class FraggedEmpireUtility  {
   /* -------------------------------------------- */
   static async loadCompendiumData(compendium) {
     const pack = game.packs.get(compendium);
-    console.log("Compendium", compendium);
     return await pack?.getDocuments() ?? [];
   }
 
@@ -183,8 +305,6 @@ export class FraggedEmpireUtility  {
   /* -------------------------------------------- */
    static async rollFraggedEmpire( rollData ) {
 
-    // Init stuff
-    console.log(rollData)
     let skillLevel = rollData.skill?.system.total ||  0;
     let nbDice = 3;
 
@@ -213,7 +333,6 @@ export class FraggedEmpireUtility  {
       let formula = nbDice+"d6+"+rollData.weaponHit+"+"+rollData.finalBM+"+"+skillLevel;
       myRoll = new Roll(formula);
       await myRoll.evaluate();
-      console.log("ROLL : ", formula);
       await this.showDiceSoNice(myRoll, game.settings.get("core", "rollMode") );
       rollData.roll = myRoll
       rollData.nbStrongHitUsed = 0;
@@ -245,8 +364,6 @@ export class FraggedEmpireUtility  {
     } else {
       rollData.strongHitAvailable = true;
     }
-    console.log("ROLLLL!!!!", rollData);
-    
     let actor = game.actors.get(rollData.actorId);
     switch (actor.type) {
       case "npc":
@@ -259,16 +376,14 @@ export class FraggedEmpireUtility  {
         rollData.endDmgAdd = Number(actor.system.attributes.sensors.current)
         break;
     }
-    if (rollData.mode != "skill") {
+    if (rollData.mode != "skill" && rollData.mode != "genericskill") {
       if (rollData.hasGrit != false) {
         switch (actor.type) {
           case "character":
-            console.log('Getting grit for a character')
             rollData.gritRerollsLeft = actor.system.gritreroll.value
             rollData.gritRerollsMax = actor.system.gritreroll.max
             break;
           case "spacecraft":
-            console.log('Getting grit for a spacecraft')
             rollData.gritRerollsLeft = actor.system.fight.gritreroll.value
             rollData.gritRerollsMax = 2
             break;
@@ -297,7 +412,7 @@ export class FraggedEmpireUtility  {
     
     actor.saveRollData( rollData );
 
-    if (game.modules.get("sequencer")?.active && game.modules.get("JB2A_DnD5e")?.active && rollData.mode != "skill") {
+    if (game.modules.get("sequencer")?.active && game.modules.get("JB2A_DnD5e")?.active && rollData.mode != "skill" && rollData.mode != "genericskill") {
       const fxSource = canvas.tokens.controlled[0]
       const fxTarget = game.user.targets.first();
 
@@ -309,7 +424,7 @@ export class FraggedEmpireUtility  {
         .play()
     }
 
-    if (rollData.mode != "skill") {
+    if (rollData.mode != "skill" && rollData.mode != "genericskill") {
       if (rollData.mode == "weapon" && rollData.useMunitions) {
         rollData.munitionsUsed = 1;
       }
@@ -328,7 +443,7 @@ export class FraggedEmpireUtility  {
       flags: { "foundry-fe2": { rollData: chatRollFlags } }
     });
 
-    if (rollData.mode != "skill") {
+    if (rollData.mode != "skill" && rollData.mode != "genericskill") {
       if (rollData.target.type == "npc"){
         if (rollData.weapon.system.statstotal.crit.value >= rollData.target.system.fight.durability.value) { }
       } else { if (rollData.target.type == "spacecraft") {
@@ -368,7 +483,7 @@ export class FraggedEmpireUtility  {
 
   /* -------------------------------------------- */
   static getUsers(filter) {
-    return game.users.filter(filter).map(user => user.data._id);
+    return game.users.filter(filter).map(user => user.id);
   }
   /* -------------------------------------------- */
   static getWhisperRecipients(rollMode, name) {
@@ -387,10 +502,9 @@ export class FraggedEmpireUtility  {
 
   /* -------------------------------------------- */
   static blindMessageToGM(chatOptions) {
-    let chatGM = duplicate(chatOptions);
+    let chatGM = foundry.utils.deepClone(chatOptions);
     chatGM.whisper = this.getUsers(user => user.isGM);
     chatGM.content = game.i18n.format("FE2.Chat.Results.BlindMessage", {name: game.user.name}) + "<br>" + chatOptions.content;
-    console.log("blindMessageToGM", chatGM);
     game.socket.emit("system.foundry-fe2", { msg: "msg_gm_chat_message", data: chatGM });
   }
 
@@ -495,42 +609,26 @@ export class FraggedEmpireUtility  {
 
   /* -------------------------------------------- */
   static buildDifficultyOptions( ) {
-    let options = ""
-    options += `<option value="0">${game.i18n.localize("FE2.Difficulty.None")}</option>`
-    options += `<option value="8">${game.i18n.localize("FE2.Difficulty.Easy")}</option>`
-    options += `<option value="12">${game.i18n.localize("FE2.Difficulty.Moderate")}</option>`
-    options += `<option value="16">${game.i18n.localize("FE2.Difficulty.Difficult")}</option>`
-    options += `<option value="18">${game.i18n.localize("FE2.Difficulty.VeryDifficult")}</option>`
-    return options;
-
+    return this.buildDifficultyChoices();
   }
   
   /* -------------------------------------------- */
-  static async confirmDelete(actorSheet, li) {
-    let itemId = li.data("item-id");
-    let msgTxt = "<p>" + game.i18n.localize("FE2.Dialog.ConfirmRemoveContent");
-    let buttons = {
-      delete: {
-          icon: '<i class="fas fa-check"></i>',
-          label: game.i18n.localize("FE2.Dialog.ConfirmRemoveYes"),
-          callback: () => {
-            actorSheet.actor.deleteEmbeddedDocuments( "Item", [itemId] );
-            li.slideUp(200, () => actorSheet.render(false));
-          }
-        },
-        cancel: {
-          icon: '<i class="fas fa-times"></i>',
-          label: game.i18n.localize("FE2.Dialog.Cancel")
-        }
+  static async confirmDelete(actor, itemId) {
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize("FE2.Dialog.ConfirmRemoveTitle") },
+      content: "<p>" + game.i18n.localize("FE2.Dialog.ConfirmRemoveContent") + "</p>",
+      yes: {
+        label: game.i18n.localize("FE2.Dialog.ConfirmRemoveYes"),
+        icon: "fas fa-check"
+      },
+      no: {
+        label: game.i18n.localize("FE2.Dialog.Cancel"),
+        icon: "fas fa-times"
       }
-      msgTxt += "</p>";
-      let d = new Dialog({
-        title: game.i18n.localize("FE2.Dialog.ConfirmRemoveTitle"),
-        content: msgTxt,
-        buttons: buttons,
-        default: "cancel"
-      });
-      d.render(true);
+    });
+    if (confirmed) {
+      actor.deleteEmbeddedDocuments("Item", [itemId]);
+    }
   }
 
 }

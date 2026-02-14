@@ -457,7 +457,7 @@ export class FraggedEmpireActor extends Actor {
   }
   /* -------------------------------------------- */
   getEffectByLabel(label) {
-    return this.getActiveEffects().find(it => it.data.label == label);
+    return this.getActiveEffects().find(it => it.name == label);
   }
   /* -------------------------------------------- */
   getEffectById(id) {
@@ -478,7 +478,7 @@ export class FraggedEmpireActor extends Actor {
   async equipGear( equipmentId ) {    
     let item = this.items.find( item => item.id == equipmentId );
     if (item && item.system) {
-      let update = { _id: item.id, "data.equipe": !item.system.equipe };
+      let update = { _id: item.id, "system.equipe": !item.system.equipe };
       await this.updateEmbeddedDocuments('Item', [update]); // Updates one EmbeddedEntity
     }
   }
@@ -592,10 +592,8 @@ export class FraggedEmpireActor extends Actor {
   getCargoSpaceUsed( ) {
     let tradeGoods = this.items.filter( item => item.type == 'tradegood' );
     let cargoSpaceUsed = 0;
-    console.log("Calculating CargoSpaceUsed")
     for (let good of tradeGoods) {
       cargoSpaceUsed = cargoSpaceUsed + good.system.cargoSpace
-      console.log(cargoSpaceUsed)
     }
     return cargoSpaceUsed;
   }
@@ -609,26 +607,25 @@ export class FraggedEmpireActor extends Actor {
   getSubActors() {
     let subActors = [];
     for (let id of this.system.subactors) {
-      subActors.push(duplicate(game.actors.get(id)));
+      subActors.push(foundry.utils.deepClone(game.actors.get(id)));
     }
     return subActors;
   }
   /* -------------------------------------------- */
   async addSubActor( subActorId) {
-    let subActors = duplicate( this.system.subactors);
+    let subActors = foundry.utils.deepClone( this.system.subactors);
     subActors.push( subActorId);
-    await this.update( { 'data.subactors': subActors } );
+    await this.update( { 'system.subactors': subActors } );
   }
   /* -------------------------------------------- */
   async delSubActor( subActorId) {
     let newArray = [];
-    console.log("ID; ", this.system.subactors, subActorId);
     for (let id of this.system.subactors) {
       if ( id != subActorId) {
         newArray.push( id);
       }
     }
-    await this.update( { 'data.subactors': newArray } );
+    await this.update( { 'system.subactors': newArray } );
   }
   /* -------------------------------------------- */
   decrementGritRerolls() {
@@ -675,9 +672,7 @@ export class FraggedEmpireActor extends Actor {
       }
       if (skill.system.staticmod) {rollData.bonusMalus += skill.system.staticmod}
       if (skill.system.toolbox == true) {rollData.useToolbox = true}
-      let rollDialog = await FraggedEmpireRoll.create( this, rollData);
-      console.log(rollDialog);
-      rollDialog.render( true );
+      await FraggedEmpireRoll.create( this, rollData);
     } else {
       ui.notifications.warn(game.i18n.localize("FE2.Notifications.SkillNotFound"));
     }
@@ -687,11 +682,11 @@ export class FraggedEmpireActor extends Actor {
   async rollGenericSkill( ) {
     let rollData = {
       mode: "genericskill",
-      alias: this.name, 
+      alias: this.name,
       actorImg: this.img,
       actorId: this.id,
       img: this.img,
-      hasFate: this.getFate(),
+      hasFate: this.getGrit(),
       rollMode: game.settings.get("core", "rollMode"),
       title: game.i18n.localize("FE2.Dialog.GenericSkillRoll"),
       optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
@@ -699,9 +694,7 @@ export class FraggedEmpireActor extends Actor {
       optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions( ),
       difficulty: 0
     }
-    let rollDialog = await FraggedEmpireRoll.create( this, rollData);
-    console.log(rollDialog);
-    rollDialog.render( true );
+    await FraggedEmpireRoll.create( this, rollData);
   }
 
   /* -------------------------------------------- */
@@ -713,9 +706,6 @@ export class FraggedEmpireActor extends Actor {
       ui.notifications.error(game.i18n.localize("FE2.Notifications.TargetNotFound"));
       return
     }
-    console.log("WEAPON :", weaponId, weapon );
-    console.log("TARGET", target.actor)
-    
     if (target.actor.type == 'npc' && target.actor.system.npctype == 'henchman') {
       intstat = target.actor.system.stats.Attribute.value;
     } else { 
@@ -759,9 +749,7 @@ export class FraggedEmpireActor extends Actor {
       } else if (this.type == 'npc' && this.system.npctype == 'henchman') {
         rollData.weapon.system.statstotal.enddmg.value = Number(this.system.stats.Attribute.value) + Number(rollData.weapon.system.statstotal.enddmg.value)
       }
-      let rollDialog = await FraggedEmpireRoll.create( this, rollData);
-      console.log("WEAPON ROLL", rollData);
-      rollDialog.render( true );
+      await FraggedEmpireRoll.create( this, rollData);
     } else {
       ui.notifications.warn(game.i18n.localize("FE2.Notifications.WeaponNotFound"), weaponId);
     }
@@ -781,8 +769,8 @@ export class FraggedEmpireActor extends Actor {
       alias: this.name, 
       actorId: this.id,
       img: this.img,
-      hasFate: this.getFate(),
-      npcstats: duplicate(this.system.stats),
+      hasFate: this.getGrit(),
+      npcstats: foundry.utils.deepClone(this.system.stats),
       rollMode: game.settings.get("core", "rollMode"),
       title: game.i18n.format("FE2.Dialog.AttackTitle", {name: this.name}),
       weaponRoFOptions: this.buildNPCRoFArray(), 
@@ -792,26 +780,21 @@ export class FraggedEmpireActor extends Actor {
       bMHitDice: 0,
       optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions( )
     }
-    let rollDialog = await FraggedEmpireRoll.create( this, rollData);
-    console.log("NPC FIGHT ROLL", rollData);
-    rollDialog.render( true );
+    await FraggedEmpireRoll.create( this, rollData);
   }
 
   /* -------------------------------------------- */
   async rollSpacecraftWeapon( weaponId ) {
       let weapon = this.items.find( item => item.id == weaponId);
       const target = game.user.targets.first();
-      console.log("SPACECRAFT WEAPON :", weaponId, weapon );
       
       // Build available actor/skills
       let actorList = []
       if (game.user.isGM )  {
         let actorNPCship = this.items.filter( item => item.name == 'Rival' || item.name == 'Outclassed' || item.name == 'Outgunned')
-        console.log('NPC ships found', actorNPCship)
         if (actorNPCship.length != 0) {
         } else {
           for (let actor of game.actors) {
-            console.log(actor)
             actorList.push( { id:actor.id, name:actor.name, skills:actor.items.filter( item => item.type == 'skill' && item.system.type == 'spaceshipcombat') } );
           }
         }
@@ -821,7 +804,6 @@ export class FraggedEmpireActor extends Actor {
       }
 
       // Skill prepare
-      console.log(actorList.length)
       if (actorList.length != 0) {
         let skill = actorList[0].skills[0]; 
         skill.system.trainedValue = (skill.system.trained) ? 1 : -2
@@ -831,7 +813,6 @@ export class FraggedEmpireActor extends Actor {
         actorList.push( { id:0, name:game.i18n.localize("FE2.Sheet.NPC.Commander"), skills:[{ id:99, name:"NPC Combat", system:{total:0} }] } );
       }
 
-      console.log(target)
       if ( weapon ) {
         let rollData = {
           mode: 'spacecraftweapon',
@@ -857,9 +838,7 @@ export class FraggedEmpireActor extends Actor {
         let rofMax = 1;
         rollData.rofValue = rofMax;
 
-        let rollDialog = await FraggedEmpireRoll.create( this, rollData);
-        console.log("SPACECRAFT WEAPON ROLL", rollData);
-        rollDialog.render( true );
+        await FraggedEmpireRoll.create( this, rollData);
       } else {
         ui.notifications.warn(game.i18n.localize("FE2.Notifications.WeaponNotFound"), weaponId);
       }
@@ -869,17 +848,17 @@ export class FraggedEmpireActor extends Actor {
   async incrementeArgent( arme ) {
     let monnaie = this.items.find( item => item.type == 'monnaie' && item.name == arme.name);
     if (monnaie) {
-      let newValeur = monnaie.data.nombre + 1;
-      await this.updateOwnedItem( { _id: monnaie._id, 'data.nombre': newValeur } );
+      let newValeur = monnaie.system.nombre + 1;
+      await this.updateEmbeddedDocuments('Item', [{ _id: monnaie.id, 'system.nombre': newValeur }]);
     }
   }
   /* -------------------------------------------- */
   async decrementeArgent( arme ) {
     let monnaie = this.items.find( item => item.type == 'monnaie' && item.name == arme.name);
     if (monnaie) {
-      let newValeur = monnaie.data.nombre - 1;
+      let newValeur = monnaie.system.nombre - 1;
       newValeur = (newValeur <= 0) ? 0 : newValeur;
-      await this.updateOwnedItem( { _id: monnaie._id, 'data.nombre': newValeur } );
+      await this.updateEmbeddedDocuments('Item', [{ _id: monnaie.id, 'system.nombre': newValeur }]);
     }
   }
   
@@ -888,17 +867,17 @@ export class FraggedEmpireActor extends Actor {
     let objetQ = this.items.find( item => item.id == objetId );
     if (objetQ) {
       let newQ = objetQ.system.quantite + 1;
-      const updated = await this.updateEmbeddedDocuments('Item', [{ _id: objetQ.id, 'data.quantite': newQ }]); // pdates one EmbeddedEntity
+      await this.updateEmbeddedDocuments('Item', [{ _id: objetQ.id, 'system.quantite': newQ }]);
     }
   }
-  
+
   /* -------------------------------------------- */
   async decrementeQuantite( objetId ) {
     let objetQ = this.items.find( item => item.id == objetId );
     if (objetQ) {
       let newQ = objetQ.system.quantite - 1;
       newQ = (newQ <= 0) ? 0 : newQ;
-      const updated = await this.updateEmbeddedDocuments('Item', [{ _id: objetQ.id, 'data.quantite': newQ }]); // pdates one EmbeddedEntity
+      await this.updateEmbeddedDocuments('Item', [{ _id: objetQ.id, 'system.quantite': newQ }]);
     }
   }
     

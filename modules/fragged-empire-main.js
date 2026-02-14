@@ -129,7 +129,7 @@ Hooks.once("ready", async function () {
     ui.notifications.info(game.i18n.localize("FE2.Notifications.NoLinkedCharacter"));
     ChatMessage.create({
       content: game.i18n.format("FE2.Notifications.NoLinkedCharacterChat", {name: game.user.name}),
-      user: game.user._id
+      user: game.user.id
     });
   }
 
@@ -327,7 +327,6 @@ Hooks.on("chatMessage", (html, content, msg) => {
   if (content[0] == '/') {
     let regExp = /(\S+)/g;
     let commands = content.toLowerCase().match(regExp);
-    console.log(commands);
   }
   return true;
 });
@@ -337,19 +336,17 @@ Hooks.on("combatRound", (combat, prior, current) => {
   // Notify you that the hook ran
   ui.notifications.info(game.i18n.format("FE2.Combat.NewRound", {round: combat.round}));
   if (combat.combatant?.actor.type == 'spacecraft') {
-    console.log("This is a spaceship fight, rerolling alternate initiative")
   }
   combat.turns.forEach((theGuy) => {
     combat.rollInitiative(theGuy.id);
   })
 });
 
-Hooks.on("renderChatMessage", async (message, html, data) => {
+Hooks.on("renderChatMessageHTML", async (message, html, data) => {
   const fe2Flags = message.flags?.["foundry-fe2"];
   if (!fe2Flags) return;
 
-  const el = html instanceof HTMLElement ? html : html[0];
-  const messageContent = el?.querySelector(".message-content");
+  const messageContent = html.querySelector(".message-content");
   if (!messageContent) return;
 
   if (fe2Flags.rollData) {
@@ -369,11 +366,9 @@ Hooks.on("renderChatMessage", async (message, html, data) => {
 
 Hooks.on("modifyTokenAttribute", (data, updates, actor) => {
   // Notify you that the hook ran
-  console.log("modifyTokenAttribute fired!",data,updates,actor)
   if (data.attribute == "fight.endurance.value" && actor.type == "npc" && actor.system.npctype == "henchman") {
     canvas.scene.tokens.forEach((st) => {
       if (st.name == actor.name && st.id != actor.parent.id) {
-        console.log("We need to update endurance on",st.actor)
         st.actor.system.fight.endurance.value = data.value
       }
     })

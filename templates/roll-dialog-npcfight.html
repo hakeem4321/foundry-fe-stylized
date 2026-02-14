@@ -1,39 +1,31 @@
-<form class="skill-roll-dialog">
+<div class="skill-roll-dialog">
   <h2 class="dialog-roll-title">{{title}}</h2>
 
   <div class="floxrow">
     <div class="flexrow">
       <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitBonus"}} : {{npcstats.hit.value}}</span>
     </div>
-    
+
     {{#if weaponRoFOptions}}
     <div class="flexrow">
       <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.RateOfFire"}} : </span>
       <select class="competence-base flexrow" type="text" id="rof" name="rof" value="rofValue" data-dtype="Number">
-        {{#select rofValue}}
-          {{#each weaponRoFOptions as |rof idx|}}
-          <option value="{{idx}}">{{rof}}</option>
-          {{/each}}
-        {{/select}}
-      </select> 
+        {{selectOptions weaponRoFOptions selected=rofValue}}
+      </select>
     </div>
     {{/if}}
 
     <div class="flexrow">
       <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.BonusMalus"}} : </span>
       <select class="competence-base flexrow" type="text" id="bonusMalus" name="bonusMalus" value="bonusMalus" data-dtype="Number">
-        {{#select bonusMalus}}
-        {{{optionsBonusMalus}}}
-        {{/select}}
-      </select> 
+        {{selectOptions optionsBonusMalus selected=bonusMalus}}
+      </select>
     </div>
 
     <div class="flexrow">
       <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitDiceModifier"}} : </span>
       <select class="competence-base flexrow" type="text" id="bMHitDice" name="bMHitDice" value="bMHitDice" data-dtype="Number">
-        {{#select bMHitDice}}
-        {{{optionsBonusMalus}}}
-        {{/select}}
+        {{selectOptions optionsBonusMalus selected=bMHitDice}}
       </select>
     </div>
 
@@ -41,5 +33,5 @@
     {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=npcstats isfinal=false title=(localize "FE2.Items.Common.FinalStatsReminder") header=true}}
 
   </div>
-  
-</form>
+
+</div>

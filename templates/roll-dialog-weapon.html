@@ -1,37 +1,29 @@
-<form class="skill-roll-dialog">
+<div class="skill-roll-dialog">
   <h2 class="dialog-roll-title">{{title}}</h2>
 
   <div class="floxrow">
     <div class="flexrow">
       <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitBonus"}} : {{weapon.system.statstotal.hit.value}}</span>
     </div>
-    
+
     <div class="flexrow">
       <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.SkillToUse"}} : </span>
       <select class="competence-base flexrow" type="text" id="skillId" name="skillId" value="skillId" data-dtype="String">
-        {{#select skillId}}
-          {{#each weaponSkills as |skill key|}}
-          <option value="{{skill.id}}">{{skill.name}} ({{skill.system.total}})</option>
-          {{/each}}
-        {{/select}}
-      </select> 
+        {{selectOptions weaponSkillChoices selected=skillId}}
+      </select>
     </div>
 
     <div class="flexrow">
       <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.BonusMalus"}} : </span>
       <select class="competence-base flexrow" type="text" id="bonusMalus" name="bonusMalus" value="bonusMalus" data-dtype="Number">
-        {{#select bonusMalus}}
-          {{{optionsBonusMalus}}}
-        {{/select}}
-      </select> 
+        {{selectOptions optionsBonusMalus selected=bonusMalus}}
+      </select>
     </div>
 
     <div class="flexrow">
       <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitDiceModifier"}} : </span>
       <select class="competence-base flexrow" type="text" id="bMHitDice" name="bMHitDice" value="bMHitDice" data-dtype="Number">
-        {{#select bMHitDice}}
-        {{{optionsBonusMalus}}}
-        {{/select}}
+        {{selectOptions optionsBonusMalus selected=bMHitDice}}
       </select>
     </div>
 
@@ -51,16 +43,13 @@
     <div class="flexrow">
       <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.Cover"}} : </span>
       <select class="competence-base flexrow" type="text" id="cover" name="cover" value="cover" data-dtype="Number">
-        <option value="0">{{localize "FE2.Roll.Cover.NoCover"}}</option>
-        <option value="1">{{localize "FE2.Roll.Cover.LightCover"}}</option>
-        <option value="2">{{localize "FE2.Roll.Cover.HeavyCover"}}</option>
-        <option value="3">{{localize "FE2.Roll.Cover.EntrenchedCover"}}</option>
-      </select> 
+        {{selectOptions coverChoices selected=cover}}
+      </select>
     </div>
 
     <h3>{{localize "FE2.Items.Common.Stats"}}</h3>
     {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=weapon.system.statstotal isfinal=false title=(localize "FE2.Items.Common.FinalStatsReminder") header=true}}
 
   </div>
-  
-</form>
+
+</div>

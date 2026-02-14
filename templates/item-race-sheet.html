@@ -1,5 +1,5 @@
 
-<form class="{{cssClass}}" autocomplete="off">
+<div class="{{cssClass}}" autocomplete="off">
   <header class="sheet-header">
       <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
       <div class="header-fields">
@@ -12,16 +12,16 @@
     <div class="tab" data-group="primary">
       <span class="generic-label"><h3>{{localize "FE2.Items.Common.Requirements"}}</h3></span>
       <span class="small-editor item-text-long-line">
-        {{editor system.requirements target="system.requirements" engine="prosemirror"}}
+        <prose-mirror button="true" toggled="true" name="system.requirements" value="{{system.requirements}}">{{{enrichedRequirements}}}</prose-mirror>
       </span>
       <span class="generic-label"><h3>{{localize "FE2.Items.Common.Benefits"}}</h3></span>
       <span class="small-editor item-text-long-line">
-        {{editor system.benefits target="system.benefits" engine="prosemirror"}}
+        <prose-mirror button="true" toggled="true" name="system.benefits" value="{{system.benefits}}">{{{enrichedBenefits}}}</prose-mirror>
       </span>
       <span class="generic-label"><h3>{{localize "FE2.Items.Common.Disadvantages"}}</h3></span>
       <span class="small-editor item-text-long-line">
-        {{editor system.disadvantages target="system.disadvantages" engine="prosemirror"}}
+        <prose-mirror button="true" toggled="true" name="system.disadvantages" value="{{system.disadvantages}}">{{{enrichedDisadvantages}}}</prose-mirror>
       </span>
     </div>
   </section>
-</form>
+</div>

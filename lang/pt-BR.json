@@ -63,7 +63,8 @@
         "Equipment": "Equipamento",
         "Influence": "Influência",
         "StrongHits": "Golpes Fortes",
-        "TradeGoods": "Bens de comércio"
+        "TradeGoods": "Bens de comércio",
+        "PostToChat": "Postar no Chat"
       },
       "Character": {
         "Resources": "Recursos",
@@ -160,7 +161,15 @@
         "MinorPerk": "Vantagem Menor"
       },
       "Complication": {
-        "InfluenceLevel": "Nível de influência"
+        "InfluenceLevel": "Nível de influência",
+        "Minor": "Menor",
+        "Moderate": "Moderada",
+        "Major": "Maior"
+      },
+      "Perk": {
+        "Minor": "Menor",
+        "Moderate": "Moderada",
+        "Major": "Maior"
       },
       "SpacecraftPerk": {
         "Optional": "Opcional",
