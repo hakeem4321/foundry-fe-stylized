@@ -6,18 +6,18 @@
 
 <h4>
   {{#if (eq mode "skill")}}  
-  Skill : {{skill.name}} ({{skill.system.total}}) {{#if nbStrongHitUsed}}(Strong Hit Reroll){{/if}}
+  {{localize "FE2.Chat.Headers.Skill"}} : {{skill.name}} ({{skill.system.total}}) {{#if nbStrongHitUsed}}({{localize "FE2.Chat.Headers.StrongHitReroll"}}){{/if}}
   {{else}}
     {{#if (eq mode "weapon")}}
-    Weapon attack : {{weapon.name}}  ({{weapon.system.statstotal.hit.value}}) / {{skill.name}} ({{skill.system.total}}) 
+    {{localize "FE2.Chat.Headers.WeaponAttack"}} : {{weapon.name}}  ({{weapon.system.statstotal.hit.value}}) / {{skill.name}} ({{skill.system.total}})
     {{else}}
       {{#if (eq mode "spacecraftweapon")}}
-        Spacecraft Weapon attack : {{weapon.name}}  ({{weapon.system.statstotal.hit.value}}) / {{skill.name}} ({{skill.system.total}})
+        {{localize "FE2.Chat.Headers.SpacecraftWeaponAttack"}} : {{weapon.name}}  ({{weapon.system.statstotal.hit.value}}) / {{skill.name}} ({{skill.system.total}})
       {{else}}
         {{#if (eq mode "npcfight")}}
-        NPC attack : {{npc.name}}  ({{npcstats.hit.value}})  
+        {{localize "FE2.Chat.Headers.NPCAttack"}} : {{npc.name}}  ({{npcstats.hit.value}})
         {{else}}
-        NPC Generic Skill roll : {{npc.name}}
+        {{localize "FE2.Chat.Headers.NPCGenericSkillRoll"}} : {{npc.name}}
         {{/if}}
         {{/if}}
       {{/if}}
@@ -46,28 +46,28 @@
 
 <div>
   <ul>
-    <li>Bonus/Malus : {{finalBM}}</li>
+    <li>{{localize "FE2.Roll.Labels.BonusMalus"}} : {{finalBM}}</li>
     {{#if difficulty}}
-    <li>Difficulty : {{difficulty}}</li>
+    <li>{{localize "FE2.Chat.Stats.Difficulty"}} : {{difficulty}}</li>
     {{/if}}
     
     {{#if (eq mode "weapon")}}
-    <li>End Damage : {{totalEndDmg}}</li>
-    <li>Crit Damage : {{critDmg}} ({{weapon.system.statstotal.crit.value}} versus {{targetArmor}})</li>
+    <li>{{localize "FE2.Chat.Stats.EndDamage"}} : {{totalEndDmg}}</li>
+    <li>{{localize "FE2.Chat.Stats.CritDamage"}} : {{critDmg}} ({{weapon.system.statstotal.crit.value}} {{localize "FE2.Chat.Stats.Versus"}} {{targetArmor}})</li>
     {{/if}}
     {{#if (eq mode "spacecraftweapon")}}
-    <li>Shield Damage : {{totalEndDmg}}</li>
-    <li>Crit Damage : {{critDmg}} ({{weapon.system.statstotal.crit.value}} versus {{targetArmor}})</li>
+    <li>{{localize "FE2.Chat.Stats.ShieldDamage"}} : {{totalEndDmg}}</li>
+    <li>{{localize "FE2.Chat.Stats.CritDamage"}} : {{critDmg}} ({{weapon.system.statstotal.crit.value}} {{localize "FE2.Chat.Stats.Versus"}} {{targetArmor}})</li>
     {{/if}}
 
-    <li><strong>Total Roll : {{rollTotal}}</strong>
-    <li><strong>Target defense: {{targetDefence}}</strong></li>
-    {{#if (gt rollTotal targetDefence)}}<li><strong>Attack lands!</strong></li>
-      {{#if (gt totalEndDmg targetEnd)}}<li><strong>Endurance 0, Critical Hit or Critical Boost!</strong></li>{{/if}}
+    <li><strong>{{localize "FE2.Chat.Stats.TotalRoll"}} : {{rollTotal}}</strong>
+    <li><strong>{{localize "FE2.Chat.Stats.TargetDefense"}}: {{targetDefence}}</strong></li>
+    {{#if (gt rollTotal targetDefence)}}<li><strong>{{localize "FE2.Chat.Results.AttackLands"}}</strong></li>
+      {{#if (gt totalEndDmg targetEnd)}}<li><strong>{{localize "FE2.Chat.Results.CriticalHitOrBoost"}}</strong></li>{{/if}}
     {{/if}}
-    <li><strong>Grit re-rolls: {{gritRerollsLeft}} / {{gritRerollsMax}}</strong></li>
+    <li><strong>{{localize "FE2.Sheet.Character.GritRerolls"}}: {{gritRerollsLeft}} / {{gritRerollsMax}}</strong></li>
     {{#if nbStrongHit}}
-    <strong> - Strong Hits Used: {{nbStrongHitUsed}} / {{nbStrongHit}}</strong></li>
+    <strong> - {{localize "FE2.Chat.Stats.StrongHitsUsed"}}: {{nbStrongHitUsed}} / {{nbStrongHit}}</strong></li>
     {{/if}}
   </ul>  
 </div>

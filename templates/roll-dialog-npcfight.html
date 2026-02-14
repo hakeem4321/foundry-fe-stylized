@@ -3,12 +3,12 @@
 
   <div class="floxrow">
     <div class="flexrow">
-      <span class="competence-base flexrow" >Hit bonus : {{npcstats.hit.value}}</span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitBonus"}} : {{npcstats.hit.value}}</span>
     </div>
     
     {{#if weaponRoFOptions}}
     <div class="flexrow">
-      <span class="competence-base flexrow" >Rate of Fire : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.RateOfFire"}} : </span>
       <select class="competence-base flexrow" type="text" id="rof" name="rof" value="rofValue" data-dtype="Number">
         {{#select rofValue}}
           {{#each weaponRoFOptions as |rof idx|}}
@@ -20,7 +20,7 @@
     {{/if}}
 
     <div class="flexrow">
-      <span class="competence-base flexrow" >Bonus/Malus : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.BonusMalus"}} : </span>
       <select class="competence-base flexrow" type="text" id="bonusMalus" name="bonusMalus" value="bonusMalus" data-dtype="Number">
         {{#select bonusMalus}}
         {{{optionsBonusMalus}}}
@@ -29,7 +29,7 @@
     </div>
 
     <div class="flexrow">
-      <span class="competence-base flexrow" >Hit Dice Modifier : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitDiceModifier"}} : </span>
       <select class="competence-base flexrow" type="text" id="bMHitDice" name="bMHitDice" value="bMHitDice" data-dtype="Number">
         {{#select bMHitDice}}
         {{{optionsBonusMalus}}}
@@ -37,8 +37,8 @@
       </select>
     </div>
 
-    <h3>Stats</h3>
-    {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=npcstats isfinal=false title="Final stats reminder" header=true}}
+    <h3>{{localize "FE2.Items.Common.Stats"}}</h3>
+    {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=npcstats isfinal=false title=(localize "FE2.Items.Common.FinalStatsReminder") header=true}}
 
   </div>
   

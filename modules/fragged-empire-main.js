@@ -75,7 +75,7 @@ function welcomeMessage() {
   ChatMessage.create({
     user: game.user.id,
     whisper: [game.user.id],
-    content: `<div id="welcome-message-fragged-empire"><span class="rdd-roll-part">Welcome !</div>
+    content: `<div id="welcome-message-fragged-empire"><span class="rdd-roll-part">${game.i18n.localize("FE2.Chat.Results.Welcome")}</div>
     ` });
 }
 
@@ -88,9 +88,9 @@ Hooks.once("ready", async function () {
 
   // User warning
   if (!game.user.isGM && game.user.character == undefined) {
-    ui.notifications.info("Warning ! No character linked to your user !");
+    ui.notifications.info(game.i18n.localize("FE2.Notifications.NoLinkedCharacter"));
     ChatMessage.create({
-      content: "<b>WARNING</b> The player  " + game.user.name + " is not linked to a character !",
+      content: game.i18n.format("FE2.Notifications.NoLinkedCharacterChat", {name: game.user.name}),
       user: game.user._id
     });
   }
@@ -140,7 +140,7 @@ Hooks.once("ready", async function () {
   }
 
   await game.settings.set("foundry-fe2", "systemMigrationVersion", game.system.version);
-  ui.notifications.notify(`Migration Complete`);
+  ui.notifications.notify(game.i18n.localize("FE2.Notifications.MigrationComplete"));
 
   welcomeMessage();
 });
@@ -160,13 +160,36 @@ Hooks.on("chatMessage", (html, content, msg) => {
 Hooks.on("combatRound", (combat, prior, current) => {
 
   // Notify you that the hook ran
-  ui.notifications.info(`New Round: Round ${combat.round}`);
+  ui.notifications.info(game.i18n.format("FE2.Combat.NewRound", {round: combat.round}));
   if (combat.combatant?.actor.type == 'spacecraft') {
     console.log("This is a spaceship fight, rerolling alternate initiative")
   }
   combat.turns.forEach((theGuy) => {
     combat.rollInitiative(theGuy.id);
   })
+});
+
+Hooks.on("renderChatMessage", async (message, html, data) => {
+  const fe2Flags = message.flags?.["foundry-fe2"];
+  if (!fe2Flags) return;
+
+  const el = html instanceof HTMLElement ? html : html[0];
+  const messageContent = el?.querySelector(".message-content");
+  if (!messageContent) return;
+
+  if (fe2Flags.rollData) {
+    const rendered = await foundry.applications.handlebars.renderTemplate(
+      "systems/foundry-fe2/templates/chat-generic-result.html",
+      fe2Flags.rollData
+    );
+    messageContent.innerHTML = rendered;
+  } else if (fe2Flags.itemData) {
+    const rendered = await foundry.applications.handlebars.renderTemplate(
+      "systems/foundry-fe2/templates/post-item.html",
+      fe2Flags.itemData
+    );
+    messageContent.innerHTML = rendered;
+  }
 });
 
 Hooks.on("modifyTokenAttribute", (data, updates, actor) => {

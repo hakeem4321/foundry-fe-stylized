@@ -30,17 +30,17 @@ export class FraggedEmpireRoll extends Dialog {
   /* -------------------------------------------- */
   constructor(actor, rollData, html, options, close = undefined) {
     let conf = {
-      title: (rollData.mode == "skill") ? "Skill" : "Roll",
+      title: (rollData.mode == "skill") ? game.i18n.localize("FE2.Chat.Headers.Skill") : game.i18n.localize("FE2.Roll.Buttons.RollTitle"),
       content: html,
       buttons: { 
         roll: {
             icon: '<i class="fas fa-check"></i>',
-            label: "Roll !",
+            label: game.i18n.localize("FE2.Roll.Buttons.Roll"),
             callback: () => { this.roll() } 
           },
           cancel: {
             icon: '<i class="fas fa-times"></i>',
-            label: "Cancel",
+            label: game.i18n.localize("FE2.Dialog.Cancel"),
             callback: () => { this.close() }
         } },
       default: "roll",

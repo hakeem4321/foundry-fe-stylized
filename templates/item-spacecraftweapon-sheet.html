@@ -2,7 +2,7 @@
     <header class="sheet-header">
         <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="{{localize "FE2.Sheet.Common.Name"}}"/></h1>
         </div>
     </header>
 
@@ -14,7 +14,7 @@
           {{> "systems/foundry-fe2/templates/variations-section.html"}}
           {{> "systems/foundry-fe2/templates/modifications-section.html"}}
 
-          <h3> Keywords</h3>
+          <h3> {{localize "FE2.Items.Common.Keywords"}}</h3>
           <div class="grid grid-3col">
             {{#each keywords as |keywordArray key|}}
             <div>
@@ -40,17 +40,17 @@
           </div>
 
 
-          <h3>Stats</h3>
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=system.statstotal isfinal=true title="Final stats" header=true}}
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=system.stats  isbase=true title="Weapon stats"}}
+          <h3>{{localize "FE2.Items.Common.Stats"}}</h3>
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=system.statstotal isfinal=true title=(localize "FE2.Items.Common.FinalStats") header=true}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=system.stats  isbase=true title=(localize "FE2.Items.Common.WeaponStats")}}
           {{#each system.variations as |variation key|}}
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=variation.system.stats  isfinal=false title="Variation" subtitle=variation.name}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=variation.system.stats  isfinal=false title=(localize "FE2.Items.Common.Variation") subtitle=variation.name}}
           {{/each}}
           {{#each system.modifications as |modification key|}}
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=modification.system.stats  isfinal=false title="Modification" subtitle=modification.name}}
+          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=modification.system.stats  isfinal=false title=(localize "FE2.Items.Common.Modification") subtitle=modification.name}}
           {{/each}}
         
-          <h3>Description</h3>
+          <h3>{{localize "FE2.Sheet.Common.Description"}}</h3>
           {{editor system.description target="system.description" engine="prosemirror"}}
         </div>
 

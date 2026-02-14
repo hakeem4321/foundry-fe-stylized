@@ -135,6 +135,7 @@ export class FraggedEmpireItemSheet extends foundry.appv1.sheets.ItemSheet {
 
     renderTemplate('systems/foundry-fe2/templates/post-item.html', chatData).then(html => {
       let chatOptions = FraggedEmpireUtility.chatDataSetup(html);
+      chatOptions.flags = { "foundry-fe2": { itemData: chatData } };
       ChatMessage.create(chatOptions)
     });
   }

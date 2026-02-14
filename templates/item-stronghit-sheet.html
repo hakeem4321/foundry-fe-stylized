@@ -3,16 +3,16 @@
     <header class="sheet-header">
         <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="{{localize "FE2.Sheet.Common.Name"}}"/></h1>
         </div>
     </header>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
         <div class="tab" data-group="primary">
-          <h3>Description</h3>
+          <h3>{{localize "FE2.Sheet.Common.Description"}}</h3>
             {{editor system.description target="system.description" engine="prosemirror"}}
-          <h3>Requirements</h3>
+          <h3>{{localize "FE2.Items.Common.Requirements"}}</h3>
             {{editor system.requirements target="system.requirements" engine="prosemirror"}}
         </div>
     </section>

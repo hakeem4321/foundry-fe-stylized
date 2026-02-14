@@ -44,7 +44,9 @@ export class FraggedEmpireUtility  {
       'systems/foundry-fe2/templates/modifications-section.html',
       'systems/foundry-fe2/templates/skill-traits-section.html',
       'systems/foundry-fe2/templates/weapon-stats-section-tchat.html',
-      'systems/foundry-fe2/templates/partial-skill-list-header.html'
+      'systems/foundry-fe2/templates/partial-skill-list-header.html',
+      'systems/foundry-fe2/templates/chat-generic-result.html',
+      'systems/foundry-fe2/templates/post-item.html'
     ]
     return foundry.applications.handlebars.loadTemplates(templatePaths);    
   }
@@ -313,8 +315,10 @@ export class FraggedEmpireUtility  {
       }
     }
 
+    let chatRollFlags = FraggedEmpireUtility.buildRollChatFlags(rollData);
     this.createChatWithRollMode( rollData.alias, {
-      content: await foundry.applications.handlebars.renderTemplate(`systems/foundry-fe2/templates/chat-generic-result.html`, rollData)
+      content: await foundry.applications.handlebars.renderTemplate(`systems/foundry-fe2/templates/chat-generic-result.html`, rollData),
+      flags: { "foundry-fe2": { rollData: chatRollFlags } }
     });
 
     if (rollData.mode != "skill") {
@@ -378,7 +382,7 @@ export class FraggedEmpireUtility  {
   static blindMessageToGM(chatOptions) {
     let chatGM = duplicate(chatOptions);
     chatGM.whisper = this.getUsers(user => user.isGM);
-    chatGM.content = "Blinde message of " + game.user.name + "<br>" + chatOptions.content;
+    chatGM.content = game.i18n.format("FE2.Chat.Results.BlindMessage", {name: game.user.name}) + "<br>" + chatOptions.content;
     console.log("blindMessageToGM", chatGM);
     game.socket.emit("system.foundry-fe2", { msg: "msg_gm_chat_message", data: chatGM });
   }
@@ -389,6 +393,52 @@ export class FraggedEmpireUtility  {
     
     let rofMax = Number(item.system.statstotal.rof.value) || 1;
     return this.createDirectOptionList(1, rofMax);
+  }
+
+  /* -------------------------------------------- */
+  static buildRollChatFlags(rollData) {
+    let flags = {
+      mode: rollData.mode,
+      actorId: rollData.actorId,
+      actorImg: rollData.actorImg,
+      alias: rollData.alias,
+      diceResults: rollData.diceResults.slice(),
+      strongHitAvailable: rollData.strongHitAvailable,
+      nbStrongHit: rollData.nbStrongHit,
+      nbStrongHitUsed: rollData.nbStrongHitUsed,
+      finalBM: rollData.finalBM,
+      difficulty: rollData.difficulty,
+      rollTotal: rollData.rollTotal,
+      targetDefence: rollData.targetDefence,
+      targetArmor: rollData.targetArmor,
+      targetEnd: rollData.targetEnd,
+      totalEndDmg: rollData.totalEndDmg,
+      critDmg: rollData.critDmg,
+      gritRerollsLeft: rollData.gritRerollsLeft,
+      gritRerollsMax: rollData.gritRerollsMax
+    };
+    if (rollData.skill) {
+      flags.skill = { name: rollData.skill.name, system: { total: rollData.skill.system.total } };
+    }
+    if (rollData.weapon) {
+      flags.weapon = {
+        name: rollData.weapon.name,
+        system: { statstotal: {
+          hit: { value: rollData.weapon.system.statstotal.hit.value },
+          crit: { value: rollData.weapon.system.statstotal.crit.value }
+        }}
+      };
+    }
+    if (rollData.target) {
+      flags.target = { name: rollData.target.name, img: rollData.target.img, type: rollData.target.type };
+    }
+    if (rollData.npc) {
+      flags.npc = { name: rollData.npc.name };
+    }
+    if (rollData.npcstats) {
+      flags.npcstats = { hit: { value: rollData.npcstats.hit.value } };
+    }
+    return flags;
   }
 
   /* -------------------------------------------- */
@@ -416,7 +466,8 @@ export class FraggedEmpireUtility  {
           this.blindMessageToGM(chatOptions);
 
           chatOptions.whisper = [game.user.id];
-          chatOptions.content = "Message only to the GM";
+          chatOptions.content = game.i18n.localize("FE2.Chat.Results.GMOnly");
+          if (chatOptions.flags) delete chatOptions.flags["foundry-fe2"];
         }
         else {
           chatOptions.whisper = this.getUsers(user => user.isGM);
@@ -438,11 +489,11 @@ export class FraggedEmpireUtility  {
   /* -------------------------------------------- */
   static buildDifficultyOptions( ) {
     let options = ""
-    options += `<option value="0">None</option>`
-    options += `<option value="8">Easy</option>`
-    options += `<option value="12">Moderate</option>`
-    options += `<option value="16">Difficult</option>`
-    options += `<option value="18">Very Difficult</option>`
+    options += `<option value="0">${game.i18n.localize("FE2.Difficulty.None")}</option>`
+    options += `<option value="8">${game.i18n.localize("FE2.Difficulty.Easy")}</option>`
+    options += `<option value="12">${game.i18n.localize("FE2.Difficulty.Moderate")}</option>`
+    options += `<option value="16">${game.i18n.localize("FE2.Difficulty.Difficult")}</option>`
+    options += `<option value="18">${game.i18n.localize("FE2.Difficulty.VeryDifficult")}</option>`
     return options;
 
   }
@@ -450,11 +501,11 @@ export class FraggedEmpireUtility  {
   /* -------------------------------------------- */
   static async confirmDelete(actorSheet, li) {
     let itemId = li.data("item-id");
-    let msgTxt = "<p>Are you sure to remove this Item ?";
+    let msgTxt = "<p>" + game.i18n.localize("FE2.Dialog.ConfirmRemoveContent");
     let buttons = {
       delete: {
           icon: '<i class="fas fa-check"></i>',
-          label: "Yes, remove it",
+          label: game.i18n.localize("FE2.Dialog.ConfirmRemoveYes"),
           callback: () => {
             actorSheet.actor.deleteEmbeddedDocuments( "Item", [itemId] );
             li.slideUp(200, () => actorSheet.render(false));
@@ -462,12 +513,12 @@ export class FraggedEmpireUtility  {
         },
         cancel: {
           icon: '<i class="fas fa-times"></i>',
-          label: "Cancel"
+          label: game.i18n.localize("FE2.Dialog.Cancel")
         }
       }
       msgTxt += "</p>";
       let d = new Dialog({
-        title: "Confirm removal",
+        title: game.i18n.localize("FE2.Dialog.ConfirmRemoveTitle"),
         content: msgTxt,
         buttons: buttons,
         default: "cancel"

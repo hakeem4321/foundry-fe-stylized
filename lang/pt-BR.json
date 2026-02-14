@@ -1,0 +1,269 @@
+{
+  "FE2": {
+    "Tabs": {
+      "Attributes": "Atributos",
+      "Skills": "Perícias",
+      "Fight": "Combate",
+      "Features": "Características",
+      "ResearchTrade": "Pesquisa e Comércio",
+      "Biography": "Biografia",
+      "Cargo": "Carga",
+      "Main": "Principal",
+      "DefenceWeapons": "Defesa/Armas"
+    },
+    "Sheet": {
+      "Common": {
+        "Name": "Nome",
+        "Type": "Tipo",
+        "Description": "Descrição",
+        "Notes": "Notas",
+        "Current": "Atual",
+        "Max": "Máx",
+        "Base": "Base",
+        "Bonus": "Bônus",
+        "Total": "Total",
+        "Alloted": "Alocado",
+        "Level": "Nível",
+        "Recovery": "Recuperação",
+        "Unlocked": "Desbloqueado",
+        "Locked": "Bloqueado",
+        "EditItem": "Editar Item",
+        "DeleteItem": "Excluir Item",
+        "Worn": "Vestido",
+        "Equipped": "Equipado?",
+        "GMNotes": "Notas do Mestre",
+        "Value": "Valor",
+        "Traits": "Traços",
+        "Modifications": "Modificações",
+        "Variations": "Variações",
+        "Used": "Utilizado",
+        "Weapons": "Armas",
+        "Equipment": "Equipamento",
+        "Influence": "Influência",
+        "StrongHits": "Golpes Fortes",
+        "TradeGoods": "Bens de comércio"
+      },
+      "Character": {
+        "Resources": "Recursos",
+        "SpareTimePoints": "Pontos de Tempo Livre",
+        "Languages": "Idiomas",
+        "PrimarySkills": "Perícias Primárias",
+        "PersonalCombatSkills": "Perícias de Combate Pessoal",
+        "SpaceshipCombatSkills": "Perícias de Naves Espaciais",
+        "Endurance": "Resistência",
+        "Defence": "Defesa",
+        "Armour": "Armadura",
+        "DronesCompanions": "Drones/Companheiros",
+        "Outfits": "Trajes",
+        "Utilities": "Utilidades",
+        "Perks": "Vantagens",
+        "Complications": "Complicações",
+        "HenchmenDrones": "Capangas/Drones",
+        "CharacterTraitsList": "Lista de Traços do Personagem",
+        "SkillsTraitsList": "Lista de Traços de Perícias",
+        "Slots": "Espaços",
+        "Research": "Pesquisa",
+        "Race": "Espécie",
+        "GritRerolls": "Re-rolagens de Determinação",
+        "CombatOrderModifier": "Modificador de Ordem de Combate",
+        "Munitions": "Munições",
+        "AtZeroEndurance": "com Resistência 0",
+        "Tradebox": "Caixa de Comércio",
+        "CargoSpace": "Espaço de Carga",
+        "ResearchUnit": "Unidade de Pesquisa"
+      },
+      "Spacecraft": {
+        "Size": "Tamanho",
+        "Build": "Construção",
+        "OtherStats": "Outras Estatísticas",
+        "CargoSpaceUsed": "Espaço de Carga Utilizado",
+        "SpacecraftPerks": "Vantagens da Nave",
+        "SpacecraftTraitsList": "Lista de Traços da Nave"
+      },
+      "NPC": {
+        "KeyStats": "Estatísticas principais",
+        "OtherDatas": "Outros dados",
+        "TraitsList": "Lista de Traços",
+        "Commander": "NPC Comandante",
+        "Henchman": "Capanga",
+        "Drone": "Drone",
+        "Companion": "Companheiro"
+      }
+    },
+    "SkillList": {
+      "Trained": "Treinado",
+      "Attribute": "Atributo",
+      "StaticMod": "Mod. fixo",
+      "Trait": "Traço",
+      "Edit": "Editar"
+    },
+    "Items": {
+      "Common": {
+        "Keywords": "Palavras-chave",
+        "Stats": "Estatísticas",
+        "Requirements": "Requisitos",
+        "Benefits": "Benefícios",
+        "Disadvantages": "Desvantagens",
+        "FinalStats": "Estatísticas finais",
+        "WeaponStats": "Estatísticas da arma",
+        "UtilityStats": "Estatísticas do utilitário",
+        "OutfitStats": "Estatísticas do traje",
+        "VariationStats": "Estatísticas da Variação",
+        "ModificationStats": "Estatísticas da Modificação",
+        "Variation": "Variação",
+        "Modification": "Modificação",
+        "DefaultSkill": "Perícia Padrão",
+        "Weight": "Peso",
+        "Cost": "Custo",
+        "FinalStatsReminder": "Lembrete de estatísticas finais",
+        "WeaponType": "Tipo de Arma"
+      },
+      "Skill": {
+        "Trained": "Treinado?",
+        "AttributeBoost": "Bônus de Atributo",
+        "StaticModifier": "Modificador Fixo",
+        "Toolbox": "Caixa de ferramentas?",
+        "Workshop": "Oficina?"
+      },
+      "Research": {
+        "GainAt12": "Ganho em 12",
+        "GainAt16": "Ganho em 16",
+        "None": "Nenhum",
+        "SecretKnowledge": "Conhecimento Secreto",
+        "MinorPerk": "Vantagem Menor"
+      },
+      "Complication": {
+        "InfluenceLevel": "Nível de influência"
+      },
+      "SpacecraftPerk": {
+        "Optional": "Opcional",
+        "Automatic": "Automático"
+      },
+      "Types": {
+        "Gun": "Arma de fogo",
+        "Shell": "Projétil",
+        "Melee": "Corpo a corpo",
+        "Companion": "Companheiro",
+        "Special": "Especial",
+        "All": "Todos",
+        "GunVariation": "Variação de Arma de fogo",
+        "ShellVariation": "Variação de Projétil",
+        "MeleeVariation": "Variação Corpo a corpo",
+        "CompanionVariation": "Variação de Companheiro",
+        "SpecialVariation": "Variação Especial",
+        "WeaponModification": "Modificação de Arma",
+        "MeleeModification": "Modificação Corpo a corpo",
+        "DroneCompanionModification": "Modificação de Drone e Companheiro",
+        "Money": "Dinheiro",
+        "Loot": "Saque",
+        "Freight": "Frete",
+        "Advancement": "Avanço",
+        "Attribute": "Atributo",
+        "PrimarySkill": "Perícia Primária",
+        "Primary": "Primário",
+        "PersonalCombat": "Combate Pessoal",
+        "SpaceshipCombat": "Naves Espaciais",
+        "NPC": "PDM",
+        "Enemy": "Inimigo",
+        "Bounty": "Recompensa",
+        "Prejudice": "Preconceito",
+        "Reputation": "Reputação",
+        "Condition": "Condição",
+        "Build": "Construção",
+        "NPCBuild": "Construção de PDM",
+        "Hull": "Casco",
+        "Engines": "Motores",
+        "Crew": "Tripulação",
+        "Power": "Energia",
+        "CPU": "CPU",
+        "Sensors": "Sensores",
+        "Size": "Tamanho"
+      }
+    },
+    "Roll": {
+      "Labels": {
+        "BonusMalus": "Bônus/Penalidade",
+        "HitBonus": "Bônus de acerto",
+        "SkillToUse": "Perícia a usar",
+        "HitDiceModifier": "Modificador de Dados de Acerto",
+        "RateOfFire": "Cadência de Tiro",
+        "Cover": "Cobertura",
+        "AvailableTools": "Ferramentas disponíveis",
+        "Toolbox": "Caixa de ferramentas?",
+        "Workshop": "Oficina?",
+        "ApplyToolsBonus": "Aplicar Bônus de Ferramentas",
+        "ApplyToolboxBonus": "Aplicar bônus da Caixa de ferramentas (+1)?",
+        "ApplyDedicatedWorkshopBonus": "Aplicar bônus da Oficina dedicada (+2)?",
+        "UseMunitions": "Usar munições",
+        "MunitionsEmpty": "Munições zeradas, câmara vazia!",
+        "Trained": "Treinado (+1)",
+        "NotTrained": "Não Treinado (-2)"
+      },
+      "Buttons": {
+        "Roll": "Rolar!",
+        "RollTitle": "Rolagem"
+      },
+      "Cover": {
+        "NoCover": "Sem Cobertura",
+        "LightCover": "Cobertura Leve",
+        "HeavyCover": "Cobertura Pesada",
+        "EntrenchedCover": "Cobertura Entrincheirada"
+      }
+    },
+    "Chat": {
+      "Headers": {
+        "Skill": "Perícia",
+        "WeaponAttack": "Ataque com arma",
+        "SpacecraftWeaponAttack": "Ataque com arma da nave",
+        "NPCAttack": "Ataque de NPC",
+        "NPCGenericSkillRoll": "Rolagem de Perícia Genérica de PDM",
+        "StrongHitReroll": "Re-rolagem de Golpe Forte"
+      },
+      "Stats": {
+        "Difficulty": "Dificuldade",
+        "EndDamage": "Dano de Resistência",
+        "CritDamage": "Dano Crítico",
+        "ShieldDamage": "Dano ao Escudo",
+        "TotalRoll": "Rolagem Total",
+        "TargetDefense": "Defesa do alvo",
+        "StrongHitsUsed": "Golpes Fortes Usados",
+        "Versus": "contra"
+      },
+      "Results": {
+        "AttackLands": "Ataque acerta!",
+        "CriticalHitOrBoost": "Resistência 0, Acerto Crítico ou Impulso Crítico!",
+        "Welcome": "Bem-vindo!",
+        "GMOnly": "Mensagem apenas para o Mestre",
+        "BlindMessage": "Mensagem oculta de {name}"
+      }
+    },
+    "Notifications": {
+      "NoLinkedCharacter": "Aviso! Nenhum personagem vinculado ao seu usuário!",
+      "NoLinkedCharacterChat": "<b>AVISO</b> O jogador {name} não está vinculado a um personagem!",
+      "MigrationComplete": "Migração Concluída",
+      "SkillNotFound": "Perícia não encontrada!",
+      "TargetNotFound": "Alvo não encontrado! Você deve ter um alvo antes de disparar uma arma.",
+      "WeaponNotFound": "Arma não encontrada!"
+    },
+    "Difficulty": {
+      "None": "Nenhuma",
+      "Easy": "Fácil",
+      "Moderate": "Moderada",
+      "Difficult": "Difícil",
+      "VeryDifficult": "Muito Difícil"
+    },
+    "Dialog": {
+      "SkillTitle": "Perícia {name} : {total}",
+      "AttackTitle": "Ataque : {name}",
+      "SpacecraftAttackTitle": "Ataque da nave : {name}",
+      "GenericSkillRoll": "Rolagem de Perícia Genérica",
+      "ConfirmRemoveTitle": "Confirmar remoção",
+      "ConfirmRemoveContent": "Tem certeza que deseja remover este Item?",
+      "ConfirmRemoveYes": "Sim, remover",
+      "Cancel": "Cancelar"
+    },
+    "Combat": {
+      "NewRound": "Nova Rodada: Rodada {round}"
+    }
+  }
+}

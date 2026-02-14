@@ -663,7 +663,7 @@ export class FraggedEmpireActor extends Actor {
         img: skill.img,
         hasFate: this.getGrit(),
         rollMode: game.settings.get("core", "rollMode"),
-        title: `Skill ${skill.name} : ${skill.system.total}`,
+        title: game.i18n.format("FE2.Dialog.SkillTitle", {name: skill.name, total: skill.system.total}),
         skill: skill,
         optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
         bonusMalus: 0,
@@ -679,7 +679,7 @@ export class FraggedEmpireActor extends Actor {
       console.log(rollDialog);
       rollDialog.render( true );
     } else {
-      ui.notifications.warn("Skill not found !");
+      ui.notifications.warn(game.i18n.localize("FE2.Notifications.SkillNotFound"));
     }
   }
 
@@ -693,7 +693,7 @@ export class FraggedEmpireActor extends Actor {
       img: this.img,
       hasFate: this.getFate(),
       rollMode: game.settings.get("core", "rollMode"),
-      title: `Generic Skill roll`,
+      title: game.i18n.localize("FE2.Dialog.GenericSkillRoll"),
       optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
       bonusMalus: 0,
       optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions( ),
@@ -710,7 +710,7 @@ export class FraggedEmpireActor extends Actor {
     let weapon = this.items.find( item => item.id == weaponId);
       const target = game.user.targets.first();
     if (Object.is( target, undefined )) { 
-      ui.notifications.error("Target not found!  You must have a target before firing a weapon.");
+      ui.notifications.error(game.i18n.localize("FE2.Notifications.TargetNotFound"));
       return
     }
     console.log("WEAPON :", weaponId, weapon );
@@ -735,7 +735,7 @@ export class FraggedEmpireActor extends Actor {
         hasGrit: this.getGrit(),
         bMHitDice: 0,
         rollMode: game.settings.get("core", "rollMode"),
-        title: "Attack : " + weapon.name,
+        title: game.i18n.format("FE2.Dialog.AttackTitle", {name: weapon.name}),
         weapon: weapon,
         rofValue: 1,
         cover: 0,
@@ -763,7 +763,7 @@ export class FraggedEmpireActor extends Actor {
       console.log("WEAPON ROLL", rollData);
       rollDialog.render( true );
     } else {
-      ui.notifications.warn("Weapon not found !", weaponId);
+      ui.notifications.warn(game.i18n.localize("FE2.Notifications.WeaponNotFound"), weaponId);
     }
   }
   /* -------------------------------------------- */
@@ -784,7 +784,7 @@ export class FraggedEmpireActor extends Actor {
       hasFate: this.getFate(),
       npcstats: duplicate(this.system.stats),
       rollMode: game.settings.get("core", "rollMode"),
-      title: "Attack : " + this.name,
+      title: game.i18n.format("FE2.Dialog.AttackTitle", {name: this.name}),
       weaponRoFOptions: this.buildNPCRoFArray(), 
       rofValue: 1,
       optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
@@ -828,7 +828,7 @@ export class FraggedEmpireActor extends Actor {
         skill.system.total = skill.system.trainedValue + skill.system.bonus;
         skill.system.isTrait = skill.system.traits.length > 0; 
       } else {
-        actorList.push( { id:0, name:'NPC Commander', skills:[{ id:99, name:"NPC Combat", system:{total:0} }] } );
+        actorList.push( { id:0, name:game.i18n.localize("FE2.Sheet.NPC.Commander"), skills:[{ id:99, name:"NPC Combat", system:{total:0} }] } );
       }
 
       console.log(target)
@@ -841,7 +841,7 @@ export class FraggedEmpireActor extends Actor {
           img: weapon.img,
 
           rollMode: game.settings.get("core", "rollMode"),
-          title: "Spacecraft attack : " + weapon.name,
+          title: game.i18n.format("FE2.Dialog.SpacecraftAttackTitle", {name: weapon.name}),
           weapon: weapon,
           munitions: this.system.fight.munitions.value,
           hasGrit: this.getGrit(),
@@ -861,7 +861,7 @@ export class FraggedEmpireActor extends Actor {
         console.log("SPACECRAFT WEAPON ROLL", rollData);
         rollDialog.render( true );
       } else {
-        ui.notifications.warn("Weapon not found !", weaponId);
+        ui.notifications.warn(game.i18n.localize("FE2.Notifications.WeaponNotFound"), weaponId);
       }
     }
   

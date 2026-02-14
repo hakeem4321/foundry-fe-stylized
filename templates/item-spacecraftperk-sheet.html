@@ -3,20 +3,20 @@
     <header class="sheet-header">
         <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="{{localize "FE2.Sheet.Common.Name"}}"/></h1>
         </div>
     </header>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
       <ul>
-        <li class="flexrow"><label class="generic-label">Type</label>
+        <li class="flexrow"><label class="generic-label">{{localize "FE2.Sheet.Common.Type"}}</label>
         <select class="competence-base flexrow" type="text" name="data.type" value="{{data.type}}" data-dtype="String">
           {{#select data.type}}
-          <option value="minor">Optionnal</option>
-          <option value="moderate">Automatic</option>
+          <option value="minor">{{localize "FE2.Items.SpacecraftPerk.Optional"}}</option>
+          <option value="moderate">{{localize "FE2.Items.SpacecraftPerk.Automatic"}}</option>
           {{/select}}
-        </select> 
+        </select>
         </li>
       </ul>
 
