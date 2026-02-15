@@ -97,6 +97,9 @@ export class FraggedEmpireRoll {
         el.querySelector("#difficulty")?.addEventListener("change", (e) => {
           rollData.difficulty = Number(e.currentTarget.value);
         });
+        el.querySelector("#isArcane")?.addEventListener("change", (e) => {
+          rollData.isArcane = e.currentTarget.checked;
+        });
         el.querySelector("#skillId")?.addEventListener("change", (e) => {
           rollData.skillId = e.currentTarget.value;
           rollData.skill = rollData.weaponSkills.find(item => item.id === rollData.skillId);

@@ -1,6 +1,8 @@
 /* -------------------------------------------- */
 import { FraggedEmpireUtility } from "./fragged-empire-utility.js";
 import { FraggedEmpireRoll } from "./fragged-empire-roll-dialog.js";
+import { createEmptyModifiers, addModifier, applyModifiers, isEquipSuppressed } from "./effects/fragged-empire-effect-helpers.js";
+import { parseEffectKey, CHARACTER_ATTRIBUTES, SPACECRAFT_ATTRIBUTES } from "./effects/fragged-empire-effect-types.js";
 
 /* -------------------------------------------- */
 const coverBonusTable = { "nocover": 0, "lightcover": 1, "heavycover": 2, "entrenchedcover": 3};
@@ -77,6 +79,24 @@ export class FraggedEmpireActor extends Actor {
   }
 
   /* -------------------------------------------- */
+  /**
+   * Override applyActiveEffects to collect structured modifiers from fe2.* keys.
+   * Populates this._effectModifiers for consumption in prepareDerivedData() and rolls.
+   */
+  applyActiveEffects() {
+    this._effectModifiers = createEmptyModifiers();
+    for (const effect of this.effects) {
+      if (effect.disabled) continue;
+      if (isEquipSuppressed(effect, this)) continue;
+      for (const change of effect.changes) {
+        const parsed = parseEffectKey(change.key);
+        if (!parsed) continue;
+        addModifier(this._effectModifiers, parsed, change, effect.name, effect.id);
+      }
+    }
+  }
+
+  /* -------------------------------------------- */
   async prepareData() {
     
     super.prepareData();
@@ -84,108 +104,253 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   prepareDerivedData() {
+    const mods = this._effectModifiers;
+    this._baseValues = {};
+    this._computed = {};
+
     if (this.type == 'character') {
-      let restotal = this.system.level.value + 3 + this.system.resources.bonus;
-      if ( restotal != this.system.resources.total) {
-        this.system.resources.total = restotal;
-        this.update( { 'system.resources.total': restotal } );
-      }
-      let inftotal = this.system.level.value + 3 + this.system.influence.bonus;
-      if ( inftotal != this.system.influence.total) {
-        this.system.influence.total = inftotal;
-        this.update( { 'system.influence.total': inftotal } );
-      }
-      let endmax = 10 + (this.system.attributes.strength.value * 5) + this.system.endurance.endurancebonus;
-      if (endmax != this.system.endurance.max) {
-        this.system.endurance.max = endmax;
-        this.update( { 'system.endurance.max': endmax } );
-      }
-      let coverBonus = coverBonusTable[this.system.defensebonus.cover] * this.system.attributes.intelligence.current;
-      let defTotal = this.getDefenseBase() + coverBonus + this.system.defensebonus.defense;
-      if ( defTotal != this.system.defensebonus.total) {
-        this.system.defensebonus.total = defTotal;
-        this.update( { 'system.defensebonus.total': defTotal } );
-      }
-      let recovery = this.system.attributes.focus.value + this.system.endurance.recoverybonus;
-      if (recovery != this.system.endurance.recovery) {
-        this.system.endurance.recovery = recovery;
-        this.update( { 'system.endurance.recovery': recovery } );
-      }
-      let gritreroll = this.system.attributes.grit.value + this.system.gritreroll.bonus;
-      if (gritreroll != this.system.gritreroll.max) {
-        this.system.gritreroll.max = gritreroll;
-        this.update( { 'system.gritreroll.max': gritreroll } );
-      }
+      this._prepareCharacterDerived(mods);
     }
     if (this.type == 'spacecraft') {
-      let cargomax = (this.system.size.value*4) + this.system.attributes.hull.value - 10 + this.system.stats.cargo.bonus;
-      if  ( cargomax != this.system.stats.cargo.max) {
-        this.system.stats.cargo.max = cargomax;
-        this.update( { 'system.stats.cargo.max': cargomax } );
-      }
-      let slotmax = this.system.size.value + this.system.stats.weaponsslot.bonus;
-      if ( slotmax != this.system.stats.weaponsslot.max) {
-        this.system.stats.weaponsslot.max = slotmax;
-        this.update( { 'system.stats.weaponsslot.max': slotmax } );
-      }
-      let resupmax = (this.system.size.value*2) + this.system.stats.resupply.bonus;
-      if ( resupmax != this.system.stats.resupply.max) {
-        this.system.stats.resupply.max = resupmax;
-        this.update( { 'system.stats.resupply.max': resupmax } );
-      }
-      let velomax = 6 
-      if ( velomax != this.system.attributes.velocity.value) {
-        this.system.attributes.velocity.value = velomax;
-        this.update( { 'system.attributes.velocity.value': velomax } );
-      }
-      let defenceb = this.getDefenseBase();
-      if ( defenceb != this.system.fight.defence.base) {
-        this.system.fight.defence.base = defenceb;
-        this.update( { 'system.fight.defence.base': defenceb } );
-      }
-      let defencet = defenceb + this.system.fight.defence.bonus;
-      if ( defencet != this.system.fight.defence.total) {
-        this.system.fight.defence.total = defencet;
-        this.update( { 'system.fight.defence.total': defencet } );
-      }
-      let armourb = this.getBaseArmour();
-      if ( armourb != this.system.fight.armour.base) {
-        this.system.fight.armour.base = armourb;
-        this.update( { 'system.fight.armour.base': armourb } );
-      }
-      let armourt = armourb + this.system.fight.armour.bonus;
-      if ( armourt != this.system.fight.armour.total) {
-        this.system.fight.armour.total = armourt;
-        this.update( { 'system.fight.armour.total': armourt } );
-      }
-      let shieldb = 10 + (this.system.attributes.power.value*this.system.size.value) ;
-      if ( shieldb != this.system.fight.shield.base) {
-        this.system.fight.shield.base = shieldb;
-        this.update( { 'system.fight.shield.base': shieldb } );        
-      }
-      let shieldt = shieldb  + this.system.fight.shield.bonus;
-      if ( shieldt != this.system.fight.shield.total) {
-        this.system.fight.shield.total = shieldt;
-        this.update( { 'system.fight.shield.total': shieldt } );        
-      }
-      let vsordinance = this.system.fight.defence.total + this.system.fight.defence.derivated.vsordinance.bonus;
-      if ( vsordinance != this.system.fight.defence.derivated.vsordinance.total) {
-        this.system.fight.defence.derivated.vsordinance.total = vsordinance;
-        this.update( { 'system.fight.defence.derivated.vsordinance.total': vsordinance } );        
-      }
-      let vsboarding = 10 + this.system.size.value + this.system.attributes.crew.value + this.system.fight.defence.derivated.vsboarding.bonus;
-      if ( vsboarding != this.system.fight.defence.derivated.vsboarding.total) {
-        this.system.fight.defence.derivated.vsboarding.total = vsboarding;
-        this.update( { 'system.fight.defence.derivated.vsboarding.total': vsboarding } );        
-      }
-      let at0shield = -1 + this.system.fight.armour.derivated.at0shield.bonus;
-      if ( at0shield != this.system.fight.armour.derivated.at0shield.total) {
-        this.system.fight.armour.derivated.at0shield.total = at0shield;
-        this.update( { 'system.fight.armour.derivated.at0shield.total': at0shield } );        
-      }
+      this._prepareSpacecraftDerived(mods);
+    }
+    if (this.type == 'npc') {
+      this._prepareNPCDerived(mods);
     }
 
     super.prepareDerivedData();
+  }
+
+  /* -------------------------------------------- */
+  /**
+   * Compute effective attribute values with effect modifiers applied.
+   * Does NOT modify system data; returns a separate object for use in formulas.
+   * @param {string[]} attrKeys - Array of attribute key names
+   * @param {object|null} mods - Effect modifiers map
+   * @param {object} defaultMaxes - Default attribute max values (e.g., {strength: 5})
+   * @returns {object} Map of key -> { value, current, max }
+   */
+  _computeEffectiveAttributes(attrKeys, mods, defaultMaxes) {
+    const effective = {};
+    for (const key of attrKeys) {
+      const attr = this.system.attributes[key];
+      if (!attr) continue;
+      const baseMax = defaultMaxes[key] ?? 5;
+      const effectiveMax = mods ? Math.round(applyModifiers(baseMax, mods.attributeMax[key] || [])) : baseMax;
+      const attrMods = mods ? [...(mods.attributes[key] || []), ...(mods.attributes.all || [])] : [];
+      effective[key] = {
+        value: attrMods.length ? Math.min(Math.round(applyModifiers(attr.value, attrMods)), effectiveMax) : attr.value,
+        current: attrMods.length ? Math.min(Math.round(applyModifiers(attr.current, attrMods)), effectiveMax) : attr.current,
+        max: effectiveMax
+      };
+    }
+    return effective;
+  }
+
+  /* -------------------------------------------- */
+  _prepareCharacterDerived(mods) {
+    // Compute effective attributes (not persisted, avoids form-binding compound bug)
+    const defaultMaxes = this.system.attributemax || {};
+    this._effectiveAttributes = this._computeEffectiveAttributes(CHARACTER_ATTRIBUTES, mods, defaultMaxes);
+    const ea = this._effectiveAttributes;
+
+    // Resources total
+    let restotal = this.system.level.value + 3 + this.system.resources.bonus;
+    this._baseValues.resourcesTotal = restotal;
+    if (mods) restotal = Math.round(applyModifiers(restotal, mods.resourcesMax));
+    if (restotal != this.system.resources.total) {
+      this.system.resources.total = restotal;
+      this.update({ 'system.resources.total': restotal });
+    }
+
+    // Influence total
+    let inftotal = this.system.level.value + 3 + this.system.influence.bonus;
+    this._baseValues.influenceTotal = inftotal;
+    if (mods) inftotal = Math.round(applyModifiers(inftotal, mods.influenceMax));
+    if (inftotal != this.system.influence.total) {
+      this.system.influence.total = inftotal;
+      this.update({ 'system.influence.total': inftotal });
+    }
+
+    // Endurance max (uses effective strength)
+    let endmax = 10 + (ea.strength.value * 5) + this.system.endurance.endurancebonus;
+    this._baseValues.enduranceMax = endmax;
+    if (mods) endmax = Math.round(applyModifiers(endmax, mods.enduranceMax));
+    if (endmax != this.system.endurance.max) {
+      this.system.endurance.max = endmax;
+      this.update({ 'system.endurance.max': endmax });
+    }
+
+    // Defense total (uses effective reflexes, intelligence)
+    let coverBonus = coverBonusTable[this.system.defensebonus.cover] * ea.intelligence.current;
+    let outfitDefBonus = 0;
+    let outfits = this.items.filter(item => (item.type == 'outfit' || item.type == 'utility') && item.system.equipped);
+    for (let item of outfits) {
+      if (!isNaN(item.system.statstotal?.defence?.value)) {
+        outfitDefBonus += Number(item.system.statstotal.defence.value);
+      }
+    }
+    let defBase = 10 + ea.reflexes.value + outfitDefBonus;
+    let defTotal = defBase + coverBonus + this.system.defensebonus.defense;
+    this._baseValues.defenseTotal = defTotal;
+    if (mods) defTotal = Math.round(applyModifiers(defTotal, mods.defense));
+    if (defTotal != this.system.defensebonus.total) {
+      this.system.defensebonus.total = defTotal;
+      this.update({ 'system.defensebonus.total': defTotal });
+    }
+
+    // Recovery (uses effective focus)
+    let recovery = ea.focus.value + this.system.endurance.recoverybonus;
+    this._baseValues.recovery = recovery;
+    if (mods) recovery = Math.round(applyModifiers(recovery, mods.recovery));
+    if (recovery != this.system.endurance.recovery) {
+      this.system.endurance.recovery = recovery;
+      this.update({ 'system.endurance.recovery': recovery });
+    }
+
+    // Grit rerolls (uses effective grit)
+    let gritreroll = ea.grit.value + this.system.gritreroll.bonus;
+    this._baseValues.gritRerollMax = gritreroll;
+    if (mods) gritreroll = Math.round(applyModifiers(gritreroll, mods.gritReroll));
+    if (gritreroll != this.system.gritreroll.max) {
+      this.system.gritreroll.max = gritreroll;
+      this.update({ 'system.gritreroll.max': gritreroll });
+    }
+
+    // Computed modifier values (not persisted, for rolls and display)
+    this._computed.hitBonus = mods ? Math.round(applyModifiers(this.system.modifiers.hitbonus, mods.hitBonus)) : this.system.modifiers.hitbonus;
+    this._computed.enduranceDamage = mods ? Math.round(applyModifiers(this.system.modifiers.endurancedamage, mods.enduranceDamage)) : this.system.modifiers.endurancedamage;
+    this._computed.utilitiesMax = mods ? Math.round(applyModifiers(this.system.modifiers.utilitiesmax, mods.utilitiesMax)) : this.system.modifiers.utilitiesmax;
+    this._computed.movement = mods ? Math.round(applyModifiers(ea.mobility.value + this.system.modifiers.movement, mods.movement)) : ea.mobility.value + this.system.modifiers.movement;
+    this._computed.acquisitionMod = mods ? Math.round(applyModifiers(this.system.modifiers.acquisitionmod, mods.acquisition)) : this.system.modifiers.acquisitionmod;
+    this._computed.arcaneMod = mods ? Math.round(applyModifiers(this.system.modifiers.arcanemod, mods.arcane)) : this.system.modifiers.arcanemod;
+    this._computed.untrainedSkillMod = mods ? Math.round(applyModifiers(this.system.modifiers.untrainedskillmod, mods.untrainedSkill)) : this.system.modifiers.untrainedskillmod;
+    this._computed.combatOrder = mods ? Math.round(applyModifiers(this.system.combatordermod, mods.combatOrder)) : this.system.combatordermod;
+    this._computed.armourZeroEnd = mods ? Math.round(applyModifiers(this.system.armourbonus.zeroendurance, mods.armourZeroEnd)) : this.system.armourbonus.zeroendurance;
+  }
+
+  /* -------------------------------------------- */
+  _prepareSpacecraftDerived(mods) {
+    // Compute effective attributes for spacecraft
+    const defaultMaxes = this.system.attributemax || {};
+    this._effectiveAttributes = this._computeEffectiveAttributes(SPACECRAFT_ATTRIBUTES, mods, defaultMaxes);
+    const ea = this._effectiveAttributes;
+
+    // Initialize sub-objects for base values
+    this._baseValues.statMaxes = {};
+    this._baseValues.fightTotals = {};
+
+    // Cargo max
+    let cargomax = (this.system.size.value * 4) + ea.hull.value - 10 + this.system.stats.cargo.bonus;
+    this._baseValues.statMaxes.cargo = cargomax;
+    if (mods) cargomax = Math.round(applyModifiers(cargomax, mods.cargoMax));
+    if (cargomax != this.system.stats.cargo.max) {
+      this.system.stats.cargo.max = cargomax;
+      this.update({ 'system.stats.cargo.max': cargomax });
+    }
+
+    // Weapon slots max
+    let slotmax = this.system.size.value + this.system.stats.weaponsslot.bonus;
+    this._baseValues.statMaxes.weaponsslot = slotmax;
+    if (mods) slotmax = Math.round(applyModifiers(slotmax, mods.weaponSlotsMax));
+    if (slotmax != this.system.stats.weaponsslot.max) {
+      this.system.stats.weaponsslot.max = slotmax;
+      this.update({ 'system.stats.weaponsslot.max': slotmax });
+    }
+
+    // Resupply max
+    let resupmax = (this.system.size.value * 2) + this.system.stats.resupply.bonus;
+    this._baseValues.statMaxes.resupply = resupmax;
+    if (mods) resupmax = Math.round(applyModifiers(resupmax, mods.resupplyMax));
+    if (resupmax != this.system.stats.resupply.max) {
+      this.system.stats.resupply.max = resupmax;
+      this.update({ 'system.stats.resupply.max': resupmax });
+    }
+
+    // Velocity max
+    let velomax = 6;
+    if (velomax != this.system.attributes.velocity.value) {
+      this.system.attributes.velocity.value = velomax;
+      this.update({ 'system.attributes.velocity.value': velomax });
+    }
+
+    // Defence base and total
+    let defenceb = this.getDefenseBase();
+    if (defenceb != this.system.fight.defence.base) {
+      this.system.fight.defence.base = defenceb;
+      this.update({ 'system.fight.defence.base': defenceb });
+    }
+    let defencet = defenceb + this.system.fight.defence.bonus;
+    this._baseValues.fightTotals.defence = defencet;
+    if (mods) defencet = Math.round(applyModifiers(defencet, mods.defense));
+    if (defencet != this.system.fight.defence.total) {
+      this.system.fight.defence.total = defencet;
+      this.update({ 'system.fight.defence.total': defencet });
+    }
+
+    // Armour base and total
+    let armourb = this.getBaseArmour();
+    if (armourb != this.system.fight.armour.base) {
+      this.system.fight.armour.base = armourb;
+      this.update({ 'system.fight.armour.base': armourb });
+    }
+    let armourt = armourb + this.system.fight.armour.bonus;
+    this._baseValues.fightTotals.armour = armourt;
+    if (mods) armourt = Math.round(applyModifiers(armourt, mods.armour));
+    if (armourt != this.system.fight.armour.total) {
+      this.system.fight.armour.total = armourt;
+      this.update({ 'system.fight.armour.total': armourt });
+    }
+
+    // Shield base and total
+    let shieldb = 10 + (ea.power.value * this.system.size.value);
+    if (shieldb != this.system.fight.shield.base) {
+      this.system.fight.shield.base = shieldb;
+      this.update({ 'system.fight.shield.base': shieldb });
+    }
+    let shieldt = shieldb + this.system.fight.shield.bonus;
+    this._baseValues.fightTotals.shield = shieldt;
+    if (mods) shieldt = Math.round(applyModifiers(shieldt, mods.shield));
+    if (shieldt != this.system.fight.shield.total) {
+      this.system.fight.shield.total = shieldt;
+      this.update({ 'system.fight.shield.total': shieldt });
+    }
+
+    // Shield regen
+    if (mods && mods.shieldRegen.length) {
+      this._computed.shieldRegen = Math.round(applyModifiers(this.system.fight.shield.derivated.regen.value, mods.shieldRegen));
+    }
+
+    // Vs ordinance
+    let vsordinance = this.system.fight.defence.total + this.system.fight.defence.derivated.vsordinance.bonus;
+    if (vsordinance != this.system.fight.defence.derivated.vsordinance.total) {
+      this.system.fight.defence.derivated.vsordinance.total = vsordinance;
+      this.update({ 'system.fight.defence.derivated.vsordinance.total': vsordinance });
+    }
+
+    // Vs boarding (uses effective crew)
+    let vsboarding = 10 + this.system.size.value + ea.crew.value + this.system.fight.defence.derivated.vsboarding.bonus;
+    if (vsboarding != this.system.fight.defence.derivated.vsboarding.total) {
+      this.system.fight.defence.derivated.vsboarding.total = vsboarding;
+      this.update({ 'system.fight.defence.derivated.vsboarding.total': vsboarding });
+    }
+
+    // At 0 shield
+    let at0shield = -1 + this.system.fight.armour.derivated.at0shield.bonus;
+    if (at0shield != this.system.fight.armour.derivated.at0shield.total) {
+      this.system.fight.armour.derivated.at0shield.total = at0shield;
+      this.update({ 'system.fight.armour.derivated.at0shield.total': at0shield });
+    }
+  }
+
+  /* -------------------------------------------- */
+  _prepareNPCDerived(mods) {
+    // NPC fight values are user-editable, so compute effective values separately.
+    // Keys match system.fight keys (British spelling) so templates can use {{lookup}}.
+    this._computed.defence = mods ? Math.round(applyModifiers(this.system.fight.defence.value, mods.defense)) : this.system.fight.defence.value;
+    this._computed.armour = mods ? Math.round(applyModifiers(this.system.fight.armour.value, mods.armour)) : this.system.fight.armour.value;
+    this._computed.endurance = mods ? Math.round(applyModifiers(this.system.fight.endurance.value, mods.enduranceMax)) : this.system.fight.endurance.value;
+    this._computed.movement = mods ? Math.round(applyModifiers(this.system.fight.movement.value, mods.movement)) : this.system.fight.movement.value;
   }
 
   /* -------------------------------------------- */
@@ -374,7 +539,6 @@ export class FraggedEmpireActor extends Actor {
       }
       skillsTraits = skillsTraits.concat( skill.system.traits );
     }
-    //console.log("Consolidated skills", skillsTraits);
     return skillsTraits;
   } 
 
@@ -500,14 +664,22 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   getInitiativeScore( phase)  {
     if ( this.type == 'character') {
-      return this.system.attributes.intelligence.current + (this.system.attributes.reflexes.current/10) + this.system.combatordermod
+      const ea = this._effectiveAttributes || {};
+      const intCur = ea.intelligence?.current ?? this.system.attributes.intelligence.current;
+      const refCur = ea.reflexes?.current ?? this.system.attributes.reflexes.current;
+      const combatOrder = this._computed?.combatOrder ?? this.system.combatordermod;
+      return intCur + (refCur / 10) + combatOrder;
     } else if (this.type == 'spacecraft') {
+      const ea = this._effectiveAttributes || {};
       if (phase == 1) {
-        return this.system.attributes.velocity.current + (this.system.attributes.crew.current/10)
+        const veloCur = ea.velocity?.current ?? this.system.attributes.velocity.current;
+        const crewCur = ea.crew?.current ?? this.system.attributes.crew.current;
+        return veloCur + (crewCur / 10);
       } else {
-        return this.system.attributes.cpu.current + (this.system.attributes.crew.current/10)
+        const cpuCur = ea.cpu?.current ?? this.system.attributes.cpu.current;
+        const crewCur = ea.crew?.current ?? this.system.attributes.crew.current;
+        return cpuCur + (crewCur / 10);
       }
-      
     }
     return 0.0;
   }
@@ -563,11 +735,14 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   getTotalArmour( ) {
     if (this.type == 'character') {
-      this.system.armourbonus.total = this.getBaseArmour() + this.system.armourbonus.armour;
-      return this.system.armourbonus.total;
+      let total = this.getBaseArmour() + this.system.armourbonus.armour;
+      this._baseValues.armourTotal = total;
+      const mods = this._effectModifiers;
+      if (mods) total = Math.round(applyModifiers(total, mods.armour));
+      this.system.armourbonus.total = total;
+      return total;
     }
     if (this.type == 'spacecraft') {
-      this.system.fight.armour.total = this.getBaseArmour() + this.system.fight.armour.bonus
       return this.system.fight.armour.total;
     }
     return 0;
@@ -672,10 +847,48 @@ export class FraggedEmpireActor extends Actor {
       }
       if (skill.system.staticmod) {rollData.bonusMalus += skill.system.staticmod}
       if (skill.system.toolbox == true) {rollData.useToolbox = true}
+      rollData.effectModifiers = this._effectModifiers;
+      rollData.untrainedSkillMod = this._computed?.untrainedSkillMod || 0;
+      rollData.arcaneMod = this._computed?.arcaneMod || 0;
       await FraggedEmpireRoll.create( this, rollData);
     } else {
       ui.notifications.warn(game.i18n.localize("FE2.Notifications.SkillNotFound"));
     }
+  }
+
+  /* -------------------------------------------- */
+  async rollAcquisition() {
+    let primarySkills = this.items.filter(item => item.type == 'skill' && item.system.type == 'primary');
+    let skill = primarySkills.find(s => s.name.toLowerCase().includes('wealth')) || primarySkills[0];
+    if (!skill) {
+      ui.notifications.warn(game.i18n.localize("FE2.Notifications.SkillNotFound"));
+      return;
+    }
+    let rollData = {
+      mode: "skill",
+      alias: this.name,
+      actorImg: this.img,
+      actorId: this.id,
+      img: skill.img,
+      hasFate: this.getGrit(),
+      rollMode: game.settings.get("core", "rollMode"),
+      title: game.i18n.localize("FE2.Dialog.AcquisitionRoll"),
+      skill: skill,
+      optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
+      bonusMalus: 0,
+      optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions(),
+      difficulty: 0,
+      useToolbox: false,
+      useDedicatedworkshop: false,
+      toolsAvailable: skill.system.toolbox || skill.system.dedicatedworkshop,
+      acquisitionMod: this._computed?.acquisitionMod || 0
+    };
+    if (skill.system.staticmod) rollData.bonusMalus += skill.system.staticmod;
+    if (skill.system.toolbox) rollData.useToolbox = true;
+    rollData.effectModifiers = this._effectModifiers;
+    rollData.untrainedSkillMod = this._computed?.untrainedSkillMod || 0;
+    rollData.arcaneMod = this._computed?.arcaneMod || 0;
+    await FraggedEmpireRoll.create(this, rollData);
   }
 
   /* -------------------------------------------- */
@@ -694,6 +907,7 @@ export class FraggedEmpireActor extends Actor {
       optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions( ),
       difficulty: 0
     }
+    rollData.effectModifiers = this._effectModifiers;
     await FraggedEmpireRoll.create( this, rollData);
   }
 
@@ -749,6 +963,10 @@ export class FraggedEmpireActor extends Actor {
       } else if (this.type == 'npc' && this.system.npctype == 'henchman') {
         rollData.weapon.system.statstotal.enddmg.value = Number(this.system.stats.Attribute.value) + Number(rollData.weapon.system.statstotal.enddmg.value)
       }
+      rollData.effectModifiers = this._effectModifiers;
+      rollData.effectHitBonus = this._computed?.hitBonus || 0;
+      rollData.effectEndDmg = this._computed?.enduranceDamage || 0;
+      rollData.untrainedSkillMod = this._computed?.untrainedSkillMod || 0;
       await FraggedEmpireRoll.create( this, rollData);
     } else {
       ui.notifications.warn(game.i18n.localize("FE2.Notifications.WeaponNotFound"), weaponId);
@@ -780,6 +998,7 @@ export class FraggedEmpireActor extends Actor {
       bMHitDice: 0,
       optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions( )
     }
+    rollData.effectModifiers = this._effectModifiers;
     await FraggedEmpireRoll.create( this, rollData);
   }
 
@@ -837,6 +1056,7 @@ export class FraggedEmpireActor extends Actor {
         }
         let rofMax = 1;
         rollData.rofValue = rofMax;
+        rollData.effectModifiers = this._effectModifiers;
 
         await FraggedEmpireRoll.create( this, rollData);
       } else {

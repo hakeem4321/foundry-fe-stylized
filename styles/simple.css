@@ -247,3 +247,189 @@ ul, li {
   flex: 0 0 auto;
 }
 
+/* ==================== (D) Effects System ==================== */
+
+/* Effects list */
+.effects-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.effect-entry {
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  gap: 4px;
+}
+
+.effect-entry:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.effect-icon {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  object-fit: cover;
+}
+
+.effect-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.effect-source {
+  flex: 0 0 auto;
+  font-size: 0.85em;
+  color: #666;
+  font-style: italic;
+}
+
+.effect-controls {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 4px;
+}
+
+.effect-control {
+  cursor: pointer;
+  color: #555;
+}
+
+.effect-control:hover {
+  color: #000;
+}
+
+/* Effect states */
+.effect-inactive {
+  opacity: 0.5;
+}
+
+.effect-suppressed {
+  opacity: 0.4;
+  font-style: italic;
+}
+
+/* Effect category headers */
+.effect-category-header {
+  margin: 8px 0 4px;
+  padding: 2px 4px;
+  border-bottom: 2px solid #4a0404;
+  font-size: 0.95em;
+}
+
+/* Add effect button */
+.effect-add {
+  padding: 4px;
+  text-align: center;
+}
+
+.effect-add a {
+  cursor: pointer;
+  color: #555;
+}
+
+.effect-add a:hover {
+  color: #000;
+}
+
+/* No effects message */
+.effects-empty {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 8px;
+}
+
+/* Modifier indicators */
+.modifier-up::after {
+  content: "\f062";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: #2d8a2d;
+  font-size: 0.75em;
+  margin-left: 2px;
+}
+
+.modifier-down::after {
+  content: "\f063";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: #8a2d2d;
+  font-size: 0.75em;
+  margin-left: 2px;
+}
+
+.attribute-max-label {
+  font-size: 0.8em;
+  color: #666;
+  margin-left: 2px;
+}
+
+/* Item sheet tab navigation */
+.item-sheet-tabs {
+  display: flex;
+  border-bottom: 2px solid #4a0404;
+  margin-bottom: 8px;
+}
+
+.item-sheet-tabs a {
+  padding: 4px 12px;
+  cursor: pointer;
+  font-family: var(--tab-header-font-family);
+  font-size: var(--tab-header-font-size);
+  color: var(--tab-header-color);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+}
+
+.item-sheet-tabs a.active {
+  color: var(--tab-header-color-active);
+  border-bottom-color: var(--tab-header-color-active);
+}
+
+/* Effect changes tab */
+.effect-changes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.effect-change-entry {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.effect-change-entry select,
+.effect-change-entry input {
+  font-size: 0.9em;
+}
+
+.effect-change-target {
+  flex: 2;
+}
+
+.effect-change-subtype {
+  flex: 1.5;
+}
+
+.effect-change-mode {
+  flex: 1;
+}
+
+.effect-change-value {
+  flex: 0 0 60px;
+}
+
+.effect-change-delete {
+  flex: 0 0 24px;
+  text-align: center;
+}
+

@@ -28,7 +28,11 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
       viewVariation: FraggedEmpireItemSheet.#onViewVariation,
       viewModification: FraggedEmpireItemSheet.#onViewModification,
       viewTrait: FraggedEmpireItemSheet.#onViewTrait,
-      deleteEmbedded: FraggedEmpireItemSheet.#onDeleteEmbedded
+      deleteEmbedded: FraggedEmpireItemSheet.#onDeleteEmbedded,
+      createEffect: FraggedEmpireItemSheet.#onCreateEffect,
+      editEffect: FraggedEmpireItemSheet.#onEditEffect,
+      toggleEffect: FraggedEmpireItemSheet.#onToggleEffect,
+      deleteEffect: FraggedEmpireItemSheet.#onDeleteEffect
     },
     dragDrop: [{ dragSelector: null, dropSelector: null }]
   };
@@ -54,6 +58,9 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
   }
 
   /* -------------------------------------------- */
+  tabGroups = { primary: "details" };
+
+  /* -------------------------------------------- */
   async _prepareContext(options) {
     const context = await super._prepareContext(options);
     const item = this.document;
@@ -73,6 +80,14 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
     context.limited = item.limited;
     context.owner = item.isOwner;
     context.isGM = game.user.isGM;
+    context.effects = item.effects.map(e => ({
+      _id: e.id,
+      name: e.name,
+      img: e.img,
+      disabled: e.disabled,
+      active: !e.disabled,
+      effect: e
+    }));
 
     // Type-specific choice objects for selectOptions
     switch (item.type) {
@@ -131,8 +146,12 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
   /* -------------------------------------------- */
   _onRender(context, options) {
     super._onRender(context, options);
-    // Item templates use .tab class for content wrapper — activate it so content is visible
-    this.element.querySelectorAll(".tab[data-group]").forEach(el => el.classList.add("active"));
+    // Activate tabs after render (V2 does not auto-activate from tabGroups)
+    for (const [group, tab] of Object.entries(this.tabGroups)) {
+      if (!tab) continue;
+      const tabElement = this.element?.querySelector(`[data-tab="${tab}"][data-group="${group}"]`);
+      if (tabElement) this.changeTab(tab, group, {force: true});
+    }
   }
 
   /* -------------------------------------------- */
@@ -176,6 +195,47 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
     const array = foundry.utils.deepClone(this.document.system[itemType]);
     const newArray = array.filter(item => item._id !== itemId);
     this.document.update({ [`system.${itemType}`]: newArray });
+  }
+
+  /* -------------------------------------------- */
+  /*  Effect Action Handlers                      */
+  /* -------------------------------------------- */
+
+  static #onCreateEffect(event, target) {
+    const effectData = {
+      name: game.i18n.localize("FE2.Effects.UI.AddEffect"),
+      img: "icons/svg/aura.svg",
+      origin: this.document.uuid,
+      transfer: true,
+      disabled: false
+    };
+    this.document.createEmbeddedDocuments("ActiveEffect", [effectData]);
+  }
+
+  static #onEditEffect(event, target) {
+    const effectId = target.closest("[data-effect-id]")?.dataset.effectId;
+    if (!effectId) return;
+    const effect = this.document.effects.get(effectId);
+    effect?.sheet.render(true);
+  }
+
+  static #onToggleEffect(event, target) {
+    const effectId = target.closest("[data-effect-id]")?.dataset.effectId;
+    if (!effectId) return;
+    const effect = this.document.effects.get(effectId);
+    if (effect) effect.update({ disabled: !effect.disabled });
+  }
+
+  static async #onDeleteEffect(event, target) {
+    const effectId = target.closest("[data-effect-id]")?.dataset.effectId;
+    if (!effectId) return;
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize("FE2.Dialog.ConfirmRemoveTitle") },
+      content: "<p>" + game.i18n.localize("FE2.Dialog.ConfirmRemoveContent") + "</p>"
+    });
+    if (confirmed) {
+      this.document.deleteEmbeddedDocuments("ActiveEffect", [effectId]);
+    }
   }
 
   /* -------------------------------------------- */

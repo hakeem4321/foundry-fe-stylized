@@ -8,8 +8,12 @@
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
+        <nav class="item-sheet-tabs tabs" data-group="primary">
+          <a data-tab="details" data-group="primary" data-action="tab">{{localize "FE2.Tabs.Details"}}</a>
+          <a data-tab="effects" data-group="primary" data-action="tab">{{localize "FE2.Effects.UI.TabLabel"}}</a>
+        </nav>
 
-        <div class="tab" data-group="primary">
+        <div class="tab" data-group="primary" data-tab="details">
 
           {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=system.stats isbase=true title=(localize "FE2.Items.Common.VariationStats") header=true}}
 
@@ -17,5 +21,8 @@
           <prose-mirror button="true" toggled="true" name="system.description" value="{{system.description}}">{{{enrichedDescription}}}</prose-mirror>
         </div>
 
+        <div class="tab" data-group="primary" data-tab="effects">
+          {{> "systems/foundry-fe2/templates/effects-section.html"}}
+        </div>
     </section>
 </div>

@@ -19,6 +19,7 @@
         <a class="item" data-tab="equipment" data-group="primary" data-action="tab">{{localize "FE2.Sheet.Common.Equipment"}}</a>
         <a class="item" data-tab="researchtrade" data-group="primary" data-action="tab">{{localize "FE2.Tabs.ResearchTrade"}}</a>
         <a class="item" data-tab="biodata" data-group="primary" data-action="tab">{{localize "FE2.Tabs.Biography"}}</a>
+        <a class="item" data-tab="effects" data-group="primary" data-action="tab">{{localize "FE2.Effects.UI.TabLabel"}}</a>
     </nav>
 
     {{!-- Sheet Body --}}
@@ -40,6 +41,8 @@
                   <span class="stat-label flexrow" name="{{key}}"><a class="carac-roll">{{localize attr.label}}</a></span>
                   <input type="text" class="input-numeric-short" name="system.attributes.{{key}}.current" value="{{attr.current}}" data-dtype="Number"/>
                   <input type="text" class="input-numeric-short" name="system.attributes.{{key}}.value" value="{{attr.value}}" data-dtype="Number"/>
+                  {{modIndicator (lookup (lookup @root.effectiveAttributes key) "value") attr.value}}
+                  <span class="attribute-max-label" title="{{localize "FE2.Effects.Fields.AttributeMax"}}">/ {{lookup (lookup @root.effectiveAttributes key) "max"}}</span>
                   <div class="item-controls">
                     {{#if (ne attr.traitId "")}}
                     <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
@@ -66,7 +69,8 @@
 
             <div class="">
 
-              <span class="generic-label"><h3>{{localize "FE2.Sheet.Character.Resources"}}</h3></span>
+              <span class="generic-label"><h3>{{localize "FE2.Sheet.Character.Resources"}}</h3>
+              <button data-action="rollAcquisition" class="small-button">{{localize "FE2.Dialog.AcquisitionRoll"}}</button></span>
               <ul>
                 <li class="item flexrow list-item packed-left" data-attr-key="fate" data-item-id="{{system.resources.traitId}}">
                   <span class="stat-label packed-left" name="level">{{localize "FE2.Sheet.Common.Current"}} :</span>
@@ -75,7 +79,7 @@
                   <input type="text" class="input-numeric-short" name="system.resources.alloted" value="{{system.resources.alloted}}" data-dtype="Number"/>
                   <span class="stat-label padd-left packed-left" name="level ">{{localize "FE2.Sheet.Common.Bonus"}} : </span>
                   <input type="text" class="input-numeric-short" name="system.resources.bonus" value="{{system.resources.bonus}}" data-dtype="Number"/>
-                  <span class="stat-label padd-left packed-left" name="level">{{localize "FE2.Sheet.Common.Max"}} : {{system.resources.total}}</span>
+                  <span class="stat-label padd-left packed-left" name="level">{{localize "FE2.Sheet.Common.Max"}} : {{system.resources.total}} {{modIndicator system.resources.total baseValues.resourcesTotal}}</span>
                   <div class="item-controls">
                     {{#if (ne system.resources.traitId "")}}
                     <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
@@ -91,7 +95,7 @@
                   <input type="text" class="input-numeric-short" name="system.influence.value" value="{{system.influence.value}}" data-dtype="Number"/>
                   <span class="stat-label padd-left" name="level">{{localize "FE2.Sheet.Common.Bonus"}} : </span>
                   <input type="text" class="input-numeric-short" name="system.influence.bonus" value="{{system.influence.bonus}}" data-dtype="Number"/>
-                  <span class="stat-label padd-left" name="level">{{localize "FE2.Sheet.Common.Max"}} : {{system.influence.total}}</span>
+                  <span class="stat-label padd-left" name="level">{{localize "FE2.Sheet.Common.Max"}} : {{system.influence.total}} {{modIndicator system.influence.total baseValues.influenceTotal}}</span>
                   <div class="item-controls">
                     {{#if (ne system.influence.traitId "")}}
                     <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
@@ -257,24 +261,25 @@
                 <input type="text" class="input-numeric-short" name="system.endurance.value" value="{{system.endurance.value}}" data-dtype="Number"/>
                 <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
                 <input type="text" class="input-numeric-short"  name="system.endurance.endurancebonus" value="{{system.endurance.endurancebonus}}" data-dtype="Number"/>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Max"}} : {{system.endurance.max}}</span>
+                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Max"}} : {{system.endurance.max}} {{modIndicator system.endurance.max baseValues.enduranceMax}}</span>
               </li>
               <li class="item flexrow list-item stack-left">
                 <span class="stat-label pad-right packed-left">{{localize "FE2.Sheet.Common.Recovery"}}</span>
                 <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
                 <input type="text" class="input-numeric-short" name="system.endurance.recoverybonus padd-left test-css" value="{{system.endurance.recoverybonus}}" data-dtype="Number"/>
-                <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Max"}}&nbsp; &nbsp;:{{system.endurance.recovery}}</span>
+                <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Max"}}&nbsp; &nbsp;:{{system.endurance.recovery}} {{modIndicator system.endurance.recovery baseValues.recovery}}</span>
               </li>
               <li class="item flexrow list-item stack-left">
                 <span class="stat-label padd-right packed-left">{{localize "FE2.Sheet.Character.GritRerolls"}} :</span>
                 <input type="text" class="input-numeric-short" name="system.gritreroll.value" value="{{system.gritreroll.value}}" data-dtype="Number"/>
                 <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
                 <input type="text" class="input-numeric-short"  name="system.gritreroll.bonus" value="{{system.gritreroll.bonus}}" data-dtype="Number"/>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Max"}} : {{system.gritreroll.max}}</span>
+                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Max"}} : {{system.gritreroll.max}} {{modIndicator system.gritreroll.max baseValues.gritRerollMax}}</span>
               </li>
               <li class="item flexrow list-item stack-left">
                 <span class="stat-label padd-right packed-left">{{localize "FE2.Sheet.Character.CombatOrderModifier"}}:</span>
                 <input type="text" class="input-numeric-short" name="system.combatordermod" value="{{system.combatordermod}}" data-dtype="Number"/>
+                {{modIndicator computed.combatOrder system.combatordermod}}
               </li>
             </ul>
 
@@ -284,7 +289,7 @@
                 <span class="stat-label padd-right packed-left">{{localize "FE2.Sheet.Common.Base"}} : {{defenseBase}}</span>
                 <span class="stat-label padd-right packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
                 <input type="text" class="input-numeric-short packed-left" name="system.defensebonus.defense" value="{{system.defensebonus.defense}}" data-dtype="Number"/>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Total"}} : {{defenseTotal}}</span>
+                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Total"}} : {{defenseTotal}} {{modIndicator defenseTotal baseValues.defenseTotal}}</span>
               </li>
             </ul>
 
@@ -294,12 +299,50 @@
                 <span class="stat-label packed-left">{{localize "FE2.Sheet.Common.Base"}} : {{armourBase}}</span>
                 <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
                 <input type="text" class="input-numeric-short padd-right" name="system.armourbonus.armour" value="{{system.armourbonus.armour}}" data-dtype="Number"/>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Total"}} : {{armourTotal}}</span>
+                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Total"}} : {{armourTotal}} {{modIndicator armourTotal baseValues.armourTotal}}</span>
                 <span></span>
               </li>
               <li class="item flexrow list-item stack-left">
                 <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Character.AtZeroEndurance"}} : </span>
                 <input type="text" class="input-numeric-short padd-right" name="system.armourbonus.zeroendurance" value="{{system.armourbonus.zeroendurance}}" data-dtype="Number"/>
+                {{modIndicator computed.armourZeroEnd system.armourbonus.zeroendurance}}
+              </li>
+            </ul>
+
+            <span class="generic-label"><h3>{{localize "FE2.Effects.Fields.Movement"}}</h3></span>
+            <ul>
+              <li class="item flexrow list-item stack-left">
+                <span class="stat-label padd-right packed-left">{{localize "FE2.Sheet.Common.Base"}} :</span>
+                <input type="text" class="input-numeric-short" name="system.modifiers.movement" value="{{system.modifiers.movement}}" data-dtype="Number"/>
+                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Total"}} : {{computed.movement}} {{modIndicator computed.movement system.modifiers.movement}}</span>
+              </li>
+            </ul>
+
+            <span class="generic-label"><h3>{{localize "FE2.Effects.Fields.HitBonus"}} / {{localize "FE2.Effects.Fields.EnduranceDamage"}}</h3></span>
+            <ul>
+              <li class="item flexrow list-item stack-left">
+                <span class="stat-label padd-right packed-left">{{localize "FE2.Effects.Fields.HitBonus"}} :</span>
+                <input type="text" class="input-numeric-short" name="system.modifiers.hitbonus" value="{{system.modifiers.hitbonus}}" data-dtype="Number"/>
+                {{modIndicator computed.hitBonus system.modifiers.hitbonus}}
+                <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Effects.Fields.EnduranceDamage"}} :</span>
+                <input type="text" class="input-numeric-short" name="system.modifiers.endurancedamage" value="{{system.modifiers.endurancedamage}}" data-dtype="Number"/>
+                {{modIndicator computed.enduranceDamage system.modifiers.endurancedamage}}
+              </li>
+              <li class="item flexrow list-item stack-left">
+                <span class="stat-label padd-right packed-left">{{localize "FE2.Effects.Fields.UtilitiesMax"}} :</span>
+                <input type="text" class="input-numeric-short" name="system.modifiers.utilitiesmax" value="{{system.modifiers.utilitiesmax}}" data-dtype="Number"/>
+                {{modIndicator computed.utilitiesMax system.modifiers.utilitiesmax}}
+                <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Effects.Fields.UntrainedSkillMod"}} :</span>
+                <input type="text" class="input-numeric-short" name="system.modifiers.untrainedskillmod" value="{{system.modifiers.untrainedskillmod}}" data-dtype="Number"/>
+                {{modIndicator computed.untrainedSkillMod system.modifiers.untrainedskillmod}}
+              </li>
+              <li class="item flexrow list-item stack-left">
+                <span class="stat-label padd-right packed-left">{{localize "FE2.Effects.Fields.AcquisitionMod"}} :</span>
+                <input type="text" class="input-numeric-short" name="system.modifiers.acquisitionmod" value="{{system.modifiers.acquisitionmod}}" data-dtype="Number"/>
+                {{modIndicator computed.acquisitionMod system.modifiers.acquisitionmod}}
+                <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Effects.Fields.ArcaneMod"}} :</span>
+                <input type="text" class="input-numeric-short" name="system.modifiers.arcanemod" value="{{system.modifiers.arcanemod}}" data-dtype="Number"/>
+                {{modIndicator computed.arcaneMod system.modifiers.arcanemod}}
               </li>
             </ul>
 
@@ -597,6 +640,11 @@
           <hr>
           {{>"systems/foundry-fe2/templates/editor-notes-gm.html" engine="prosemirror"}}
         </article>
+      </div>
+
+      {{!-- Effects Tab --}}
+      <div class="tab effects" data-group="primary" data-tab="effects">
+        {{> "systems/foundry-fe2/templates/effects-section.html"}}
       </div>
 
     </section>

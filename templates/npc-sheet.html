@@ -17,6 +17,7 @@
         <a class="item" data-tab="traits" data-group="primary" data-action="tab">{{localize "FE2.Sheet.Common.Traits"}}</a>
         <a class="item" data-tab="equipment" data-group="primary" data-action="tab">{{localize "FE2.Sheet.Common.Equipment"}}</a>
         <a class="item" data-tab="notes" data-group="primary" data-action="tab">{{localize "FE2.Sheet.Common.Notes"}}</a>
+        <a class="item" data-tab="effects" data-group="primary" data-action="tab">{{localize "FE2.Effects.UI.TabLabel"}}</a>
     </nav>
 
     {{!-- Sheet Body --}}
@@ -25,7 +26,7 @@
         {{!-- Carac Tab --}}
         <div class="tab items" data-group="primary" data-tab="attribute">
           <span><a data-action="lockUnlockSheet"><img class="small-button-container"
-            src="systems/foundry-fe2/images/icons/{{#if editScore}}unlocked.svg{{else}}locked.svg{{/if}}" alt="Unlocked/Locked"
+            src="systems/foundry-fe2/images/icons/{{#if editScore}}unlocked.svg{{else}}locked.svg{{/if}}" alt="{{localize 'FE2.Sheet.Common.Toggle'}}"
             >{{#if editScore}}{{localize "FE2.Sheet.Common.Unlocked"}}{{else}}{{localize "FE2.Sheet.Common.Locked"}}{{/if}}</a>
           </span>
           <div class="grid grid-2col">
@@ -76,6 +77,7 @@
               <li class="item flexrow list-item stack-left">
                 <span class="stat-label padd-right"><strong>{{localize fight.label}}</strong></span>                
                 <input type="text" class="input-numeric-short padd-right" name="system.fight.{{key}}.value" value="{{fight.value}}" data-dtype="Number"/>
+                {{modIndicator (lookup @root.computed key) fight.value}}
               </li>
               {{#each fight.derivated as |derivated keydev|}}   
               <li class="item flexrow list-item">
@@ -175,6 +177,11 @@
           <hr>
           {{>"systems/foundry-fe2/templates/editor-notes-gm.html"}}
         </article>
+      </div>
+
+      {{!-- Effects Tab --}}
+      <div class="tab effects" data-group="primary" data-tab="effects">
+        {{> "systems/foundry-fe2/templates/effects-section.html"}}
       </div>
 
     </section>

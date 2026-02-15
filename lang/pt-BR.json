@@ -9,7 +9,9 @@
       "Biography": "Biografia",
       "Cargo": "Carga",
       "Main": "Principal",
-      "DefenceWeapons": "Defesa/Armas"
+      "DefenceWeapons": "Defesa/Armas",
+      "Details": "Detalhes",
+      "Effects": "Efeitos"
     },
     "Attributes": {
       "Strength": "Força",
@@ -49,6 +51,7 @@
         "Recovery": "Recuperação",
         "Unlocked": "Desbloqueado",
         "Locked": "Bloqueado",
+        "Toggle": "Alternar Bloqueio",
         "EditItem": "Editar Item",
         "DeleteItem": "Excluir Item",
         "Worn": "Vestido",
@@ -375,7 +378,8 @@
         "UseMunitions": "Usar munições",
         "MunitionsEmpty": "Munições zeradas, câmara vazia!",
         "Trained": "Treinado (+1)",
-        "NotTrained": "Não Treinado (-2)"
+        "NotTrained": "Não Treinado (-2)",
+        "ArcaneRoll": "Rolagem Arcana (penalidade +2)"
       },
       "Buttons": {
         "Roll": "Rolar!",
@@ -435,6 +439,7 @@
       "AttackTitle": "Ataque : {name}",
       "SpacecraftAttackTitle": "Ataque da nave : {name}",
       "GenericSkillRoll": "Rolagem de Perícia Genérica",
+      "AcquisitionRoll": "Rolagem de Aquisição",
       "ConfirmRemoveTitle": "Confirmar remoção",
       "ConfirmRemoveContent": "Tem certeza que deseja remover este Item?",
       "ConfirmRemoveYes": "Sim, remover",
@@ -442,6 +447,83 @@
     },
     "Combat": {
       "NewRound": "Nova Rodada: Rodada {round}"
+    },
+    "Effects": {
+      "Categories": {
+        "Skills": "Perícias",
+        "Attributes": "Atributos",
+        "Combat": "Combate",
+        "Resources": "Recursos",
+        "Spacecraft": "Espaçonave"
+      },
+      "TargetTypes": {
+        "Skill": "Perícia",
+        "AllSkills": "Todas as Perícias",
+        "UntrainedSkill": "Mod. Perícia Não Treinada",
+        "Attribute": "Atributo",
+        "AllAttributes": "Todos os Atributos",
+        "AttributeMax": "Máximo do Atributo",
+        "EnduranceCurrent": "Resistência (Atual)",
+        "EnduranceMax": "Resistência (Máx)",
+        "EquipmentCurrent": "Slots de Equip. (Atual)",
+        "EquipmentMax": "Slots de Equip. (Máx)",
+        "Armour": "Armadura",
+        "ArmourZeroEnd": "Armadura com Res. 0",
+        "HitBonus": "Bônus de Acerto",
+        "EnduranceDamage": "Dano de Resistência",
+        "InfluenceMax": "Influência (Máx)",
+        "ResourcesMax": "Recursos (Máx)",
+        "UtilitiesMax": "Utilitários (Máx)",
+        "GritReroll": "Re-rolagens de Determinação",
+        "CombatOrder": "Ordem de Combate",
+        "Defense": "Defesa",
+        "Movement": "Movimento",
+        "Acquisition": "Rolagens de Aquisição",
+        "Arcane": "Rolagens Arcanas",
+        "Recovery": "Recuperação",
+        "Shield": "Escudo",
+        "ShieldRegen": "Regeneração de Escudo",
+        "CargoMax": "Carga (Máx)",
+        "WeaponSlotsMax": "Slots de Armas (Máx)",
+        "ResupplyMax": "Reabastecimento (Máx)"
+      },
+      "Modes": {
+        "Add": "Adicionar",
+        "Multiply": "Multiplicar"
+      },
+      "UI": {
+        "TabLabel": "Efeitos",
+        "AddEffect": "Adicionar Efeito",
+        "Edit": "Editar Efeito",
+        "Delete": "Excluir Efeito",
+        "Toggle": "Alternar Efeito",
+        "NoEffects": "Sem efeitos.",
+        "Passive": "Passivo",
+        "Temporary": "Temporário",
+        "Inactive": "Inativo",
+        "Source": "Fonte",
+        "TargetType": "Tipo de Alvo",
+        "Subtype": "Subtipo",
+        "Mode": "Modo",
+        "Value": "Valor",
+        "AddChange": "Adicionar Alteração",
+        "DeleteChange": "Excluir Alteração",
+        "SelectTargetType": "Selecione o tipo de alvo...",
+        "SelectSubtype": "Selecione..."
+      },
+      "Fields": {
+        "HitBonus": "Bônus de Acerto",
+        "EnduranceDamage": "Dano de Resistência",
+        "Movement": "Movimento",
+        "UtilitiesMax": "Máx. Utilitários",
+        "AcquisitionMod": "Mod. Aquisição",
+        "ArcaneMod": "Mod. Arcano",
+        "UntrainedSkillMod": "Mod. Perícia Não Treinada",
+        "AttributeMax": "Máximo do Atributo"
+      }
+    },
+    "SheetLabels": {
+      "Effect": "Ficha de Efeito Fragged Empire"
     }
   }
 }

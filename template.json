@@ -115,6 +115,23 @@
         "equipmentslots": {
           "bonus": 0,
           "current": 0
+        },
+        "modifiers": {
+          "hitbonus": 0,
+          "endurancedamage": 0,
+          "utilitiesmax": 0,
+          "movement": 0,
+          "acquisitionmod": 0,
+          "arcanemod": 0,
+          "untrainedskillmod": 0
+        },
+        "attributemax": {
+          "strength": 5,
+          "reflexes": 5,
+          "mobility": 5,
+          "focus": 5,
+          "intelligence": 5,
+          "grit": 5
         }
       },
       "npc": {
@@ -249,6 +266,15 @@
             "max": 0,
             "bonus": 0
           }
+        },
+        "attributemax": {
+          "hull": 10,
+          "engines": 10,
+          "crew": 10,
+          "power": 10,
+          "cpu": 10,
+          "sensors": 10,
+          "velocity": 10
         },
         "fight": {
           "defence": {

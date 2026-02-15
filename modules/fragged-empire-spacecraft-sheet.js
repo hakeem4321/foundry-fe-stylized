@@ -15,7 +15,11 @@ export class FraggedEmpireSpacecraftSheet extends HandlebarsApplicationMixin(fou
       equipItem: FraggedEmpireSpacecraftSheet.#onEquipItem,
       rollSkill: FraggedEmpireSpacecraftSheet.#onRollSkill,
       rollSpacecraftWeapon: FraggedEmpireSpacecraftSheet.#onRollSpacecraftWeapon,
-      lockUnlockSheet: FraggedEmpireSpacecraftSheet.#onLockUnlockSheet
+      lockUnlockSheet: FraggedEmpireSpacecraftSheet.#onLockUnlockSheet,
+      createEffect: FraggedEmpireSpacecraftSheet.#onCreateEffect,
+      editEffect: FraggedEmpireSpacecraftSheet.#onEditEffect,
+      toggleEffect: FraggedEmpireSpacecraftSheet.#onToggleEffect,
+      deleteEffect: FraggedEmpireSpacecraftSheet.#onDeleteEffect
     },
     dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }]
   };
@@ -38,7 +42,7 @@ export class FraggedEmpireSpacecraftSheet extends HandlebarsApplicationMixin(fou
     context.img = actor.img;
     context.system = actor.system;
     context.cssClass = this.isEditable ? "editable" : "locked";
-    context.effects = actor.effects.map(e => foundry.utils.deepClone(e));
+    context.effectCategories = FraggedEmpireUtility.categorizeEffects(actor);
     context.limited = actor.limited;
     context.weapons = actor.getSpacecraftWeapons();
     context.tradeGoods = actor.getTradeGoods();
@@ -55,6 +59,9 @@ export class FraggedEmpireSpacecraftSheet extends HandlebarsApplicationMixin(fou
     context.owner = actor.isOwner;
     context.editScore = this._editScore ??= false;
     context.isGM = game.user.isGM;
+    context.effectiveAttributes = actor._effectiveAttributes || {};
+    context.computed = actor._computed || {};
+    context.baseValues = actor._baseValues || {};
 
     // Enrich HTML for prose-mirror collapsed display
     const enrichOptions = { async: true, relativeTo: actor };
@@ -69,7 +76,9 @@ export class FraggedEmpireSpacecraftSheet extends HandlebarsApplicationMixin(fou
     super._onRender(context, options);
     // Activate tabs after render (V2 does not auto-activate from tabGroups)
     for (const [group, tab] of Object.entries(this.tabGroups)) {
-      if (tab) this.changeTab(tab, group, {force: true});
+      if (!tab) continue;
+      const tabElement = this.element?.querySelector(`[data-tab="${tab}"][data-group="${group}"]`);
+      if (tabElement) this.changeTab(tab, group, {force: true});
     }
   }
 
@@ -108,6 +117,52 @@ export class FraggedEmpireSpacecraftSheet extends HandlebarsApplicationMixin(fou
     this._editScore = !this._editScore;
     this.render();
   }
+
+  /* -------------------------------------------- */
+  /*  Effect Action Handlers                      */
+  /* -------------------------------------------- */
+
+  static #onCreateEffect(event, target) {
+    const effectData = {
+      name: game.i18n.localize("FE2.Effects.UI.AddEffect"),
+      img: "icons/svg/aura.svg",
+      origin: this.document.uuid,
+      transfer: false,
+      disabled: false
+    };
+    this.document.createEmbeddedDocuments("ActiveEffect", [effectData]);
+  }
+
+  static #onEditEffect(event, target) {
+    const effectId = target.closest("[data-effect-id]")?.dataset.effectId;
+    if (!effectId) return;
+    const effect = this.document.effects.get(effectId);
+    effect?.sheet.render(true);
+  }
+
+  static #onToggleEffect(event, target) {
+    const effectId = target.closest("[data-effect-id]")?.dataset.effectId;
+    if (!effectId) return;
+    const effect = this.document.effects.get(effectId);
+    if (effect) effect.update({ disabled: !effect.disabled });
+  }
+
+  static async #onDeleteEffect(event, target) {
+    const effectId = target.closest("[data-effect-id]")?.dataset.effectId;
+    if (!effectId) return;
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize("FE2.Dialog.ConfirmRemoveTitle") },
+      content: "<p>" + game.i18n.localize("FE2.Dialog.ConfirmRemoveContent") + "</p>"
+    });
+    if (confirmed) {
+      this.document.deleteEmbeddedDocuments("ActiveEffect", [effectId]);
+    }
+  }
+
+  /* -------------------------------------------- */
+  /*  Private Helpers                             */
+  /* -------------------------------------------- */
+
 
   /* -------------------------------------------- */
   /*  Form Submission                             */

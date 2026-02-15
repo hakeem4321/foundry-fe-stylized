@@ -9,7 +9,9 @@
       "Biography": "Biography",
       "Cargo": "Cargo",
       "Main": "Main",
-      "DefenceWeapons": "Defence/Weapons"
+      "DefenceWeapons": "Defence/Weapons",
+      "Details": "Details",
+      "Effects": "Effects"
     },
     "Attributes": {
       "Strength": "Strength",
@@ -49,6 +51,7 @@
         "Recovery": "Recovery",
         "Unlocked": "Unlocked",
         "Locked": "Locked",
+        "Toggle": "Toggle Lock",
         "EditItem": "Edit Item",
         "DeleteItem": "Delete Item",
         "Worn": "Worn",
@@ -375,7 +378,8 @@
         "UseMunitions": "Use munitions",
         "MunitionsEmpty": "Munitions zero, chamber is empty!",
         "Trained": "Trained (+1)",
-        "NotTrained": "Not Trained (-2)"
+        "NotTrained": "Not Trained (-2)",
+        "ArcaneRoll": "Arcane Roll (+2 penalty)"
       },
       "Buttons": {
         "Roll": "Roll !",
@@ -435,6 +439,7 @@
       "AttackTitle": "Attack : {name}",
       "SpacecraftAttackTitle": "Spacecraft attack : {name}",
       "GenericSkillRoll": "Generic Skill roll",
+      "AcquisitionRoll": "Acquisition Roll",
       "ConfirmRemoveTitle": "Confirm removal",
       "ConfirmRemoveContent": "Are you sure to remove this Item ?",
       "ConfirmRemoveYes": "Yes, remove it",
@@ -442,6 +447,83 @@
     },
     "Combat": {
       "NewRound": "New Round: Round {round}"
+    },
+    "Effects": {
+      "Categories": {
+        "Skills": "Skills",
+        "Attributes": "Attributes",
+        "Combat": "Combat",
+        "Resources": "Resources",
+        "Spacecraft": "Spacecraft"
+      },
+      "TargetTypes": {
+        "Skill": "Skill",
+        "AllSkills": "All Skills",
+        "UntrainedSkill": "Untrained Skill Modifier",
+        "Attribute": "Attribute",
+        "AllAttributes": "All Attributes",
+        "AttributeMax": "Attribute Maximum",
+        "EnduranceCurrent": "Endurance (Current)",
+        "EnduranceMax": "Endurance (Max)",
+        "EquipmentCurrent": "Equipment Slots (Current)",
+        "EquipmentMax": "Equipment Slots (Max)",
+        "Armour": "Armour",
+        "ArmourZeroEnd": "Armour at Zero Endurance",
+        "HitBonus": "Hit Bonus",
+        "EnduranceDamage": "Endurance Damage",
+        "InfluenceMax": "Influence (Max)",
+        "ResourcesMax": "Resources (Max)",
+        "UtilitiesMax": "Utilities (Max)",
+        "GritReroll": "Grit Rerolls",
+        "CombatOrder": "Combat Order",
+        "Defense": "Defense",
+        "Movement": "Movement",
+        "Acquisition": "Acquisition Rolls",
+        "Arcane": "Arcane Rolls",
+        "Recovery": "Recovery",
+        "Shield": "Shield",
+        "ShieldRegen": "Shield Regen",
+        "CargoMax": "Cargo (Max)",
+        "WeaponSlotsMax": "Weapon Slots (Max)",
+        "ResupplyMax": "Resupply (Max)"
+      },
+      "Modes": {
+        "Add": "Add",
+        "Multiply": "Multiply"
+      },
+      "UI": {
+        "TabLabel": "Effects",
+        "AddEffect": "Add Effect",
+        "Edit": "Edit Effect",
+        "Delete": "Delete Effect",
+        "Toggle": "Toggle Effect",
+        "NoEffects": "No effects.",
+        "Passive": "Passive",
+        "Temporary": "Temporary",
+        "Inactive": "Inactive",
+        "Source": "Source",
+        "TargetType": "Target Type",
+        "Subtype": "Subtype",
+        "Mode": "Mode",
+        "Value": "Value",
+        "AddChange": "Add Change",
+        "DeleteChange": "Delete Change",
+        "SelectTargetType": "Select target type...",
+        "SelectSubtype": "Select..."
+      },
+      "Fields": {
+        "HitBonus": "Hit Bonus",
+        "EnduranceDamage": "Endurance Damage",
+        "Movement": "Movement",
+        "UtilitiesMax": "Utilities Max",
+        "AcquisitionMod": "Acquisition Modifier",
+        "ArcaneMod": "Arcane Modifier",
+        "UntrainedSkillMod": "Untrained Skill Modifier",
+        "AttributeMax": "Attribute Maximum"
+      }
+    },
+    "SheetLabels": {
+      "Effect": "Fragged Empire Effect Sheet"
     }
   }
 }

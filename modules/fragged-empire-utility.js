@@ -1,6 +1,7 @@
-/* -------------------------------------------- */  
+/* -------------------------------------------- */
+import { applyModifiers } from "./effects/fragged-empire-effect-helpers.js";
 
-/* -------------------------------------------- */  
+/* -------------------------------------------- */
 export class FraggedEmpireUtility  {
   
 
@@ -53,7 +54,9 @@ export class FraggedEmpireUtility  {
       'systems/foundry-fe2/templates/weapon-stats-section-tchat.html',
       'systems/foundry-fe2/templates/partial-skill-list-header.html',
       'systems/foundry-fe2/templates/chat-generic-result.html',
-      'systems/foundry-fe2/templates/post-item.html'
+      'systems/foundry-fe2/templates/post-item.html',
+      'systems/foundry-fe2/templates/effects-section.html',
+      'systems/foundry-fe2/templates/effects/effect-changes-tab.html'
     ]
     return foundry.applications.handlebars.loadTemplates(templatePaths);    
   }
@@ -308,14 +311,33 @@ export class FraggedEmpireUtility  {
     let skillLevel = rollData.skill?.system.total ||  0;
     let nbDice = 3;
 
+    // Apply skill effect modifiers
+    if (rollData.effectModifiers) {
+      const mods = rollData.effectModifiers;
+      const skillId = rollData.skill?.id;
+      const skillMods = [...(mods.skills[skillId] || []), ...(mods.skills.all || [])];
+      if (skillMods.length) {
+        skillLevel = Math.round(applyModifiers(skillLevel, skillMods));
+      }
+      if (rollData.skill && !rollData.skill.system.trained && rollData.untrainedSkillMod) {
+        skillLevel += rollData.untrainedSkillMod;
+      }
+    }
+
     // Bonus/Malus total
     rollData.weaponHit = 0;
     rollData.finalBM = rollData.bonusMalus;
+    if (rollData.acquisitionMod) rollData.finalBM += rollData.acquisitionMod;
+    if (rollData.isArcane) {
+      let arcanePenalty = 2 + (rollData.arcaneMod || 0);
+      if (arcanePenalty < 0) arcanePenalty = 0;
+      rollData.finalBM -= arcanePenalty;
+    }
     if ( rollData.useToolbox) rollData.finalBM += 1;
     if ( rollData.useDedicatedworkshop) rollData.finalBM += 2;
     if ( rollData.mode == 'weapon' || rollData.mode == 'spacecraftweapon') {
       rollData.rofValue = (rollData.rofValue < 1) ? 1 : Number(rollData.rofValue);
-      rollData.weaponHit = Number(rollData.weapon.system.statstotal.hit.value);
+      rollData.weaponHit = Number(rollData.weapon.system.statstotal.hit.value) + (rollData.effectHitBonus || 0);
       nbDice = Number(rollData.weapon.system.statstotal.hitdice.value.substring(0,1));
     }
 
@@ -390,23 +412,23 @@ export class FraggedEmpireUtility  {
         }
       }
       if (rollData.target.type == "npc"){
-        rollData.targetDefence = rollData.target.system.fight.defence.value + (rollData.intmod * rollData.cover)
-        rollData.targetArmor = rollData.target.system.fight.armour.value
-        rollData.targetEnd = rollData.target.system.fight.endurance.value
-        rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.enddmg.value) + Number(actor.system.attributes.focus.current)
-        rollData.critDmg = rollData.weapon.system.statstotal.crit.value - rollData.target.system.fight.armour.value
+        rollData.targetDefence = (rollData.target._computed?.defence ?? rollData.target.system.fight.defence.value) + (rollData.intmod * rollData.cover)
+        rollData.targetArmor = rollData.target._computed?.armour ?? rollData.target.system.fight.armour.value
+        rollData.targetEnd = rollData.target._computed?.endurance ?? rollData.target.system.fight.endurance.value
+        rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.enddmg.value) + Number(actor.system.attributes.focus.current) + (rollData.effectEndDmg || 0)
+        rollData.critDmg = rollData.weapon.system.statstotal.crit.value - (rollData.target._computed?.armour ?? rollData.target.system.fight.armour.value)
       } else if (rollData.target.type == "spacecraft") {
         rollData.targetDefence = rollData.target.system.fight.defence.total
         rollData.targetArmor = rollData.target.system.fight.armour.total
         rollData.targetEnd = rollData.target.system.fight.shield.total
-        rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.shielddmg.value) + rollData.endDmgAdd
+        rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.shielddmg.value) + rollData.endDmgAdd + (rollData.effectEndDmg || 0)
         rollData.critDmg = rollData.weapon.system.statstotal.crit.value - rollData.target.system.fight.armour.total
       } else {
         rollData.targetDefence = rollData.target.system.defensebonus.total + (rollData.intmod * rollData.cover)
         rollData.targetArmor = rollData.target.system.armourbonus.total
         rollData.targetEnd = rollData.target.system.endurance.value
         rollData.critDmg = rollData.weapon.system.statstotal.crit.value - rollData.target.system.armourbonus.total
-        rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.enddmg.value) + rollData.endDmgAdd
+        rollData.totalEndDmg = Number(rollData.weapon.system.statstotal.enddmg.value) + rollData.endDmgAdd + (rollData.effectEndDmg || 0)
       }
     }
     
@@ -612,6 +634,46 @@ export class FraggedEmpireUtility  {
     return this.buildDifficultyChoices();
   }
   
+  /* -------------------------------------------- */
+  /**
+   * Categorize actor effects into Passive, Temporary, and Inactive groups.
+   * @param {Actor} actor
+   * @returns {Object} Categories with label and effects array
+   */
+  static categorizeEffects(actor) {
+    const passive = [];
+    const temporary = [];
+    const inactive = [];
+
+    for (const effect of actor.effects) {
+      const d = {
+        _id: effect.id,
+        name: effect.name,
+        img: effect.img,
+        disabled: effect.disabled,
+        duration: effect.duration,
+        active: !effect.disabled && !effect.isSuppressed,
+        isSuppressed: effect.isSuppressed,
+        sourceName: effect.originItem?.name ?? "",
+        effect: effect
+      };
+
+      if (effect.disabled || effect.isSuppressed) {
+        inactive.push(d);
+      } else if (effect.duration?.rounds || effect.duration?.seconds || effect.duration?.turns) {
+        temporary.push(d);
+      } else {
+        passive.push(d);
+      }
+    }
+
+    return {
+      passive: { label: "FE2.Effects.Categories.Passive", effects: passive },
+      temporary: { label: "FE2.Effects.Categories.Temporary", effects: temporary },
+      inactive: { label: "FE2.Effects.Categories.Inactive", effects: inactive }
+    };
+  }
+
   /* -------------------------------------------- */
   static async confirmDelete(actor, itemId) {
     const confirmed = await foundry.applications.api.DialogV2.confirm({

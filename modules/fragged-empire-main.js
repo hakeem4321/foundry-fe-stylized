@@ -15,6 +15,8 @@ import { FraggedEmpireSpacecraftSheet } from "./fragged-empire-spacecraft-sheet.
 import { FraggedEmpireNPCSheet } from "./fragged-empire-npc-sheet.js";
 import { FraggedEmpireUtility } from "./fragged-empire-utility.js";
 import { FraggedEmpireCombat } from "./fragged-empire-combat.js";
+import { FraggedEmpireEffect } from "./effects/fragged-empire-effect.js";
+import { FraggedEmpireEffectSheet } from "./effects/fragged-empire-effect-sheet.js";
 
 /* -------------------------------------------- */
 /*  Foundry VTT Initialization                  */
@@ -41,6 +43,16 @@ Hooks.once("init", async function () {
   });
 
   /* -------------------------------------------- */
+  // Custom Handlebars helper: show up/down arrow when effective value differs from base
+  Handlebars.registerHelper("modIndicator", function (effective, base) {
+    const eff = Number(effective);
+    const b = Number(base);
+    if (isNaN(eff) || isNaN(b) || eff === b) return "";
+    if (eff > b) return new Handlebars.SafeString('<span class="modifier-up" title="' + eff + '"><i class="fas fa-arrow-up"></i></span>');
+    return new Handlebars.SafeString('<span class="modifier-down" title="' + eff + '"><i class="fas fa-arrow-down"></i></span>');
+  });
+
+  /* -------------------------------------------- */
   // preload handlebars templates
   FraggedEmpireUtility.preloadHandlebarsTemplates();
 
@@ -62,6 +74,17 @@ Hooks.once("init", async function () {
   CONFIG.Actor.documentClass = FraggedEmpireActor;
   CONFIG.FraggedEmpire = {
   }
+
+  // Register custom ActiveEffect document class and enable legacy transferral
+  CONFIG.ActiveEffect.documentClass = FraggedEmpireEffect;
+  CONFIG.ActiveEffect.legacyTransferral = true;
+
+  // Register custom ActiveEffect sheet
+  foundry.applications.apps.DocumentSheetConfig.unregisterSheet(ActiveEffect, "core", foundry.applications.sheets.ActiveEffectConfig);
+  foundry.applications.apps.DocumentSheetConfig.registerSheet(ActiveEffect, "foundry-fe2", FraggedEmpireEffectSheet, {
+    makeDefault: true,
+    label: "FE2.SheetLabels.Effect"
+  });
 
   /* -------------------------------------------- */
   // Register sheet application classes
@@ -309,6 +332,38 @@ Hooks.once("ready", async function () {
         }
       } catch (error) {
         error.message = `Failed i18n migration for Item ${item.name}: ${error.message}`;
+        console.error(error);
+      }
+    }
+  }
+
+  // Migration 1.04: Add modifiers and attributemax fields for ActiveEffect support
+  if (foundry.utils.isNewerVersion("1.04", game.settings.get("foundry-fe2", "systemMigrationVersion"))) {
+    const defaultModifiers = {
+      hitbonus: 0, endurancedamage: 0, utilitiesmax: 0,
+      movement: 0, acquisitionmod: 0, arcanemod: 0, untrainedskillmod: 0
+    };
+    const defaultCharAttrMax = {
+      strength: 5, reflexes: 5, mobility: 5, focus: 5, intelligence: 5, grit: 5
+    };
+    const defaultScAttrMax = {
+      hull: 10, engines: 10, crew: 10, power: 10, cpu: 10, sensors: 10, velocity: 10
+    };
+
+    for (let actor of game.actors) {
+      try {
+        let updates = {};
+        if (actor.type === "character") {
+          if (!actor.system.modifiers) updates["system.modifiers"] = defaultModifiers;
+          if (!actor.system.attributemax) updates["system.attributemax"] = defaultCharAttrMax;
+        } else if (actor.type === "spacecraft") {
+          if (!actor.system.attributemax) updates["system.attributemax"] = defaultScAttrMax;
+        }
+        if (Object.keys(updates).length > 0) {
+          await actor.update(updates);
+        }
+      } catch (error) {
+        error.message = `Failed effects migration for Actor ${actor.name}: ${error.message}`;
         console.error(error);
       }
     }

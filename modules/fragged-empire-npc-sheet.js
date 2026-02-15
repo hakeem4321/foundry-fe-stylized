@@ -19,7 +19,11 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
       rollWeapon: FraggedEmpireNPCSheet.#onRollWeapon,
       rollNPCFight: FraggedEmpireNPCSheet.#onRollNPCFight,
       rollGenericSkill: FraggedEmpireNPCSheet.#onRollGenericSkill,
-      lockUnlockSheet: FraggedEmpireNPCSheet.#onLockUnlockSheet
+      lockUnlockSheet: FraggedEmpireNPCSheet.#onLockUnlockSheet,
+      createEffect: FraggedEmpireNPCSheet.#onCreateEffect,
+      editEffect: FraggedEmpireNPCSheet.#onEditEffect,
+      toggleEffect: FraggedEmpireNPCSheet.#onToggleEffect,
+      deleteEffect: FraggedEmpireNPCSheet.#onDeleteEffect
     },
     dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }]
   };
@@ -46,7 +50,7 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
     context.img = actor.img;
     context.system = actor.system;
     context.cssClass = this.isEditable ? "editable" : "locked";
-    context.effects = actor.effects.map(e => foundry.utils.deepClone(e));
+    context.effectCategories = FraggedEmpireUtility.categorizeEffects(actor);
     context.limited = actor.limited;
     context.equipments = actor.getEquipments();
     context.defenseBase = actor.getDefenseBase();
@@ -61,6 +65,8 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
     context.npcTypeChoices = FraggedEmpireUtility.buildNPCTypeChoices();
     context.editScore = this._editScore ??= false;
     context.isGM = game.user.isGM;
+    context.computed = actor._computed || {};
+    context.baseValues = actor._baseValues || {};
 
     // Enrich HTML for prose-mirror collapsed display
     const enrichOptions = { async: true, relativeTo: actor };
@@ -78,7 +84,9 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
     await super._onRender(context, options);
     // Activate tabs after render (V2 does not auto-activate from tabGroups)
     for (const [group, tab] of Object.entries(this.tabGroups)) {
-      if (tab) this.changeTab(tab, group, {force: true});
+      if (!tab) continue;
+      const tabElement = this.element?.querySelector(`[data-tab="${tab}"][data-group="${group}"]`);
+      if (tabElement) this.changeTab(tab, group, {force: true});
     }
   }
 
@@ -176,6 +184,52 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
     this._editScore = !this._editScore;
     this.render();
   }
+
+  /* -------------------------------------------- */
+  /*  Effect Action Handlers                      */
+  /* -------------------------------------------- */
+
+  static #onCreateEffect(event, target) {
+    const effectData = {
+      name: game.i18n.localize("FE2.Effects.UI.AddEffect"),
+      img: "icons/svg/aura.svg",
+      origin: this.document.uuid,
+      transfer: false,
+      disabled: false
+    };
+    this.document.createEmbeddedDocuments("ActiveEffect", [effectData]);
+  }
+
+  static #onEditEffect(event, target) {
+    const effectId = target.closest("[data-effect-id]")?.dataset.effectId;
+    if (!effectId) return;
+    const effect = this.document.effects.get(effectId);
+    effect?.sheet.render(true);
+  }
+
+  static #onToggleEffect(event, target) {
+    const effectId = target.closest("[data-effect-id]")?.dataset.effectId;
+    if (!effectId) return;
+    const effect = this.document.effects.get(effectId);
+    if (effect) effect.update({ disabled: !effect.disabled });
+  }
+
+  static async #onDeleteEffect(event, target) {
+    const effectId = target.closest("[data-effect-id]")?.dataset.effectId;
+    if (!effectId) return;
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize("FE2.Dialog.ConfirmRemoveTitle") },
+      content: "<p>" + game.i18n.localize("FE2.Dialog.ConfirmRemoveContent") + "</p>"
+    });
+    if (confirmed) {
+      this.document.deleteEmbeddedDocuments("ActiveEffect", [effectId]);
+    }
+  }
+
+  /* -------------------------------------------- */
+  /*  Private Helpers                             */
+  /* -------------------------------------------- */
+
 
   /* -------------------------------------------- */
   /*  Form Submission                             */

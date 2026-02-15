@@ -1,0 +1,61 @@
+{{!-- Shared effects list partial for item and actor sheets --}}
+{{#if effectCategories}}
+  {{!-- Actor sheet: categorized effects --}}
+  {{#each effectCategories as |category catKey|}}
+    {{#if category.effects.length}}
+    <h3 class="effect-category-header">{{localize category.label}}</h3>
+    <ol class="effects-list">
+      {{#each category.effects as |effect idx|}}
+      <li class="effect-entry flexrow{{#unless effect.active}} effect-inactive{{/unless}}{{#if effect.isSuppressed}} effect-suppressed{{/if}}" data-effect-id="{{effect._id}}">
+        <img class="effect-icon" src="{{effect.img}}" title="{{effect.name}}" />
+        <span class="effect-name">{{effect.name}}</span>
+        {{#if effect.sourceName}}
+        <span class="effect-source">({{effect.sourceName}})</span>
+        {{/if}}
+        <span class="effect-controls">
+          <a class="effect-control" data-action="toggleEffect" title="{{localize "FE2.Effects.UI.Toggle"}}">
+            <i class="fas {{#if effect.active}}fa-check{{else}}fa-times{{/if}}"></i>
+          </a>
+          <a class="effect-control" data-action="editEffect" title="{{localize "FE2.Effects.UI.Edit"}}">
+            <i class="fas fa-edit"></i>
+          </a>
+          <a class="effect-control" data-action="deleteEffect" title="{{localize "FE2.Effects.UI.Delete"}}">
+            <i class="fas fa-trash"></i>
+          </a>
+        </span>
+      </li>
+      {{/each}}
+    </ol>
+    {{/if}}
+  {{/each}}
+{{else if effects}}
+  {{!-- Item sheet: flat effects list --}}
+  {{#if effects.length}}
+  <ol class="effects-list">
+    {{#each effects as |effect idx|}}
+    <li class="effect-entry flexrow{{#unless effect.active}} effect-inactive{{/unless}}" data-effect-id="{{effect._id}}">
+      <img class="effect-icon" src="{{effect.img}}" title="{{effect.name}}" />
+      <span class="effect-name">{{effect.name}}</span>
+      <span class="effect-controls">
+        <a class="effect-control" data-action="toggleEffect" title="{{localize "FE2.Effects.UI.Toggle"}}">
+          <i class="fas {{#if effect.active}}fa-check{{else}}fa-times{{/if}}"></i>
+        </a>
+        <a class="effect-control" data-action="editEffect" title="{{localize "FE2.Effects.UI.Edit"}}">
+          <i class="fas fa-edit"></i>
+        </a>
+        <a class="effect-control" data-action="deleteEffect" title="{{localize "FE2.Effects.UI.Delete"}}">
+          <i class="fas fa-trash"></i>
+        </a>
+      </span>
+    </li>
+    {{/each}}
+  </ol>
+  {{else}}
+  <p class="effects-empty">{{localize "FE2.Effects.UI.NoEffects"}}</p>
+  {{/if}}
+{{/if}}
+<div class="effect-add">
+  <a class="effect-control" data-action="createEffect">
+    <i class="fas fa-plus"></i> {{localize "FE2.Effects.UI.AddEffect"}}
+  </a>
+</div>

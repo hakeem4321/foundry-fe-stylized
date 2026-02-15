@@ -1,0 +1,57 @@
+{{!-- Custom changes tab for the Fragged Empire effect configuration sheet --}}
+<div class="tab" data-group="sheet" data-tab="changes">
+  <h3>{{localize "FE2.Effects.UI.AddChange"}}</h3>
+
+  <ol class="effect-changes-list">
+    {{#each changes as |change idx|}}
+    <li class="effect-change-entry" data-index="{{idx}}">
+      <div class="effect-change-target">
+        <select name="changes.{{idx}}.targetType" data-index="{{idx}}" data-field="targetType">
+          <option value="">{{localize "FE2.Effects.UI.SelectTargetType"}}</option>
+          {{#each ../targetTypeOptions as |category catKey|}}
+          <optgroup label="{{localize category.label}}">
+            {{#each category.types as |type tKey|}}
+            <option value="{{type.type}}" {{#if (eq type.type ../change.targetType)}}selected{{/if}}>{{localize type.label}}</option>
+            {{/each}}
+          </optgroup>
+          {{/each}}
+        </select>
+      </div>
+
+      {{#if change.hasSubtype}}
+      <div class="effect-change-subtype">
+        <select name="changes.{{idx}}.targetId" data-index="{{idx}}" data-field="targetId">
+          <option value="">{{localize "FE2.Effects.UI.SelectSubtype"}}</option>
+          {{#each change.subtypeOptions as |opt oKey|}}
+          <option value="{{opt.value}}" {{#if (eq opt.value ../change.targetId)}}selected{{/if}}>{{opt.label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      {{/if}}
+
+      <div class="effect-change-mode">
+        <select name="changes.{{idx}}.mode" data-index="{{idx}}" data-field="mode">
+          <option value="2" {{#if (eq change.mode 2)}}selected{{/if}}>{{localize "FE2.Effects.Modes.Add"}}</option>
+          <option value="1" {{#if (eq change.mode 1)}}selected{{/if}}>{{localize "FE2.Effects.Modes.Multiply"}}</option>
+        </select>
+      </div>
+
+      <div class="effect-change-value">
+        <input type="number" name="changes.{{idx}}.value" value="{{change.value}}" data-index="{{idx}}" data-field="value" step="any" />
+      </div>
+
+      <div class="effect-change-delete">
+        <a class="effect-control" data-action="deleteChange" data-index="{{idx}}" title="{{localize "FE2.Effects.UI.DeleteChange"}}">
+          <i class="fas fa-trash"></i>
+        </a>
+      </div>
+    </li>
+    {{/each}}
+  </ol>
+
+  <div class="effect-add">
+    <a class="effect-control" data-action="addChange">
+      <i class="fas fa-plus"></i> {{localize "FE2.Effects.UI.AddChange"}}
+    </a>
+  </div>
+</div>

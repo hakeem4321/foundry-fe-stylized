@@ -10,5 +10,17 @@
     {{!-- Sheet Body --}}
     <section class="sheet-body">
 
+        <nav class="item-sheet-tabs tabs" data-group="primary">
+          <a data-tab="details" data-group="primary" data-action="tab">{{localize "FE2.Tabs.Details"}}</a>
+          <a data-tab="effects" data-group="primary" data-action="tab">{{localize "FE2.Effects.UI.TabLabel"}}</a>
+        </nav>
+
+        <div class="tab" data-group="primary" data-tab="details">
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="effects">
+          {{> "systems/foundry-fe2/templates/effects-section.html"}}
+        </div>
+
     </section>
 </div>

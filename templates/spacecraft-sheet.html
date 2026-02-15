@@ -17,6 +17,7 @@
         <a class="item" data-tab="cargo" data-group="primary" data-action="tab">{{localize "FE2.Tabs.Cargo"}}</a>
         <a class="item" data-tab="features" data-group="primary" data-action="tab">{{localize "FE2.Tabs.Features"}}</a>
         <a class="item" data-tab="notes" data-group="primary" data-action="tab">{{localize "FE2.Sheet.Common.Notes"}}</a>
+        <a class="item" data-tab="effects" data-group="primary" data-action="tab">{{localize "FE2.Effects.UI.TabLabel"}}</a>
     </nav>
 
     {{!-- Sheet Body --}}
@@ -25,7 +26,7 @@
         {{!-- Carac Tab --}}
         <div class="tab items" data-group="primary" data-tab="attribute">
           <span><a data-action="lockUnlockSheet"><img class="small-button-container"
-            src="systems/foundry-fe2/images/icons/{{#if editScore}}unlocked.svg{{else}}locked.svg{{/if}}" alt="Unlocked/Locked"
+            src="systems/foundry-fe2/images/icons/{{#if editScore}}unlocked.svg{{else}}locked.svg{{/if}}" alt="{{localize 'FE2.Sheet.Common.Toggle'}}"
             >{{#if editScore}}{{localize "FE2.Sheet.Common.Unlocked"}}{{else}}{{localize "FE2.Sheet.Common.Locked"}}{{/if}}</a>
           </span>
           <div class="grid grid-2col">
@@ -42,7 +43,8 @@
                   &nbsp;/&nbsp;
                   <select class="carac-base flexrow" type="text" name="system.attributes.{{key}}.value" value="{{attr.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}>
                     {{selectOptions ../spacecraftAttrValueChoices selected=attr.value}}
-                  </select> 
+                  </select>
+                  {{modIndicator (lookup (lookup @root.effectiveAttributes key) "value") attr.value}}
                   <div class="item-controls">
                     {{#if (ne attr.traitId "")}}
                     <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
@@ -82,7 +84,7 @@
                     <input type="text" class="input-numeric-short padd-right" name="system.stats.{{key}}.bonus" value="{{stat.bonus}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/>
                     {{/if}}
                     {{#if stat.max}}
-                    <span class="stat-label padd-left" name="{{key}}"> {{stat.max}}</span>
+                    <span class="stat-label padd-left" name="{{key}}"> {{stat.max}} {{modIndicator stat.max (lookup @root.baseValues.statMaxes key)}}</span>
                     {{/if}}
                     <input type="text" class="input-numeric-short padd-right" name="system.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/>
                   </li>
@@ -108,7 +110,7 @@
               <span class="stat-label padd-right padd-left packed-left">{{localize "FE2.Sheet.Common.Base"}} : {{fight.base}}</span>
               <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
               <input type="text" class="input-numeric-short padd-right"  name="system.fight.{{key}}.bonus" value="{{fight.bonus}}" data-dtype="Number"/>
-              <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Total"}} : {{fight.total}}</span>
+              <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Total"}} : {{fight.total}} {{modIndicator fight.total (lookup @root.baseValues.fightTotals key)}}</span>
               {{/if}}
             </div>         
             <ul>
@@ -246,6 +248,11 @@
           <hr>
           {{>"systems/foundry-fe2/templates/editor-notes-gm.html"}}
         </article>
+      </div>
+
+      {{!-- Effects Tab --}}
+      <div class="tab effects" data-group="primary" data-tab="effects">
+        {{> "systems/foundry-fe2/templates/effects-section.html"}}
       </div>
 
     </section>

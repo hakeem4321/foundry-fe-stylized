@@ -31,7 +31,12 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
       viewTraitLink: FraggedEmpireActorSheet.#onViewTraitLink,
       viewItemLink: FraggedEmpireActorSheet.#onViewItemLink,
       rollWeaponDamage: FraggedEmpireActorSheet.#onRollWeaponDamage,
-      rollWeaponDamageCritical: FraggedEmpireActorSheet.#onRollWeaponDamageCritical
+      rollWeaponDamageCritical: FraggedEmpireActorSheet.#onRollWeaponDamageCritical,
+      rollAcquisition: FraggedEmpireActorSheet.#onRollAcquisition,
+      createEffect: FraggedEmpireActorSheet.#onCreateEffect,
+      editEffect: FraggedEmpireActorSheet.#onEditEffect,
+      toggleEffect: FraggedEmpireActorSheet.#onToggleEffect,
+      deleteEffect: FraggedEmpireActorSheet.#onDeleteEffect
     }
   };
 
@@ -65,7 +70,7 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
       editable: this.isEditable,
       cssClass: this.isEditable ? "editable" : "locked",
       system: actorData.system,
-      effects: actor.effects.map(e => foundry.utils.deepClone(e)),
+      effectCategories: FraggedEmpireUtility.categorizeEffects(actor),
       limited: actor.limited,
       sortedSkills: sortedSkills,
       weapons: actor.getWeapons(),
@@ -93,7 +98,10 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
       optionsBase: FraggedEmpireUtility.createDirectOptionList(0, 20),
       owner: actor.isOwner,
       editScore: this._editScore,
-      isGM: game.user.isGM
+      isGM: game.user.isGM,
+      effectiveAttributes: actor._effectiveAttributes || {},
+      computed: actor._computed || {},
+      baseValues: actor._baseValues || {}
     });
 
     // Enrich HTML for prose-mirror collapsed display
@@ -112,7 +120,9 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
 
     // Activate tabs after render (V2 does not auto-activate from tabGroups)
     for (const [group, tab] of Object.entries(this.tabGroups)) {
-      if (tab) this.changeTab(tab, group, {force: true});
+      if (!tab) continue;
+      const tabElement = this.element?.querySelector(`[data-tab="${tab}"][data-group="${group}"]`);
+      if (tabElement) this.changeTab(tab, group, {force: true});
     }
 
     if (!this.isEditable) return;
@@ -252,6 +262,57 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
     const weapon = this.document.items.get(itemId);
     if (weapon) this.document.rollDamage(weapon, "criticaldamage");
   }
+
+  /* -------------------------------------------- */
+  static #onRollAcquisition(event, target) {
+    this.document.rollAcquisition();
+  }
+
+  /* -------------------------------------------- */
+  /*  Effect Action Handlers                      */
+  /* -------------------------------------------- */
+
+  static #onCreateEffect(event, target) {
+    const effectData = {
+      name: game.i18n.localize("FE2.Effects.UI.AddEffect"),
+      img: "icons/svg/aura.svg",
+      origin: this.document.uuid,
+      transfer: false,
+      disabled: false
+    };
+    this.document.createEmbeddedDocuments("ActiveEffect", [effectData]);
+  }
+
+  static #onEditEffect(event, target) {
+    const effectId = target.closest("[data-effect-id]")?.dataset.effectId;
+    if (!effectId) return;
+    const effect = this.document.effects.get(effectId);
+    effect?.sheet.render(true);
+  }
+
+  static #onToggleEffect(event, target) {
+    const effectId = target.closest("[data-effect-id]")?.dataset.effectId;
+    if (!effectId) return;
+    const effect = this.document.effects.get(effectId);
+    if (effect) effect.update({ disabled: !effect.disabled });
+  }
+
+  static async #onDeleteEffect(event, target) {
+    const effectId = target.closest("[data-effect-id]")?.dataset.effectId;
+    if (!effectId) return;
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window: { title: game.i18n.localize("FE2.Dialog.ConfirmRemoveTitle") },
+      content: "<p>" + game.i18n.localize("FE2.Dialog.ConfirmRemoveContent") + "</p>"
+    });
+    if (confirmed) {
+      this.document.deleteEmbeddedDocuments("ActiveEffect", [effectId]);
+    }
+  }
+
+  /* -------------------------------------------- */
+  /*  Private Helpers                             */
+  /* -------------------------------------------- */
+
 
   /* -------------------------------------------- */
   /*  Drag and Drop                               */
