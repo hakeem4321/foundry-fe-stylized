@@ -2,13 +2,25 @@
 
     {{!-- Sheet Header --}}
     <header class="sheet-header">
+      <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}" />
       <div class="header-fields">
         <div class="flexrow">
-          <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}" />
           <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="{{localize "FE2.Sheet.Common.Name"}}"/></h1>
           <a class="fe2-lock-btn" data-action="lockUnlockSheet" title="{{#if editScore}}{{localize "FE2.Sheet.Common.Unlocked"}}{{else}}{{localize "FE2.Sheet.Common.Locked"}}{{/if}}">
             <i class="fas {{#if editScore}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
           </a>
+        </div>
+        <div class="flexrow fe2-header-subrow">
+          <span class="fe2-field">
+            <span class="stat-label">{{localize "FE2.Sheet.Common.Level"}}</span>
+            <input type="text" class="input-numeric-short fe2-stat-input"
+                   name="system.level.value" value="{{system.level.value}}"
+                   data-dtype="Number" {{#unless editScore}}disabled{{/unless}}/>
+          </span>
+          {{#if species}}
+          <a class="fe2-species-name" data-action="editItem" data-item-id="{{species.id}}"
+             title="{{localize "FE2.Sheet.Common.EditItem"}}">{{species.name}}</a>
+          {{/if}}
         </div>
       </div>
     </header>
@@ -51,18 +63,6 @@
                 {{/each}}
               </ul>  
 
-              <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Level"}}</h3>
-              <ul>
-                <li class="item flexrow list-item stack-left" data-attr-key="level" data-item-id="{{system.level.traitId}}">
-                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Level"}}</span>
-                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.level.value" value="{{system.level.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/></span>
-                  <div class="item-controls">
-                    {{#if (ne system.level.traitId "")}}
-                      <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
-                    {{/if}}
-                  </div>                  
-                </li>
-              </ul>
 
             </div>
 
@@ -342,7 +342,7 @@
 
             <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Weapons"}}</h3>
             <ul class="fe2-item-list">
-              <li class="item flexrow fe2-section-header">
+              <li class="item flexrow fe2-list-header">
                 <span class="fe2-icon-spacer"></span>
                 <span class="competence-label">{{localize "FE2.Sheet.Common.Name"}}</span>
                 <span class="specialisation-label">{{localize "FE2.Stats.Weapon.HitDice"}}</span>
@@ -532,7 +532,8 @@
 
             <div><h4>{{localize "FE2.Sheet.Common.Equipment"}}</h4></div>
             <ul class="item-list alternate-list fe2-item-list">
-              <li class="item flexrow list-item">
+              <li class="item flexrow fe2-list-header">
+                <span class="fe2-icon-spacer"></span>
                 <span class="equipement-label">{{localize "FE2.Sheet.Common.Name"}}</span>
                 <span class="equipement-label">{{localize "FE2.Sheet.Common.Type"}}</span>
                 <div class="item-controls">
@@ -561,7 +562,8 @@
             
           <div><h4>{{localize "FE2.Sheet.Common.TradeGoods"}}</h4></div>
             <ul class="item-list alternate-list fe2-item-list">
-              <li class="item flexrow list-item">
+              <li class="item flexrow fe2-list-header">
+                <span class="fe2-icon-spacer"></span>
                 <span class="equipement-label">{{localize "FE2.Sheet.Common.Name"}}</span>
                 <span class="equipement-label">{{localize "FE2.Sheet.Character.Tradebox"}}</span>
                 <span class="equipement-label">{{localize "FE2.Sheet.Character.CargoSpace"}}</span>
@@ -586,7 +588,8 @@
 
           <div><h4>{{localize "FE2.Sheet.Character.Research"}}</h4></div>
             <ul class="item-list alternate-list fe2-item-list">
-              <li class="item flexrow list-item">
+              <li class="item flexrow fe2-list-header">
+                <span class="fe2-icon-spacer"></span>
                 <span class="equipement-label">{{localize "FE2.Sheet.Common.Name"}}</span>
                 <span class="equipement-label">{{localize "FE2.Sheet.Character.ResearchUnit"}}</span>
                 <div class="item-controls">

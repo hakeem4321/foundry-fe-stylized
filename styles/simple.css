@@ -67,7 +67,7 @@
   --fe2-font-size-xs: 0.75rem;
 
   /* B.6: Layout */
-  --fe2-input-compact-width: 2rem;
+  --fe2-input-compact-width: 3.5rem;
   --fe2-input-compact-height: 1.75rem;
   --fe2-input-height: 3rem;
   --fe2-icon-sm: 24px;
@@ -113,6 +113,51 @@ ul, li {
   letter-spacing: 1px;
   color: var(--fe2-text);
   min-width: 400px;
+
+  /* Foundry CSS variable overrides — neutralize dark theme colors */
+
+  /* Application-level */
+  --background: var(--fe2-bg);
+  --color-header-background: rgba(0, 0, 0, 0.5);
+  --color-border: var(--fe2-border);
+  --color-tabs-border: var(--fe2-border);
+  --color-fieldset-border: var(--fe2-border);
+  --color-form-label: var(--fe2-text);
+  --color-form-label-hover: var(--fe2-text-value);
+  --color-form-hint: var(--fe2-text);
+  --color-form-hint-hover: var(--fe2-text-value);
+  --color-select-option-bg: var(--fe2-bg);
+
+  /* Inputs */
+  --input-background-color: var(--fe2-input-bg);
+  --input-border-color: var(--fe2-input-border);
+  --input-text-color: var(--fe2-text-value);
+  --input-placeholder-color: var(--fe2-text);
+  --input-focus-outline-color: var(--fe2-highlight);
+  --input-focus-text-color: var(--fe2-text-value);
+  --input-box-shadow: none;
+
+  /* Checkboxes */
+  --checkbox-background-color: var(--fe2-bg);
+  --checkbox-checked-color: var(--fe2-highlight);
+  --checkbox-checkmark-color: var(--fe2-bg);
+  --checkbox-disabled-color: var(--fe2-text);
+
+  /* Buttons */
+  --button-background-color: var(--fe2-bg);
+  --button-border-color: var(--fe2-border);
+  --button-text-color: var(--fe2-text-value);
+  --button-hover-background-color: var(--fe2-highlight);
+  --button-hover-border-color: var(--fe2-highlight);
+  --button-hover-text-color: var(--fe2-text-heading);
+  --button-focus-outline-color: var(--fe2-highlight);
+
+  /* ProseMirror */
+  --menu-background: var(--fe2-bg);
+  --dropdown-background: var(--fe2-bg);
+  --dropdown-border: var(--fe2-border);
+  --dialog-background: var(--fe2-bg);
+  --dialog-border: var(--fe2-border);
 }
 
 /*
@@ -172,6 +217,11 @@ ul, li {
   color: var(--fe2-highlight);
 }
 
+/* Window header (title bar) */
+.application.foundry-fe2 .window-header {
+  background: var(--fe2-header-bg);
+}
+
 /* Buttons inside sheet content (excludes Foundry window-header buttons) */
 .application.foundry-fe2 .window-content button,
 .application.foundry-fe2 .window-content a.button {
@@ -207,6 +257,24 @@ ul, li {
 .application.foundry-fe2 .prosemirror .prosemirror-dropdown-menu {
   background: var(--fe2-bg);
   border: 1px solid var(--fe2-border);
+}
+
+/* Scrollbar: FE2 design token colors (Chromium/Electron only) */
+.application.foundry-fe2 .sheet-body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.application.foundry-fe2 .sheet-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.application.foundry-fe2 .sheet-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.application.foundry-fe2 .sheet-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.35);
 }
 
 /* Remove Foundry backdrop-filter blur */
@@ -287,6 +355,29 @@ ul, li {
   color: var(--fe2-highlight);
 }
 
+/* Species + Level sub-row in sheet header */
+.foundry-fe2 .fe2-header-subrow {
+  align-items: center;
+  gap: var(--fe2-space-sm);
+  padding: 0 var(--fe2-space-sm);
+  min-height: 1.5rem;
+}
+
+.foundry-fe2 .fe2-species-name {
+  color: var(--fe2-text-value);
+  font-family: var(--fe2-font-body);
+  font-size: var(--fe2-font-size-sm);
+  cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-left: var(--fe2-space-sm);
+}
+
+.foundry-fe2 .fe2-species-name:hover {
+  color: var(--fe2-highlight);
+}
+
 /* Tab navigation: fixed height, colors from tokens */
 .foundry-fe2 .sheet-tabs {
   flex: 0 0 auto;
@@ -306,6 +397,7 @@ ul, li {
   border: none;
   background: none;
   cursor: pointer;
+  flex: 1;
 }
 
 .foundry-fe2 nav.tabs[data-group] [data-tab]:hover {
@@ -355,6 +447,25 @@ ul, li {
   font-weight: bold;
   margin: var(--fe2-space-sm) 0 var(--fe2-space-xs);
   border-bottom: 2px solid var(--fe2-border);
+}
+
+/* Column header rows for item lists (black bg, off-white text) */
+.foundry-fe2 .fe2-list-header {
+  background: var(--fe2-header-bg);
+  color: var(--fe2-text-heading);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-sm);
+  font-weight: bold;
+  border-radius: var(--fe2-border-radius);
+}
+
+.foundry-fe2 .fe2-list-header.item.flexrow .generic-label,
+.foundry-fe2 .fe2-list-header.item.flexrow .competence-label,
+.foundry-fe2 .fe2-list-header.item.flexrow .specialisation-label,
+.foundry-fe2 .fe2-list-header.item.flexrow .equipement-label,
+.foundry-fe2 .fe2-list-header.item.flexrow .stat-label {
+  color: var(--fe2-text-heading);
 }
 
 /* Sub-headers: accent blue bg, off-white text */
@@ -502,14 +613,14 @@ ul, li {
 /* Typography hierarchy */
 .foundry-fe2 h3 {
   font-family: var(--fe2-font-heading);
-  font-size: var(--fe2-font-size-lg);
+  font-size: var(--fe2-font-size-md);
   color: var(--fe2-text-value);
   margin: 0;
 }
 
 .foundry-fe2 h4 {
   font-family: var(--fe2-font-heading);
-  font-size: var(--fe2-font-size-md);
+  font-size: var(--fe2-font-size-sm);
   color: var(--fe2-text-value);
 }
 
@@ -939,7 +1050,7 @@ ul, li {
 }
 
 /* Effect category headers */
-.effect-category-header {
+.foundry-fe2 .effect-category-header {
   margin: var(--fe2-space-sm) 0 var(--fe2-space-xs);
   padding: var(--fe2-space-xs) var(--fe2-space-sm);
   background: var(--fe2-header-bg);

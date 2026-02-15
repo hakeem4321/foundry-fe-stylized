@@ -75,6 +75,7 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
       sortedSkills: sortedSkills,
       weapons: actor.getWeapons(),
       strongHits: actor.getStrongHits(),
+      species: actor.getRaces()[0] || null,
       races: actor.getRaces(),
       outfits: actor.getOutfits(),
       utilities: actor.getUtilities(),
@@ -332,6 +333,22 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
         return;
       }
     }
+    // Single-species enforcement: remove existing race items before adding new one
+    if (data?.type === "Item") {
+      const item = await fromUuid(data.uuid);
+      if (item?.type === "race") {
+        const existingRaces = this.document.getRaces();
+        if (existingRaces.length > 0) {
+          await this.document.deleteEmbeddedDocuments("Item",
+            existingRaces.map(r => r.id));
+        }
+        // Create the new race item directly — super._onDrop cannot re-read
+        // the drag event data after getDragEventData already consumed it.
+        const itemData = item.toObject();
+        await this.document.createEmbeddedDocuments("Item", [itemData]);
+        return;
+      }
+    }
     super._onDrop(event);
   }
 
@@ -342,10 +359,14 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
   async _onChangeForm(formConfig, event) {
     // Munitions inputs are handled by dedicated event listeners in _onRender
     if (event?.target?.closest(".weapon-munitions-label")) return;
-    const form = this.form;
-    if (!form) return;
-    const formData = new foundry.applications.ux.FormDataExtended(form);
-    const data = foundry.utils.expandObject(formData.object);
+    const target = event?.target;
+    if (!target?.name) return;
+    // Build update from the single changed field only — collecting the entire form
+    // via FormDataExtended omits disabled fields, which can blank out locked inputs
+    // (e.g. system.level.value when sheet is locked).
+    let value = target.value;
+    if (target.dataset.dtype === "Number") value = Number(value) || 0;
+    const data = foundry.utils.expandObject({ [target.name]: value });
     await this.document.update(data);
   }
 }
