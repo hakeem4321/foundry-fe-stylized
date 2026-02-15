@@ -54,8 +54,8 @@
               <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Level"}}</h3>
               <ul>
                 <li class="item flexrow list-item stack-left" data-attr-key="level" data-item-id="{{system.level.traitId}}">
-                  <span class="stat-label padd-right packed-left" name="level">{{localize "FE2.Sheet.Common.Level"}}</span>
-                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.level.value" value="{{system.level.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/>
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Level"}}</span>
+                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.level.value" value="{{system.level.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/></span>
                   <div class="item-controls">
                     {{#if (ne system.level.traitId "")}}
                       <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
@@ -74,13 +74,13 @@
               </div>
               <ul>
                 <li class="item flexrow list-item packed-left" data-attr-key="fate" data-item-id="{{system.resources.traitId}}">
-                  <span class="stat-label packed-left" name="level">{{localize "FE2.Sheet.Common.Current"}} :</span>
-                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.resources.value" value="{{system.resources.value}}" data-dtype="Number"/>
-                  <span class="stat-label packed-left" name="level">{{localize "FE2.Sheet.Common.Alloted"}} :</span>
-                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.resources.alloted" value="{{system.resources.alloted}}" data-dtype="Number"/>
-                  <span class="stat-label padd-left packed-left" name="level ">{{localize "FE2.Sheet.Common.Bonus"}} : </span>
-                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.resources.bonus" value="{{system.resources.bonus}}" data-dtype="Number"/>
-                  <span class="stat-label padd-left packed-left" name="level">{{localize "FE2.Sheet.Common.Max"}} : {{system.resources.total}} {{modIndicator system.resources.total baseValues.resourcesTotal}}</span>
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Current"}} :</span>
+                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.resources.value" value="{{system.resources.value}}" data-dtype="Number"/></span>
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Alloted"}} :</span>
+                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.resources.alloted" value="{{system.resources.alloted}}" data-dtype="Number"/></span>
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
+                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.resources.bonus" value="{{system.resources.bonus}}" data-dtype="Number"/></span>
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : {{system.resources.total}} {{modIndicator system.resources.total baseValues.resourcesTotal}}</span></span>
                   <div class="item-controls">
                     {{#if (ne system.resources.traitId "")}}
                     <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
@@ -92,11 +92,11 @@
               <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Influence"}}</h3>
               <ul>
                 <li class="item flexrow list-item stack-left" data-attr-key="fate" data-item-id="{{system.influence.traitId}}">
-                  <span class="stat-label" name="level">{{localize "FE2.Sheet.Common.Current"}} : </span>
-                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.influence.value" value="{{system.influence.value}}" data-dtype="Number"/>
-                  <span class="stat-label padd-left" name="level">{{localize "FE2.Sheet.Common.Bonus"}} : </span>
-                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.influence.bonus" value="{{system.influence.bonus}}" data-dtype="Number"/>
-                  <span class="stat-label padd-left" name="level">{{localize "FE2.Sheet.Common.Max"}} : {{system.influence.total}} {{modIndicator system.influence.total baseValues.influenceTotal}}</span>
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Current"}} :</span>
+                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.influence.value" value="{{system.influence.value}}" data-dtype="Number"/></span>
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
+                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.influence.bonus" value="{{system.influence.bonus}}" data-dtype="Number"/></span>
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : {{system.influence.total}} {{modIndicator system.influence.total baseValues.influenceTotal}}</span></span>
                   <div class="item-controls">
                     {{#if (ne system.influence.traitId "")}}
                     <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
@@ -108,8 +108,8 @@
               <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.SpareTimePoints"}}</h3>
               <ul>
                 <li class="item flexrow list-item stack-left" data-item-id="{{lang.id}}">
-                  <span class="stat-label padd-right packed-left">{{localize "FE2.Sheet.Character.SpareTimePoints"}} : </span>
-                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.sparetimepoints.value" value="{{system.sparetimepoints.value}}" data-dtype="Number"/>
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.SpareTimePoints"}} :</span>
+                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.sparetimepoints.value" value="{{system.sparetimepoints.value}}" data-dtype="Number"/></span>
                 </li>                  
               </ul>
 
@@ -252,124 +252,119 @@
             <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.Endurance"}}</h3>
             <ul>
               <li class="item flexrow list-item stack-left">
-                <span class="stat-label padd-right packed-left">{{localize "FE2.Sheet.Common.Current"}} :</span>
-                <input type="text" class="input-numeric-short fe2-stat-input" name="system.endurance.value" value="{{system.endurance.value}}" data-dtype="Number"/>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
-                <input type="text" class="input-numeric-short fe2-stat-input"  name="system.endurance.endurancebonus" value="{{system.endurance.endurancebonus}}" data-dtype="Number"/>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Max"}} : {{system.endurance.max}} {{modIndicator system.endurance.max baseValues.enduranceMax}}</span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Current"}} :</span>
+                <input type="text" class="input-numeric-short fe2-stat-input" name="system.endurance.value" value="{{system.endurance.value}}" data-dtype="Number"/></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
+                <input type="text" class="input-numeric-short fe2-stat-input" name="system.endurance.endurancebonus" value="{{system.endurance.endurancebonus}}" data-dtype="Number"/></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : {{system.endurance.max}} {{modIndicator system.endurance.max baseValues.enduranceMax}}</span></span>
               </li>
               <li class="item flexrow list-item stack-left">
-                <span class="stat-label pad-right packed-left">{{localize "FE2.Sheet.Common.Recovery"}}</span>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
-                <input type="text" class="input-numeric-short fe2-stat-input" name="system.endurance.recoverybonus padd-left test-css" value="{{system.endurance.recoverybonus}}" data-dtype="Number"/>
-                <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Max"}}&nbsp; &nbsp;:{{system.endurance.recovery}} {{modIndicator system.endurance.recovery baseValues.recovery}}</span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Recovery"}}</span></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
+                <input type="text" class="input-numeric-short fe2-stat-input" name="system.endurance.recoverybonus" value="{{system.endurance.recoverybonus}}" data-dtype="Number"/></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : {{system.endurance.recovery}} {{modIndicator system.endurance.recovery baseValues.recovery}}</span></span>
               </li>
               <li class="item flexrow list-item stack-left">
-                <span class="stat-label padd-right packed-left">{{localize "FE2.Sheet.Character.GritRerolls"}} :</span>
-                <input type="text" class="input-numeric-short fe2-stat-input" name="system.gritreroll.value" value="{{system.gritreroll.value}}" data-dtype="Number"/>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
-                <input type="text" class="input-numeric-short fe2-stat-input"  name="system.gritreroll.bonus" value="{{system.gritreroll.bonus}}" data-dtype="Number"/>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Max"}} : {{system.gritreroll.max}} {{modIndicator system.gritreroll.max baseValues.gritRerollMax}}</span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.GritRerolls"}} :</span>
+                <input type="text" class="input-numeric-short fe2-stat-input" name="system.gritreroll.value" value="{{system.gritreroll.value}}" data-dtype="Number"/></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
+                <input type="text" class="input-numeric-short fe2-stat-input" name="system.gritreroll.bonus" value="{{system.gritreroll.bonus}}" data-dtype="Number"/></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : {{system.gritreroll.max}} {{modIndicator system.gritreroll.max baseValues.gritRerollMax}}</span></span>
               </li>
               <li class="item flexrow list-item stack-left">
-                <span class="stat-label padd-right packed-left">{{localize "FE2.Sheet.Character.CombatOrderModifier"}}:</span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.CombatOrderModifier"}} :</span>
                 <input type="text" class="input-numeric-short fe2-stat-input" name="system.combatordermod" value="{{system.combatordermod}}" data-dtype="Number"/>
-                {{modIndicator computed.combatOrder system.combatordermod}}
+                {{modIndicator computed.combatOrder system.combatordermod}}</span>
               </li>
             </ul>
 
             <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.Defence"}}</h3>
             <ul>
               <li class="item flexrow list-item stack-left">
-                <span class="stat-label padd-right packed-left">{{localize "FE2.Sheet.Common.Base"}} : {{defenseBase}}</span>
-                <span class="stat-label padd-right packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
-                <input type="text" class="input-numeric-short fe2-stat-input packed-left" name="system.defensebonus.defense" value="{{system.defensebonus.defense}}" data-dtype="Number"/>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Total"}} : {{defenseTotal}} {{modIndicator defenseTotal baseValues.defenseTotal}}</span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Base"}} : {{defenseBase}}</span></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
+                <input type="text" class="input-numeric-short fe2-stat-input" name="system.defensebonus.defense" value="{{system.defensebonus.defense}}" data-dtype="Number"/></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Total"}} : {{defenseTotal}} {{modIndicator defenseTotal baseValues.defenseTotal}}</span></span>
               </li>
             </ul>
 
             <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.Armour"}}</h3>
             <ul class="list-item">
               <li class="item flexrow list-item stack-left">
-                <span class="stat-label packed-left">{{localize "FE2.Sheet.Common.Base"}} : {{armourBase}}</span>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
-                <input type="text" class="input-numeric-short fe2-stat-input padd-right" name="system.armourbonus.armour" value="{{system.armourbonus.armour}}" data-dtype="Number"/>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Total"}} : {{armourTotal}} {{modIndicator armourTotal baseValues.armourTotal}}</span>
-                <span></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Base"}} : {{armourBase}}</span></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
+                <input type="text" class="input-numeric-short fe2-stat-input" name="system.armourbonus.armour" value="{{system.armourbonus.armour}}" data-dtype="Number"/></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Total"}} : {{armourTotal}} {{modIndicator armourTotal baseValues.armourTotal}}</span></span>
               </li>
               <li class="item flexrow list-item stack-left">
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Character.AtZeroEndurance"}} : </span>
-                <input type="text" class="input-numeric-short fe2-stat-input padd-right" name="system.armourbonus.zeroendurance" value="{{system.armourbonus.zeroendurance}}" data-dtype="Number"/>
-                {{modIndicator computed.armourZeroEnd system.armourbonus.zeroendurance}}
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.AtZeroEndurance"}} :</span>
+                <input type="text" class="input-numeric-short fe2-stat-input" name="system.armourbonus.zeroendurance" value="{{system.armourbonus.zeroendurance}}" data-dtype="Number"/>
+                {{modIndicator computed.armourZeroEnd system.armourbonus.zeroendurance}}</span>
               </li>
             </ul>
 
             <h3 class="fe2-section-header">{{localize "FE2.Effects.Fields.Movement"}}</h3>
             <ul>
               <li class="item flexrow list-item stack-left">
-                <span class="stat-label padd-right packed-left">{{localize "FE2.Sheet.Common.Base"}} :</span>
-                <input type="text" class="input-numeric-short fe2-stat-input" name="system.modifiers.movement" value="{{system.modifiers.movement}}" data-dtype="Number"/>
-                <span class="stat-label padd-left packed-left">{{localize "FE2.Sheet.Common.Total"}} : {{computed.movement}} {{modIndicator computed.movement system.modifiers.movement}}</span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Base"}} :</span>
+                <input type="text" class="input-numeric-short fe2-stat-input" name="system.modifiers.movement" value="{{system.modifiers.movement}}" data-dtype="Number"/></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Total"}} : {{computed.movement}} {{modIndicator computed.movement system.modifiers.movement}}</span></span>
               </li>
             </ul>
 
             <h3 class="fe2-section-header">{{localize "FE2.Effects.Fields.HitBonus"}} / {{localize "FE2.Effects.Fields.EnduranceDamage"}}</h3>
             <ul>
               <li class="item flexrow list-item stack-left">
-                <span class="stat-label padd-right packed-left">{{localize "FE2.Effects.Fields.HitBonus"}} :</span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.HitBonus"}} :</span>
                 <input type="text" class="input-numeric-short fe2-stat-input" name="system.modifiers.hitbonus" value="{{system.modifiers.hitbonus}}" data-dtype="Number"/>
-                {{modIndicator computed.hitBonus system.modifiers.hitbonus}}
-                <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Effects.Fields.EnduranceDamage"}} :</span>
+                {{modIndicator computed.hitBonus system.modifiers.hitbonus}}</span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.EnduranceDamage"}} :</span>
                 <input type="text" class="input-numeric-short fe2-stat-input" name="system.modifiers.endurancedamage" value="{{system.modifiers.endurancedamage}}" data-dtype="Number"/>
-                {{modIndicator computed.enduranceDamage system.modifiers.endurancedamage}}
+                {{modIndicator computed.enduranceDamage system.modifiers.endurancedamage}}</span>
               </li>
               <li class="item flexrow list-item stack-left">
-                <span class="stat-label padd-right packed-left">{{localize "FE2.Effects.Fields.UtilitiesMax"}} :</span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.UtilitiesMax"}} :</span>
                 <input type="text" class="input-numeric-short fe2-stat-input" name="system.modifiers.utilitiesmax" value="{{system.modifiers.utilitiesmax}}" data-dtype="Number"/>
-                {{modIndicator computed.utilitiesMax system.modifiers.utilitiesmax}}
-                <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Effects.Fields.UntrainedSkillMod"}} :</span>
+                {{modIndicator computed.utilitiesMax system.modifiers.utilitiesmax}}</span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.UntrainedSkillMod"}} :</span>
                 <input type="text" class="input-numeric-short fe2-stat-input" name="system.modifiers.untrainedskillmod" value="{{system.modifiers.untrainedskillmod}}" data-dtype="Number"/>
-                {{modIndicator computed.untrainedSkillMod system.modifiers.untrainedskillmod}}
+                {{modIndicator computed.untrainedSkillMod system.modifiers.untrainedskillmod}}</span>
               </li>
               <li class="item flexrow list-item stack-left">
-                <span class="stat-label padd-right packed-left">{{localize "FE2.Effects.Fields.AcquisitionMod"}} :</span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.AcquisitionMod"}} :</span>
                 <input type="text" class="input-numeric-short fe2-stat-input" name="system.modifiers.acquisitionmod" value="{{system.modifiers.acquisitionmod}}" data-dtype="Number"/>
-                {{modIndicator computed.acquisitionMod system.modifiers.acquisitionmod}}
-                <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Effects.Fields.ArcaneMod"}} :</span>
+                {{modIndicator computed.acquisitionMod system.modifiers.acquisitionmod}}</span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.ArcaneMod"}} :</span>
                 <input type="text" class="input-numeric-short fe2-stat-input" name="system.modifiers.arcanemod" value="{{system.modifiers.arcanemod}}" data-dtype="Number"/>
-                {{modIndicator computed.arcaneMod system.modifiers.arcanemod}}
+                {{modIndicator computed.arcaneMod system.modifiers.arcanemod}}</span>
               </li>
             </ul>
 
             <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Weapons"}}</h3>
-            <table class="fe2-stat-table fe2-weapon-table">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>{{localize "FE2.Sheet.Common.Name"}}</th>
-                  <th>{{localize "FE2.Stats.Weapon.HitDice"}}</th>
-                  <th>{{localize "FE2.Stats.Weapon.HitBonus"}}</th>
-                  <th>{{localize "FE2.Stats.Weapon.EnduranceDamage"}}</th>
-                  <th>{{localize "FE2.Stats.Weapon.CriticalDamage"}}</th>
-                  <th>{{localize "FE2.Stats.Weapon.RangeIncrement"}}</th>
-                  <th>{{localize "FE2.Sheet.Character.Munitions"}}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{#each weapons as |weapon key|}}
-                <tr class="item" data-item-id="{{weapon.id}}">
-                  <td><img class="sheet-competence-img" src="{{weapon.img}}"/></td>
-                  <td class="weapon-label"><a data-action="rollWeapon" name="{{weapon.name}}">{{weapon.name}}</a></td>
-                  <td>{{weapon.system.statstotal.hitdice.value}}</td>
-                  <td>{{weapon.system.statstotal.hit.value}}</td>
-                  <td>{{weapon.system.statstotal.enddmg.value}}</td>
-                  <td>{{weapon.system.statstotal.crit.value}}</td>
-                  <td>{{weapon.system.statstotal.range.value}}</td>
-                  <td><input type="text" class="fe2-stat-input" name="{{weapon.id}}" value="{{weapon.system.munitions}}" data-dtype="Number"/></td>
-                </tr>
-                {{/each}}
-              </tbody>
-            </table>          
+            <ul class="fe2-item-list">
+              <li class="item flexrow fe2-section-header">
+                <span class="fe2-icon-spacer"></span>
+                <span class="competence-label">{{localize "FE2.Sheet.Common.Name"}}</span>
+                <span class="specialisation-label">{{localize "FE2.Stats.Weapon.HitDice"}}</span>
+                <span class="specialisation-label">{{localize "FE2.Stats.Weapon.HitBonus"}}</span>
+                <span class="specialisation-label">{{localize "FE2.Stats.Weapon.EnduranceDamage"}}</span>
+                <span class="specialisation-label">{{localize "FE2.Stats.Weapon.CriticalDamage"}}</span>
+                <span class="specialisation-label">{{localize "FE2.Stats.Weapon.RangeIncrement"}}</span>
+                <span class="specialisation-label">{{localize "FE2.Sheet.Character.Munitions"}}</span>
+              </li>
+              {{#each weapons as |weapon key|}}
+              <li class="item flexrow list-item" data-item-id="{{weapon.id}}">
+                <img class="sheet-competence-img" src="{{weapon.img}}"/>
+                <span class="competence-label weapon-label"><a data-action="rollWeapon" name="{{weapon.name}}">{{weapon.name}}</a></span>
+                <span class="specialisation-label">{{weapon.system.statstotal.hitdice.value}}</span>
+                <span class="specialisation-label">{{weapon.system.statstotal.hit.value}}</span>
+                <span class="specialisation-label">{{weapon.system.statstotal.enddmg.value}}</span>
+                <span class="specialisation-label">{{weapon.system.statstotal.crit.value}}</span>
+                <span class="specialisation-label">{{weapon.system.statstotal.range.value}}</span>
+                <span class="specialisation-label"><input type="text" class="fe2-stat-input" name="{{weapon.id}}" value="{{weapon.system.munitions}}" data-dtype="Number"/></span>
+              </li>
+              {{/each}}
+            </ul>          
 
             <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.DronesCompanions"}}</h3>
             <ul>
@@ -524,12 +519,12 @@
           <div><h4>{{localize "FE2.Sheet.Character.Slots"}}</h4></div>
           <ul class="item-list alternate-list fe2-item-list">
             <li class="item flexrow list-item stack-left">
-              <span class="equipement-label packed-left padd-right">{{localize "FE2.Sheet.Common.Base"}} : {{equipmentsSlotsBase}}</span>
-              <span class="equipement-label packed-left padd-right padd-left">{{localize "FE2.Sheet.Common.Bonus"}} : </span>
-              <input type="text" class="input-numeric-short fe2-stat-input padd-right"  name="system.equipmentslots.bonus" value="{{system.equipmentslots.bonus}}" data-dtype="Number"/>
-              <span class="equipement-label packed-left padd-right padd-left">{{localize "FE2.Sheet.Common.Total"}} : {{equipmentsSlotsTotal}}</span>
-              <span class="equipement-label packed-left padd-right padd-left">{{localize "FE2.Sheet.Common.Current"}} : </span>
-              <input type="text" class="input-numeric-short fe2-stat-input padd-right" name="system.equipmentslots.current" value="{{system.equipmentslots.current}}" data-dtype="Number"/>
+              <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Base"}} : {{equipmentsSlotsBase}}</span></span>
+              <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
+              <input type="text" class="input-numeric-short fe2-stat-input" name="system.equipmentslots.bonus" value="{{system.equipmentslots.bonus}}" data-dtype="Number"/></span>
+              <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Total"}} : {{equipmentsSlotsTotal}}</span></span>
+              <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Current"}} :</span>
+              <input type="text" class="input-numeric-short fe2-stat-input" name="system.equipmentslots.current" value="{{system.equipmentslots.current}}" data-dtype="Number"/></span>
             </li>
             <li class="item flexrow list-item stack-left"></li>
               <span class="equipement-label packed-left padd-right">{{localize "FE2.Sheet.Common.Used"}} : {{equipmentsSlotsUsed}}</span>

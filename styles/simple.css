@@ -413,35 +413,19 @@ ul, li {
   text-align: center;
 }
 
-/* Weapon table in fight tab: compact single-row-per-weapon layout */
-.fe2-weapon-table {
-  font-size: var(--fe2-font-size-sm);
+/* Label+input field group: keeps label and input together in flex rows */
+.fe2-field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fe2-space-xs);
+  flex: 0 0 auto;
 }
 
-.fe2-weapon-table thead th {
-  font-size: var(--fe2-font-size-xs);
-  white-space: nowrap;
-}
-
-.fe2-weapon-table .weapon-label {
-  text-align: left;
-  white-space: nowrap;
-}
-
-.fe2-weapon-table .weapon-label a {
-  color: var(--fe2-text-value);
-}
-
-.fe2-weapon-table .weapon-label a:hover {
-  color: var(--fe2-highlight);
-}
-
-.fe2-weapon-table .sheet-competence-img {
-  vertical-align: middle;
-}
-
-.fe2-weapon-table tbody tr:nth-child(even) {
-  background: var(--fe2-row-alt);
+/* Spacer to align list headers with rows that have icons */
+.foundry-fe2 .fe2-icon-spacer {
+  width: 24px;
+  flex: 0 0 24px;
+  margin-right: 0.25rem;
 }
 
 /* Prose-mirror editor block display */
