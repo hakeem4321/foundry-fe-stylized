@@ -2,12 +2,6 @@
 <section class="tab scrollable{{#if tab.active}} active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
     {{formGroup fields.tint value=source.tint rootId=rootId placeholder="#ffffff"}}
 
-    <div class="form-group stacked">
-        <label>{{localize "EFFECT.FIELDS.description.label"}}</label>
-        <prose-mirror button="true" toggled="true" name="description"
-            value="{{source.description}}">{{{enrichedDescription}}}</prose-mirror>
-    </div>
-
     {{formGroup fields.disabled value=source.disabled rootId=rootId}}
 
     {{#if isActorEffect}}
@@ -18,4 +12,10 @@
     {{/if}}
 
     {{formGroup fields.statuses value=source.statuses options=statuses rootId=rootId classes="statuses"}}
+
+    <div class="form-group stacked">
+        <label>{{localize "EFFECT.FIELDS.description.label"}}</label>
+        <prose-mirror button="true" toggled="true" name="description"
+            value="{{source.description}}">{{{enrichedDescription}}}</prose-mirror>
+    </div>
 </section>

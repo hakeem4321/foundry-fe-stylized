@@ -141,10 +141,10 @@ ul, li {
   --input-box-shadow: none;
 
   /* Checkboxes */
-  --checkbox-background-color: var(--fe2-bg);
+  --checkbox-background-color: var(--fe2-gray-text);
   --checkbox-checked-color: var(--fe2-highlight);
   --checkbox-checkmark-color: var(--fe2-bg);
-  --checkbox-disabled-color: var(--fe2-text);
+  --checkbox-disabled-color: var(--fe2-border);
 
   /* Buttons */
   --button-background-color: var(--fe2-bg);
@@ -213,11 +213,18 @@ ul, li {
 
 /* Checkboxes */
 .application.foundry-fe2 input[type="checkbox"] {
-  color: var(--fe2-bg);
-  accent-color: var(--fe2-highlight);
+  --checkbox-size: 20px;
+  --checkbox-font-weight: 400;
+  padding: 0;
 }
 .application.foundry-fe2 input[type="checkbox"]::before {
-  color: var(--fe2-highlight);
+  color: var(--fe2-gray-text);
+}
+.application.foundry-fe2 input[type="checkbox"]:checked::before {
+  color: var(--fe2-off-white);
+}
+.application.foundry-fe2 input[type="checkbox"]:checked::after {
+  color: var(--fe2-gray-text);
 }
 
 /* Window header (title bar) */
