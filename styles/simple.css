@@ -119,8 +119,9 @@ ul, li {
   /* Application-level */
   --background: var(--fe2-bg);
   --color-header-background: rgba(0, 0, 0, 0.5);
-  --color-scrollbar: rgba(0, 0, 0, 0.2);
+  --color-scrollbar: var(--fe2-blue);
   --color-scrollbar-track: transparent;
+  --color-shadow-primary: var(--fe2-highlight);
   --color-border: var(--fe2-border);
   --color-tabs-border: var(--fe2-border);
   --color-fieldset-border: var(--fe2-border);
