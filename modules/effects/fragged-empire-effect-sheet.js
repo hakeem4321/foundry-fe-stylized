@@ -33,6 +33,14 @@ export class FraggedEmpireEffectSheet extends foundry.applications.sheets.Active
   };
 
   /* -------------------------------------------- */
+  /** @override */
+  _configureRenderParts(options) {
+    const parts = super._configureRenderParts(options);
+    delete parts.footer;
+    return parts;
+  }
+
+  /* -------------------------------------------- */
   static TABS = {
     sheet: {
       tabs: [

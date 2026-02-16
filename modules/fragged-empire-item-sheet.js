@@ -84,6 +84,7 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
       _id: e.id,
       name: e.name,
       img: e.img,
+      tint: e.tint ?? "#ffffff",
       disabled: e.disabled,
       active: !e.disabled,
       effect: e

@@ -28,6 +28,7 @@
   --fe2-red: rgb(167, 45, 50);
   --fe2-blue: rgb(135, 171, 196);
   --fe2-green-light: rgb(223, 237, 197);
+  --fe2-light-gray: #e8e8e8d5;
 
   /* B.2: Semantic Colors (Tier 2) */
   --fe2-bg: var(--fe2-off-white);
@@ -40,6 +41,7 @@
   --fe2-header-bg: var(--fe2-black);
   --fe2-row-alt: var(--fe2-green-light);
   --fe2-border: rgba(0, 0, 0, 0.15);
+  --fe2-img-bg: var(--fe2-light-gray);
 
   /* B.3: Component Colors (Tier 3) */
   --fe2-tab-bg: var(--fe2-header-bg);
@@ -323,6 +325,7 @@ ul, li {
   border: 2px solid var(--fe2-border);
   border-radius: var(--fe2-border-radius);
   margin-right: var(--fe2-space-sm);
+  background: var(--fe2-img-bg);
 }
 
 /* Character name input fills remaining space */
@@ -1015,12 +1018,23 @@ ul, li {
   background: rgba(0, 0, 0, 0.05);
 }
 
-.effect-icon {
+.effect-icon-wrapper {
   flex: 0 0 var(--fe2-icon-sm);
+}
+
+.effect-icon {
   width: var(--fe2-icon-sm);
   height: var(--fe2-icon-sm);
-  border: none;
-  object-fit: cover;
+  background-color: gray;
+}
+
+.effect-icon-tint {
+  float: left;
+  width: var(--fe2-icon-sm);
+  height: var(--fe2-icon-sm);
+  position: absolute;
+  mix-blend-mode: overlay;
+  z-index: 2;
 }
 
 .effect-name {
@@ -1148,6 +1162,7 @@ ul, li {
   border: 2px solid var(--fe2-border);
   border-radius: var(--fe2-border-radius);
   margin-right: var(--fe2-space-sm);
+  background: var(--fe2-img-bg);
 }
 
 .foundry-fe2.active-effect .standard-form > header input[type="text"] {

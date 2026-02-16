@@ -650,6 +650,7 @@ export class FraggedEmpireUtility  {
         _id: effect.id,
         name: effect.name,
         img: effect.img,
+        tint: effect.tint ?? "#ffffff",
         disabled: effect.disabled,
         duration: effect.duration,
         active: !effect.disabled && !effect.isSuppressed,
