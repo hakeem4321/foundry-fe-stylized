@@ -602,6 +602,11 @@ ul, li {
   gap: var(--fe2-space-md);
 }
 
+.foundry-fe2 .tab.fight .grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
 /* List row padding */
 .foundry-fe2 .list-item {
   padding: var(--fe2-space-xs) var(--fe2-space-sm);

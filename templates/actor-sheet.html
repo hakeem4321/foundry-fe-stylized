@@ -239,68 +239,77 @@
               </ul>
             </div>
           </div>
+
+          <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.SkillModifiers"}}</h3>
+          <ul>
+            <li class="item flexrow list-item stack-left">
+              <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.GritRerolls"}} :</span>
+              <input type="text" class="input-numeric-short fe2-stat-input" name="system.gritreroll.value" value="{{system.gritreroll.value}}" data-dtype="Number"/></span>
+              <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : <span class="{{modColor system.gritreroll.max baseValues.gritRerollMax}}">{{system.gritreroll.max}}</span></span></span>
+            </li>
+            <li class="item flexrow list-item stack-left">
+              <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.UntrainedSkillMod"}} : <span class="{{modColor computed.untrainedSkillMod 0}}">{{computed.untrainedSkillMod}}</span></span></span>
+              <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.ArcaneMod"}} : <span class="{{modColor computed.arcaneMod 0}}">{{computed.arcaneMod}}</span></span></span>
+            </li>
+          </ul>
         </div>
 
         {{!-- Combat Tab --}}
         <div class="tab fight" data-group="primary" data-tab="fight">
           <div class="flexcol">
 
-            <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.Endurance"}}</h3>
-            <ul>
-              <li class="item flexrow list-item stack-left">
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Current"}} :</span>
-                <input type="text" class="input-numeric-short fe2-stat-input" name="system.endurance.value" value="{{system.endurance.value}}" data-dtype="Number"/></span>
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : <span class="{{modColor system.endurance.max baseValues.enduranceMax}}">{{system.endurance.max}}</span></span></span>
-              </li>
-              <li class="item flexrow list-item stack-left">
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Recovery"}} : <span class="{{modColor system.endurance.recovery baseValues.recovery}}">{{system.endurance.recovery}}</span></span></span>
-              </li>
-              <li class="item flexrow list-item stack-left">
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.GritRerolls"}} :</span>
-                <input type="text" class="input-numeric-short fe2-stat-input" name="system.gritreroll.value" value="{{system.gritreroll.value}}" data-dtype="Number"/></span>
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : <span class="{{modColor system.gritreroll.max baseValues.gritRerollMax}}">{{system.gritreroll.max}}</span></span></span>
-              </li>
-            </ul>
+            <div class="grid grid-2col">
+              <div>
+                <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.CombatModifiers"}}</h3>
+                <ul>
+                  <li class="item flexrow list-item stack-left">
+                    <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.Movement"}} : <span class="{{modColor computed.movement baseValues.movementBase}}">{{computed.movement}}</span></span></span>
+                  </li>
+                  <li class="item flexrow list-item stack-left">
+                    <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.CombatOrderModifier"}} : <span class="{{modColor computed.combatOrder 0}}">{{computed.combatOrder}}</span></span></span>
+                  </li>
+                  <li class="item flexrow list-item stack-left">
+                    <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.HitBonus"}} : <span class="{{modColor computed.hitBonus 0}}">{{computed.hitBonus}}</span></span></span>
+                  </li>
+                  <li class="item flexrow list-item stack-left">
+                    <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.EnduranceDamage"}} : <span class="{{modColor computed.enduranceDamage 0}}">{{computed.enduranceDamage}}</span></span></span>
+                  </li>
+                </ul>
 
-            <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.Defence"}}</h3>
-            <ul>
-              <li class="item flexrow list-item stack-left">
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Base"}} : {{defenseBase}}</span></span>
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Total"}} : <span class="{{modColor defenseTotal baseValues.defenseTotal}}">{{defenseTotal}}</span></span></span>
-              </li>
-            </ul>
+                <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.Defence"}}</h3>
+                <ul>
+                  <li class="item flexrow list-item stack-left">
+                    <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Base"}} : {{defenseBase}}</span></span>
+                    <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Total"}} : <span class="{{modColor defenseTotal baseValues.defenseTotal}}">{{defenseTotal}}</span></span></span>
+                  </li>
+                </ul>
+              </div>
 
-            <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.Armour"}}</h3>
-            <ul class="list-item">
-              <li class="item flexrow list-item stack-left">
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Base"}} : {{armourBase}}</span></span>
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Total"}} : <span class="{{modColor armourTotal baseValues.armourTotal}}">{{armourTotal}}</span></span></span>
-              </li>
-              <li class="item flexrow list-item stack-left">
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.AtZeroEndurance"}} : <span class="{{modColor computed.armourZeroEnd 0}}">{{computed.armourZeroEnd}}</span></span></span>
-              </li>
-            </ul>
+              <div>
+                <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.Endurance"}}</h3>
+                <ul>
+                  <li class="item flexrow list-item stack-left">
+                    <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Current"}} :</span>
+                    <input type="text" class="input-numeric-short fe2-stat-input" name="system.endurance.value" value="{{system.endurance.value}}" data-dtype="Number"/></span>
+                    <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : <span class="{{modColor system.endurance.max baseValues.enduranceMax}}">{{system.endurance.max}}</span></span></span>
+                  </li>
+                  <li class="item flexrow list-item stack-left">
+                    <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Recovery"}} : <span class="{{modColor system.endurance.recovery baseValues.recovery}}">{{system.endurance.recovery}}</span></span></span>
+                  </li>
+                </ul>
 
-            <ul>
-              <li class="item flexrow list-item stack-left">
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.Movement"}} : <span class="{{modColor computed.movement baseValues.movementBase}}">{{computed.movement}}</span></span></span>
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.CombatOrderModifier"}} : <span class="{{modColor computed.combatOrder 0}}">{{computed.combatOrder}}</span></span></span>
-              </li>
-            </ul>
-
-            <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.CombatModifiers"}}</h3>
-            <ul>
-              <li class="item flexrow list-item stack-left">
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.HitBonus"}} : <span class="{{modColor computed.hitBonus 0}}">{{computed.hitBonus}}</span></span></span>
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.EnduranceDamage"}} : <span class="{{modColor computed.enduranceDamage 0}}">{{computed.enduranceDamage}}</span></span></span>
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.UtilitiesMax"}} : <span class="{{modColor computed.utilitiesMax 0}}">{{computed.utilitiesMax}}</span></span></span>
-              </li>
-              <li class="item flexrow list-item stack-left">
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.UntrainedSkillMod"}} : <span class="{{modColor computed.untrainedSkillMod 0}}">{{computed.untrainedSkillMod}}</span></span></span>
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.AcquisitionMod"}} : <span class="{{modColor computed.acquisitionMod 0}}">{{computed.acquisitionMod}}</span></span></span>
-                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.ArcaneMod"}} : <span class="{{modColor computed.arcaneMod 0}}">{{computed.arcaneMod}}</span></span></span>
-              </li>
-            </ul>
+                <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.Armour"}}</h3>
+                <ul>
+                  <li class="item flexrow list-item stack-left">
+                    <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Base"}} : {{armourBase}}</span></span>
+                    <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Total"}} : <span class="{{modColor armourTotal baseValues.armourTotal}}">{{armourTotal}}</span></span></span>
+                  </li>
+                  <li class="item flexrow list-item stack-left">
+                    <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.AtZeroEndurance"}} : <span class="{{modColor computed.armourZeroEnd 0}}">{{computed.armourZeroEnd}}</span></span></span>
+                  </li>
+                </ul>
+              </div>
+            </div>
 
             <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Weapons"}}</h3>
             <ul class="fe2-item-list">
@@ -490,6 +499,14 @@
             </li>
             <li class="item flexrow list-item stack-left"></li>
               <span class="equipement-label packed-left padd-right">{{localize "FE2.Sheet.Common.Used"}} : {{equipmentsSlotsUsed}}</span>
+            </ul>
+
+            <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.EquipmentModifiers"}}</h3>
+            <ul>
+              <li class="item flexrow list-item stack-left">
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.UtilitiesMax"}} : <span class="{{modColor computed.utilitiesMax 0}}">{{computed.utilitiesMax}}</span></span></span>
+                <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.AcquisitionMod"}} : <span class="{{modColor computed.acquisitionMod 0}}">{{computed.acquisitionMod}}</span></span></span>
+              </li>
             </ul>
 
             <div><h4>{{localize "FE2.Sheet.Common.Equipment"}}</h4></div>

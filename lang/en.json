@@ -93,6 +93,8 @@
         "GritRerolls": "Grit re-rolls",
         "CombatOrderModifier": "Combat Order modifier",
         "CombatModifiers": "Combat Modifiers",
+        "SkillModifiers": "Skill Modifiers",
+        "EquipmentModifiers": "Equipment Modifiers",
         "Munitions": "Munitions",
         "AtZeroEndurance": "at 0 Endurance",
         "Tradebox": "Tradebox",
