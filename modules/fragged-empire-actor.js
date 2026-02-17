@@ -221,7 +221,7 @@ export class FraggedEmpireActor extends Actor {
     // Computed modifier values (not persisted, for rolls and display — base is 0, only effects contribute)
     this._computed.hitBonus = mods ? Math.round(applyModifiers(0, mods.hitBonus)) : 0;
     this._computed.enduranceDamage = mods ? Math.round(applyModifiers(0, mods.enduranceDamage)) : 0;
-    this._computed.utilitiesMax = mods ? Math.round(applyModifiers(0, mods.utilitiesMax)) : 0;
+    this._computed.utilitiesMax = mods ? Math.round(applyModifiers(1, mods.utilitiesMax)) : 1;
     this._baseValues.movementBase = ea.mobility.value;
     this._computed.movement = mods ? Math.round(applyModifiers(ea.mobility.value, mods.movement)) : ea.mobility.value;
     this._computed.acquisitionMod = mods ? Math.round(applyModifiers(0, mods.acquisition)) : 0;
