@@ -43,13 +43,12 @@ Hooks.once("init", async function () {
   });
 
   /* -------------------------------------------- */
-  // Custom Handlebars helper: show up/down arrow when effective value differs from base
-  Handlebars.registerHelper("modIndicator", function (effective, base) {
+  // Custom Handlebars helper: return CSS class name for color-coding modified values
+  Handlebars.registerHelper("modColor", function (effective, base) {
     const eff = Number(effective);
     const b = Number(base);
     if (isNaN(eff) || isNaN(b) || eff === b) return "";
-    if (eff > b) return new Handlebars.SafeString('<span class="modifier-up" title="' + eff + '"><i class="fas fa-arrow-up"></i></span>');
-    return new Handlebars.SafeString('<span class="modifier-down" title="' + eff + '"><i class="fas fa-arrow-down"></i></span>');
+    return eff > b ? "fe2-mod-up" : "fe2-mod-down";
   });
 
   /* -------------------------------------------- */
@@ -365,6 +364,36 @@ Hooks.once("ready", async function () {
       } catch (error) {
         error.message = `Failed effects migration for Actor ${actor.name}: ${error.message}`;
         console.error(error);
+      }
+    }
+  }
+
+  // Migration 1.05: Zero out bonus fields now driven by Active Effects
+  if (foundry.utils.isNewerVersion("1.05", game.settings.get("foundry-fe2", "systemMigrationVersion"))) {
+    for (let actor of game.actors) {
+      if (actor.type !== "character") continue;
+      try {
+        await actor.update({
+          "system.armourbonus.armour": 0,
+          "system.armourbonus.zeroendurance": 0,
+          "system.defensebonus.defense": 0,
+          "system.influence.bonus": 0,
+          "system.resources.bonus": 0,
+          "system.equipmentslots.bonus": 0,
+          "system.endurance.endurancebonus": 0,
+          "system.endurance.recoverybonus": 0,
+          "system.gritreroll.bonus": 0,
+          "system.combatordermod": 0,
+          "system.modifiers.hitbonus": 0,
+          "system.modifiers.endurancedamage": 0,
+          "system.modifiers.utilitiesmax": 0,
+          "system.modifiers.movement": 0,
+          "system.modifiers.untrainedskillmod": 0,
+          "system.modifiers.acquisitionmod": 0,
+          "system.modifiers.arcanemod": 0
+        }, { enforceTypes: false });
+      } catch (err) {
+        console.error(`FE2 | Migration 1.05 failed for actor ${actor.name}:`, err);
       }
     }
   }

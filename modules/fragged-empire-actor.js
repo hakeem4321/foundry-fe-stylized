@@ -151,11 +151,12 @@ export class FraggedEmpireActor extends Actor {
   _prepareCharacterDerived(mods) {
     // Compute effective attributes (not persisted, avoids form-binding compound bug)
     const defaultMaxes = this.system.attributemax || {};
+    this._baseValues.attributeMaxes = { ...defaultMaxes };
     this._effectiveAttributes = this._computeEffectiveAttributes(CHARACTER_ATTRIBUTES, mods, defaultMaxes);
     const ea = this._effectiveAttributes;
 
     // Resources total
-    let restotal = this.system.level.value + 3 + this.system.resources.bonus;
+    let restotal = this.system.level.value + 3;
     this._baseValues.resourcesTotal = restotal;
     if (mods) restotal = Math.round(applyModifiers(restotal, mods.resourcesMax));
     if (restotal != this.system.resources.total) {
@@ -164,7 +165,7 @@ export class FraggedEmpireActor extends Actor {
     }
 
     // Influence total
-    let inftotal = this.system.level.value + 3 + this.system.influence.bonus;
+    let inftotal = this.system.level.value + 3;
     this._baseValues.influenceTotal = inftotal;
     if (mods) inftotal = Math.round(applyModifiers(inftotal, mods.influenceMax));
     if (inftotal != this.system.influence.total) {
@@ -173,7 +174,7 @@ export class FraggedEmpireActor extends Actor {
     }
 
     // Endurance max (uses effective strength)
-    let endmax = 10 + (ea.strength.value * 5) + this.system.endurance.endurancebonus;
+    let endmax = 10 + (ea.strength.value * 5);
     this._baseValues.enduranceMax = endmax;
     if (mods) endmax = Math.round(applyModifiers(endmax, mods.enduranceMax));
     if (endmax != this.system.endurance.max) {
@@ -191,7 +192,7 @@ export class FraggedEmpireActor extends Actor {
       }
     }
     let defBase = 10 + ea.reflexes.value + outfitDefBonus;
-    let defTotal = defBase + coverBonus + this.system.defensebonus.defense;
+    let defTotal = defBase + coverBonus;
     this._baseValues.defenseTotal = defTotal;
     if (mods) defTotal = Math.round(applyModifiers(defTotal, mods.defense));
     if (defTotal != this.system.defensebonus.total) {
@@ -199,8 +200,8 @@ export class FraggedEmpireActor extends Actor {
       this.update({ 'system.defensebonus.total': defTotal });
     }
 
-    // Recovery (uses effective focus)
-    let recovery = ea.focus.value + this.system.endurance.recoverybonus;
+    // Recovery (uses effective grit)
+    let recovery = ea.grit.value;
     this._baseValues.recovery = recovery;
     if (mods) recovery = Math.round(applyModifiers(recovery, mods.recovery));
     if (recovery != this.system.endurance.recovery) {
@@ -209,7 +210,7 @@ export class FraggedEmpireActor extends Actor {
     }
 
     // Grit rerolls (uses effective grit)
-    let gritreroll = ea.grit.value + this.system.gritreroll.bonus;
+    let gritreroll = ea.grit.value;
     this._baseValues.gritRerollMax = gritreroll;
     if (mods) gritreroll = Math.round(applyModifiers(gritreroll, mods.gritReroll));
     if (gritreroll != this.system.gritreroll.max) {
@@ -217,22 +218,24 @@ export class FraggedEmpireActor extends Actor {
       this.update({ 'system.gritreroll.max': gritreroll });
     }
 
-    // Computed modifier values (not persisted, for rolls and display)
-    this._computed.hitBonus = mods ? Math.round(applyModifiers(this.system.modifiers.hitbonus, mods.hitBonus)) : this.system.modifiers.hitbonus;
-    this._computed.enduranceDamage = mods ? Math.round(applyModifiers(this.system.modifiers.endurancedamage, mods.enduranceDamage)) : this.system.modifiers.endurancedamage;
-    this._computed.utilitiesMax = mods ? Math.round(applyModifiers(this.system.modifiers.utilitiesmax, mods.utilitiesMax)) : this.system.modifiers.utilitiesmax;
-    this._computed.movement = mods ? Math.round(applyModifiers(ea.mobility.value + this.system.modifiers.movement, mods.movement)) : ea.mobility.value + this.system.modifiers.movement;
-    this._computed.acquisitionMod = mods ? Math.round(applyModifiers(this.system.modifiers.acquisitionmod, mods.acquisition)) : this.system.modifiers.acquisitionmod;
-    this._computed.arcaneMod = mods ? Math.round(applyModifiers(this.system.modifiers.arcanemod, mods.arcane)) : this.system.modifiers.arcanemod;
-    this._computed.untrainedSkillMod = mods ? Math.round(applyModifiers(this.system.modifiers.untrainedskillmod, mods.untrainedSkill)) : this.system.modifiers.untrainedskillmod;
-    this._computed.combatOrder = mods ? Math.round(applyModifiers(this.system.combatordermod, mods.combatOrder)) : this.system.combatordermod;
-    this._computed.armourZeroEnd = mods ? Math.round(applyModifiers(this.system.armourbonus.zeroendurance, mods.armourZeroEnd)) : this.system.armourbonus.zeroendurance;
+    // Computed modifier values (not persisted, for rolls and display — base is 0, only effects contribute)
+    this._computed.hitBonus = mods ? Math.round(applyModifiers(0, mods.hitBonus)) : 0;
+    this._computed.enduranceDamage = mods ? Math.round(applyModifiers(0, mods.enduranceDamage)) : 0;
+    this._computed.utilitiesMax = mods ? Math.round(applyModifiers(0, mods.utilitiesMax)) : 0;
+    this._baseValues.movementBase = ea.mobility.value;
+    this._computed.movement = mods ? Math.round(applyModifiers(ea.mobility.value, mods.movement)) : ea.mobility.value;
+    this._computed.acquisitionMod = mods ? Math.round(applyModifiers(0, mods.acquisition)) : 0;
+    this._computed.arcaneMod = mods ? Math.round(applyModifiers(0, mods.arcane)) : 0;
+    this._computed.untrainedSkillMod = mods ? Math.round(applyModifiers(0, mods.untrainedSkill)) : 0;
+    this._computed.combatOrder = mods ? Math.round(applyModifiers(0, mods.combatOrder)) : 0;
+    this._computed.armourZeroEnd = mods ? Math.round(applyModifiers(0, mods.armourZeroEnd)) : 0;
   }
 
   /* -------------------------------------------- */
   _prepareSpacecraftDerived(mods) {
     // Compute effective attributes for spacecraft
     const defaultMaxes = this.system.attributemax || {};
+    this._baseValues.attributeMaxes = { ...defaultMaxes };
     this._effectiveAttributes = this._computeEffectiveAttributes(SPACECRAFT_ATTRIBUTES, mods, defaultMaxes);
     const ea = this._effectiveAttributes;
 
@@ -418,6 +421,15 @@ export class FraggedEmpireActor extends Actor {
       }
       item.system.total = item.system.trainedValue + item.system.bonus;
       if (item.system.staticmod) {item.system.total = item.system.total + item.system.staticmod}
+
+      // Inject effect modifiers for display (transient, not persisted)
+      const skillMods = this._effectModifiers?.skills?.[item.id] || [];
+      const allSkillMods = this._effectModifiers?.skills?.all || [];
+      const combinedMods = [...skillMods, ...allSkillMods];
+      item.system._effectMod = combinedMods.length ? Math.round(applyModifiers(0, combinedMods)) : 0;
+      item.system._effectiveStaticMod = (item.system.staticmod || 0) + item.system._effectMod;
+      item.system._effectiveTotal = item.system.total + item.system._effectMod;
+
       item.system.isTrait = item.system.traits.length > 0;
       return item;
     }
@@ -526,7 +538,10 @@ export class FraggedEmpireActor extends Actor {
 
     /* -------------------------------------------- */
   getEquipmentSlotsTotal() {
-    return this.getEquipmentSlotsBase() + this.system.equipmentslots.bonus;
+    const base = this.getEquipmentSlotsBase();
+    this._baseValues.equipmentSlotsBase = base;
+    const mods = this._effectModifiers;
+    return mods ? Math.round(applyModifiers(base, mods.equipmentMax)) : base;
   }
 
   /* -------------------------------------------- */
@@ -735,7 +750,7 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   getTotalArmour( ) {
     if (this.type == 'character') {
-      let total = this.getBaseArmour() + this.system.armourbonus.armour;
+      let total = this.getBaseArmour();
       this._baseValues.armourTotal = total;
       const mods = this._effectModifiers;
       if (mods) total = Math.round(applyModifiers(total, mods.armour));

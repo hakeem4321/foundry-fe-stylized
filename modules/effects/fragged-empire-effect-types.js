@@ -13,9 +13,7 @@ export const EFFECT_TARGET_TYPES = {
   attribute: "attribute",
   allAttributes: "allAttributes",
   attributeMax: "attributeMax",
-  enduranceCurrent: "enduranceCurrent",
   enduranceMax: "enduranceMax",
-  equipmentCurrent: "equipmentCurrent",
   equipmentMax: "equipmentMax",
   armour: "armour",
   armourZeroEnd: "armourZeroEnd",
@@ -76,9 +74,7 @@ export const EFFECT_CATEGORIES = {
   resources: {
     label: "FE2.Effects.Categories.Resources",
     types: [
-      { type: EFFECT_TARGET_TYPES.enduranceCurrent, label: "FE2.Effects.TargetTypes.EnduranceCurrent" },
       { type: EFFECT_TARGET_TYPES.enduranceMax, label: "FE2.Effects.TargetTypes.EnduranceMax" },
-      { type: EFFECT_TARGET_TYPES.equipmentCurrent, label: "FE2.Effects.TargetTypes.EquipmentCurrent" },
       { type: EFFECT_TARGET_TYPES.equipmentMax, label: "FE2.Effects.TargetTypes.EquipmentMax" },
       { type: EFFECT_TARGET_TYPES.influenceMax, label: "FE2.Effects.TargetTypes.InfluenceMax" },
       { type: EFFECT_TARGET_TYPES.resourcesMax, label: "FE2.Effects.TargetTypes.ResourcesMax" },
@@ -107,9 +103,7 @@ export const EFFECT_CATEGORIES = {
 const KEY_MAP = {
   "fe2.skill.all": { targetType: EFFECT_TARGET_TYPES.allSkills, targetId: null },
   "fe2.attribute.all": { targetType: EFFECT_TARGET_TYPES.allAttributes, targetId: null },
-  "fe2.endurance.current": { targetType: EFFECT_TARGET_TYPES.enduranceCurrent, targetId: null },
   "fe2.endurance.max": { targetType: EFFECT_TARGET_TYPES.enduranceMax, targetId: null },
-  "fe2.equipment.current": { targetType: EFFECT_TARGET_TYPES.equipmentCurrent, targetId: null },
   "fe2.equipment.max": { targetType: EFFECT_TARGET_TYPES.equipmentMax, targetId: null },
   "fe2.armour": { targetType: EFFECT_TARGET_TYPES.armour, targetId: null },
   "fe2.armourzeroend": { targetType: EFFECT_TARGET_TYPES.armourZeroEnd, targetId: null },
@@ -188,12 +182,8 @@ export function buildEffectKey(targetType, targetId) {
       return "fe2.attribute.all";
     case EFFECT_TARGET_TYPES.attributeMax:
       return `fe2.attributemax.${targetId}`;
-    case EFFECT_TARGET_TYPES.enduranceCurrent:
-      return "fe2.endurance.current";
     case EFFECT_TARGET_TYPES.enduranceMax:
       return "fe2.endurance.max";
-    case EFFECT_TARGET_TYPES.equipmentCurrent:
-      return "fe2.equipment.current";
     case EFFECT_TARGET_TYPES.equipmentMax:
       return "fe2.equipment.max";
     case EFFECT_TARGET_TYPES.armour:

@@ -1110,23 +1110,15 @@ ul, li {
   padding: var(--fe2-space-sm);
 }
 
-/* Modifier indicators */
-.modifier-up::after {
-  content: "\f062";
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-  color: #2d8a2d;
-  font-size: 0.75em;
-  margin-left: 2px;
+/* Effect modifier color indicators */
+.fe2-mod-up {
+  color: var(--fe2-green);
+  font-weight: bold;
 }
 
-.modifier-down::after {
-  content: "\f063";
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-  color: #8a2d2d;
-  font-size: 0.75em;
-  margin-left: 2px;
+.fe2-mod-down {
+  color: var(--fe2-red);
+  font-weight: bold;
 }
 
 .attribute-max-label {

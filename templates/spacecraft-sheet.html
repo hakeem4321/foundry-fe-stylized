@@ -44,7 +44,7 @@
                   <select class="carac-base flexrow" type="text" name="system.attributes.{{key}}.value" value="{{attr.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}>
                     {{selectOptions ../spacecraftAttrValueChoices selected=attr.value}}
                   </select>
-                  {{modIndicator (lookup (lookup @root.effectiveAttributes key) "value") attr.value}}
+                  <span class="{{modColor (lookup (lookup @root.effectiveAttributes key) "value") attr.value}}">{{lookup (lookup @root.effectiveAttributes key) "value"}}</span>
                   <div class="item-controls">
                     {{#if (ne attr.traitId "")}}
                     <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
@@ -84,7 +84,7 @@
                     <input type="text" class="input-numeric-short fe2-stat-input padd-right" name="system.stats.{{key}}.bonus" value="{{stat.bonus}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/>
                     {{/if}}
                     {{#if stat.max}}
-                    <span class="stat-label padd-left" name="{{key}}"> {{stat.max}} {{modIndicator stat.max (lookup @root.baseValues.statMaxes key)}}</span>
+                    <span class="stat-label padd-left" name="{{key}}"> <span class="{{modColor stat.max (lookup @root.baseValues.statMaxes key)}}">{{stat.max}}</span></span>
                     {{/if}}
                     <input type="text" class="input-numeric-short fe2-stat-input padd-right" name="system.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/>
                   </li>
@@ -110,7 +110,7 @@
               <span class="stat-label padd-right padd-left packed-left">{{localize "FE2.Sheet.Common.Base"}} : {{fight.base}}</span>
               <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
               <input type="text" class="input-numeric-short fe2-stat-input padd-right"  name="system.fight.{{key}}.bonus" value="{{fight.bonus}}" data-dtype="Number"/>
-              <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Total"}} : {{fight.total}} {{modIndicator fight.total (lookup @root.baseValues.fightTotals key)}}</span>
+              <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Total"}} : <span class="{{modColor fight.total (lookup @root.baseValues.fightTotals key)}}">{{fight.total}}</span></span>
               {{/if}}
             </div>         
             <ul>

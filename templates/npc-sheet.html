@@ -77,7 +77,7 @@
               <li class="item flexrow list-item stack-left">
                 <span class="stat-label padd-right"><strong>{{localize fight.label}}</strong></span>                
                 <input type="text" class="input-numeric-short fe2-stat-input padd-right" name="system.fight.{{key}}.value" value="{{fight.value}}" data-dtype="Number"/>
-                {{modIndicator (lookup @root.computed key) fight.value}}
+                <span class="{{modColor (lookup @root.computed key) fight.value}}">{{lookup @root.computed key}}</span>
               </li>
               {{#each fight.derivated as |derivated keydev|}}   
               <li class="item flexrow list-item">
