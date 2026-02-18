@@ -56,7 +56,8 @@ export class FraggedEmpireUtility  {
       'systems/foundry-fe2/templates/chat-generic-result.html',
       'systems/foundry-fe2/templates/post-item.html',
       'systems/foundry-fe2/templates/effects-section.html',
-      'systems/foundry-fe2/templates/effects/effect-changes-tab.html'
+      'systems/foundry-fe2/templates/effects/effect-changes-tab.html',
+      'systems/foundry-fe2/templates/partial-keywords-section.html'
     ]
     return foundry.applications.handlebars.loadTemplates(templatePaths);    
   }
@@ -362,9 +363,13 @@ export class FraggedEmpireUtility  {
     
     let minStrongHit = 6;
     let maxStrongHit = 6;
-    if ( rollData.weapon && rollData.weapon.system.keywords.stronghit.flag) {
-      minStrongHit = Number(rollData.weapon.system.keywords.stronghit.X);
-      maxStrongHit = Number(rollData.weapon.system.keywords.stronghit.Y);
+    if (rollData.weapon) {
+      const keywords = Array.isArray(rollData.weapon.system.keywords) ? rollData.weapon.system.keywords : [];
+      const strongHit = keywords.find(k => k.id === "stronghit");
+      if (strongHit) {
+        minStrongHit = Number(strongHit.X) || 6;
+        maxStrongHit = Number(strongHit.Y) || 6;
+      }
     }
     rollData.diceResults = [];
     let nbStrongHit = 0;
@@ -582,23 +587,6 @@ export class FraggedEmpireUtility  {
       flags.npcstats = { hit: { value: rollData.npcstats.hit.value } };
     }
     return flags;
-  }
-
-  /* -------------------------------------------- */
-  static split3Columns(data) {
-    
-    let array = [ [], [], [] ];
-    if (data== undefined) return array;
-
-    let col = 0;
-    for (let key in data) {
-      let keyword = data[key];
-      keyword.key = key; // Self-reference
-      array[col].push( keyword);
-      col++;
-      if (col == 3) col = 0;
-    }
-    return array;
   }
 
   /* -------------------------------------------- */

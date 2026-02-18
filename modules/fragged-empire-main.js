@@ -398,6 +398,65 @@ Hooks.once("ready", async function () {
     }
   }
 
+  // Migration 1.06: Carry states, equipment fields, keyword array format
+  if (foundry.utils.isNewerVersion("1.06", game.settings.get("foundry-fe2", "systemMigrationVersion"))) {
+    const equippableTypes = new Set(["weapon", "outfit", "utility", "equipment"]);
+    const keywordTypes = new Set(["weapon", "outfit", "utility", "equipment", "spacecraftweapon"]);
+
+    // Collect all items: world items + embedded items on actors
+    const allItems = [...game.items];
+    for (const actor of game.actors) {
+      for (const item of actor.items) allItems.push(item);
+    }
+
+    for (const item of allItems) {
+      try {
+        const updates = {};
+        const t = item.type;
+
+        // Carry state migration (equippable items only)
+        if (equippableTypes.has(t) && !("carryState" in item.system)) {
+          if ("equipped" in item.system) {
+            if (item.system.equipped) {
+              updates["system.carryState"] = (t === "outfit") ? "active" : "inHand";
+            } else {
+              updates["system.carryState"] = "carried";
+            }
+          } else {
+            updates["system.carryState"] = "carried";
+          }
+        }
+
+        // Inject default equipment fields if missing
+        if (equippableTypes.has(t)) {
+          if (item.system.slots === undefined) updates["system.slots"] = 2;
+          if (item.system.hands === undefined) updates["system.hands"] = (t === "weapon") ? 2 : 0;
+          if (item.system.draw === undefined) updates["system.draw"] = 1;
+          if (item.system.reload === undefined) updates["system.reload"] = 2;
+        }
+
+        // Keyword migration: nested object → array format
+        if (keywordTypes.has(t) && item.system.keywords && !Array.isArray(item.system.keywords)) {
+          const kws = [];
+          for (const [key, val] of Object.entries(item.system.keywords)) {
+            if (!val || typeof val !== "object" || !val.flag) continue;
+            const entry = { id: key };
+            if (val.X && val.X !== "0" && val.X !== "") entry.X = val.X;
+            if (val.Y && val.Y !== "0" && val.Y !== "") entry.Y = val.Y;
+            kws.push(entry);
+          }
+          updates["system.keywords"] = kws;
+        }
+
+        if (Object.keys(updates).length > 0) {
+          await item.update(updates);
+        }
+      } catch (error) {
+        console.error(`FE2 | Migration 1.06 failed for Item ${item.name}:`, error);
+      }
+    }
+  }
+
   await game.settings.set("foundry-fe2", "systemMigrationVersion", game.system.version);
   ui.notifications.notify(game.i18n.localize("FE2.Notifications.MigrationComplete"));
 

@@ -95,6 +95,11 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
       equipmentsSlotsMax: actor.getEquipmentSlotsTotal(),
       equipmentsSlotsUsed: actor.getEquipmentSlotsUsed(),
       equipmentsSlotsCurrent: actor.getEquipmentSlotsTotal() - actor.getEquipmentSlotsUsed(),
+      handsMax: actor._computed?.handsMax ?? 2,
+      handsUsed: actor._computed?.handsUsed ?? 0,
+      weaponsMax: actor._computed?.weaponsMax ?? 3,
+      weaponsCount: actor._computed?.weaponsCount ?? 0,
+      utilitiesCount: actor.getUtilities().length,
       subActors: actor.getSubActors(),
       optionsDMDP: FraggedEmpireUtility.createDirectOptionList(-3, +3),
       optionsBase: FraggedEmpireUtility.createDirectOptionList(0, 20),
@@ -315,6 +320,68 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
   /*  Private Helpers                             */
   /* -------------------------------------------- */
 
+  /**
+   * Check if adding an item would exceed character limits.
+   * Returns true (blocked) and shows a notification if a limit is exceeded.
+   * @param {Item} item - The item being dropped
+   * @returns {boolean} True if the item should be blocked
+   */
+  _checkItemLimits(item) {
+    const actor = this.document;
+    const computed = actor._computed || {};
+
+    // Weapon limit
+    if (item.type === "weapon") {
+      const weaponsMax = computed.weaponsMax ?? 3;
+      const weaponsCount = computed.weaponsCount ?? actor.items.filter(i => i.type === "weapon").length;
+      if (weaponsCount >= weaponsMax) {
+        ui.notifications.warn(game.i18n.format("FE2.Limits.WeaponsMax", { max: weaponsMax }));
+        return true;
+      }
+    }
+
+    // Equipment slots limit (all equippable items)
+    const equippableTypes = new Set(["weapon", "outfit", "utility", "equipment"]);
+    if (equippableTypes.has(item.type)) {
+      const slotsUsed = actor.getEquipmentSlotsUsed();
+      const slotsMax = actor.getEquipmentSlotsTotal();
+      const itemSlots = Number(item.system?.slots) || 2;
+      if (slotsUsed + itemSlots > slotsMax) {
+        ui.notifications.warn(game.i18n.format("FE2.Limits.EquipmentSlots", { used: slotsUsed, max: slotsMax }));
+        return true;
+      }
+    }
+
+    // Utilities limit
+    if (item.type === "utility") {
+      const utilitiesMax = computed.utilitiesMax ?? 1;
+      const utilitiesCount = actor.items.filter(i => i.type === "utility").length;
+      if (utilitiesCount >= utilitiesMax) {
+        ui.notifications.warn(game.i18n.format("FE2.Limits.Utilities", { max: utilitiesMax }));
+        return true;
+      }
+    }
+
+    // Resources limit
+    if (equippableTypes.has(item.type)) {
+      const resourcesAllotted = computed.resourcesAllotted ?? actor.getResourcesAllotted();
+      const resourcesMax = actor.system.resources?.total || 0;
+      let itemCost = 0;
+      if (item.type === "equipment") {
+        itemCost = Number(item.system?.cost) || 0;
+      } else if (item.type === "utility") {
+        itemCost = Number(item.system?.statstotal?.cost?.value || item.system?.stats?.cost?.value) || 0;
+      } else {
+        itemCost = Number(item.system?.statstotal?.resources?.value || item.system?.stats?.resources?.value) || 0;
+      }
+      if (itemCost > 0 && resourcesAllotted + itemCost > resourcesMax) {
+        ui.notifications.warn(game.i18n.format("FE2.Limits.Resources", { used: resourcesAllotted, max: resourcesMax }));
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   /* -------------------------------------------- */
   /*  Drag and Drop                               */
@@ -343,11 +410,14 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
           await this.document.deleteEmbeddedDocuments("Item",
             existingRaces.map(r => r.id));
         }
-        // Create the new race item directly — super._onDrop cannot re-read
-        // the drag event data after getDragEventData already consumed it.
         const itemData = item.toObject();
         await this.document.createEmbeddedDocuments("Item", [itemData]);
         return;
+      }
+      // Block equippable items that exceed character limits
+      if (this.document.type === "character" && item) {
+        const blocked = this._checkItemLimits(item);
+        if (blocked) return;
       }
     }
     super._onDrop(event);

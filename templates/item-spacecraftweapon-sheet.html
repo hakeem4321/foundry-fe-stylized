@@ -18,30 +18,7 @@
           {{> "systems/foundry-fe2/templates/variations-section.html"}}
           {{> "systems/foundry-fe2/templates/modifications-section.html"}}
 
-          <h3> {{localize "FE2.Items.Common.Keywords"}}</h3>
-          <div class="grid grid-3col">
-            {{#each keywords as |keywordArray key|}}
-            <div>
-              <ul>
-                {{#each keywordArray as |keyword key|}}
-                <li class="item-list item flexrow stack-left">
-                  <input type="checkbox" name="system.keywords.{{keyword.key}}.flag" {{checked keyword.flag}}/>
-                  <label class="generic-label keyword-label packed-left">{{localize keyword.label}}</label>
-                  {{#if keyword.X}}
-                    <input type="text" class="input-numeric-short fe2-stat-input padd-right" name="system.keywords.{{keyword.key}}.X" value="{{keyword.X}}" data-dtype="String"/>
-                  {{/if}}
-                  {{#if keyword.Y}}
-                    {{#if keyword.labelY}}
-                    <label class="generic-label keyword-label  packed-left">{{localize keyword.labelY}}</label>
-                    {{/if}}
-                    <input type="text" class="input-numeric-short fe2-stat-input padd-right" name="system.keywords.{{keyword.key}}.Y" value="{{keyword.Y}}" data-dtype="String"/>
-                  {{/if}}
-                </li>
-                {{/each}}
-              </ul>
-            </div>
-            {{/each}}
-          </div>
+          {{> "systems/foundry-fe2/templates/partial-keywords-section.html"}}
 
 
           <h3>{{localize "FE2.Items.Common.Stats"}}</h3>

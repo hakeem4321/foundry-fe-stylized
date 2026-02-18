@@ -3,6 +3,7 @@ import { FraggedEmpireUtility } from "./fragged-empire-utility.js";
 import { FraggedEmpireRoll } from "./fragged-empire-roll-dialog.js";
 import { createEmptyModifiers, addModifier, applyModifiers, isEquipSuppressed } from "./effects/fragged-empire-effect-helpers.js";
 import { parseEffectKey, CHARACTER_ATTRIBUTES, SPACECRAFT_ATTRIBUTES } from "./effects/fragged-empire-effect-types.js";
+import { computeEffectiveItemStats } from "./keyword-config.js";
 
 /* -------------------------------------------- */
 const coverBonusTable = { "nocover": 0, "lightcover": 1, "heavycover": 2, "entrenchedcover": 3};
@@ -189,7 +190,7 @@ export class FraggedEmpireActor extends Actor {
     // Defense total (uses effective reflexes, intelligence)
     let coverBonus = coverBonusTable[this.system.defensebonus.cover] * ea.intelligence.current;
     let outfitDefBonus = 0;
-    let outfits = this.items.filter(item => (item.type == 'outfit' || item.type == 'utility') && item.system.equipped);
+    let outfits = this.items.filter(item => (item.type === 'outfit' || item.type === 'utility') && item.system.carryState !== "carried");
     for (let item of outfits) {
       if (!isNaN(item.system.statstotal?.defence?.value)) {
         outfitDefBonus += Number(item.system.statstotal.defence.value);
@@ -233,6 +234,26 @@ export class FraggedEmpireActor extends Actor {
     this._computed.untrainedSkillMod = mods ? Math.round(applyModifiers(0, mods.untrainedSkill)) : 0;
     this._computed.combatOrder = mods ? Math.round(applyModifiers(0, mods.combatOrder)) : 0;
     this._computed.armourZeroEnd = mods ? Math.round(applyModifiers(0, mods.armourZeroEnd)) : 0;
+
+    // Hands max (base 2 + AE modifiers)
+    this._baseValues.handsMax = 2;
+    this._computed.handsMax = mods ? Math.round(applyModifiers(2, mods.handsMax)) : 2;
+
+    // Hands used (sum of effective hands from items in "inHand" state)
+    this._computed.handsUsed = 0;
+    for (const item of this.items) {
+      if (item.system.carryState === "inHand") {
+        const effective = computeEffectiveItemStats(item);
+        this._computed.handsUsed += effective.hands;
+      }
+    }
+
+    // Weapons max (base 3 + AE modifiers)
+    this._baseValues.weaponsMax = 3;
+    this._computed.weaponsMax = mods ? Math.round(applyModifiers(3, mods.weaponsMax)) : 3;
+
+    // Weapons count
+    this._computed.weaponsCount = this.items.filter(item => item.type === "weapon").length;
   }
 
   /* -------------------------------------------- */
@@ -434,18 +455,29 @@ export class FraggedEmpireActor extends Actor {
   }
 
   /* -------------------------------------------- */
-  async equipItem(itemId ) {
-    let item = this.items.find( item => item.id == itemId );
-    if ( item &&  item.type == 'outfit' || item.type == 'utility') {
-      let itemUnequipped = this.items.find( item2 => item2.type == item.type && item2.system.equipped );
-      if ( itemUnequipped) {
-        let update = { _id: itemUnequipped.id, "system.equipped": false };
-        await this.updateEmbeddedDocuments('Item', [update]); 
+  async equipItem(itemId) {
+    const item = this.items.find(i => i.id === itemId);
+    if (!item?.system) return;
+
+    const currentState = item.system.carryState || "carried";
+
+    if (item.type === "outfit") {
+      // Outfits cycle: carried → active → carried (max 1 active)
+      if (currentState === "carried") {
+        const updates = [];
+        const activeOutfit = this.items.find(i => i.type === "outfit" && i.id !== item.id && i.system.carryState === "active");
+        if (activeOutfit) {
+          updates.push({ _id: activeOutfit.id, "system.carryState": "carried" });
+        }
+        updates.push({ _id: item.id, "system.carryState": "active" });
+        await this.updateEmbeddedDocuments('Item', updates);
+      } else {
+        await this.updateEmbeddedDocuments('Item', [{ _id: item.id, "system.carryState": "carried" }]);
       }
-    }
-    if (item && item.system) {
-      let update = { _id: item.id, "system.equipped": !item.system.equipped };
-      await this.updateEmbeddedDocuments('Item', [update]); // Updates one EmbeddedEntity
+    } else if (item.type === "weapon" || item.type === "utility" || item.type === "equipment") {
+      // Weapons/utilities/equipment cycle: carried → inHand → carried
+      const newState = currentState === "carried" ? "inHand" : "carried";
+      await this.updateEmbeddedDocuments('Item', [{ _id: item.id, "system.carryState": newState }]);
     }
   }
 
@@ -513,25 +545,40 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   getEquipmentSlotsBase() {
-    let equipSlots = this.items.filter( item => item.type == 'outfit' || item.type == 'utility');
+    let activeGear = this.items.filter(item =>
+      (item.type === 'outfit' || item.type === 'utility') && item.system.carryState !== "carried"
+    );
     let equipmentSlots = 6 + this.system.attributes.strength.value;
-    for (let equip of equipSlots) {
-      if ( equip.system.statstotal?.equipmentslots?.value && !isNaN( equip.system.statstotal.equipmentslots.value)) {
-        equipmentSlots+= Number(equip.system.statstotal.equipmentslots.value);
+    for (let equip of activeGear) {
+      if (equip.system.statstotal?.equipmentslots?.value && !isNaN(equip.system.statstotal.equipmentslots.value)) {
+        equipmentSlots += Number(equip.system.statstotal.equipmentslots.value);
       }
     }
     return equipmentSlots;
   }
   /* -------------------------------------------- */
   getEquipmentSlotsUsed() {
-    let equipSlotsNeeded = this.items.filter( item => item.type == 'outfit' || item.type == 'utility' || item.type == 'weapon' || item.type == 'equipment');
-    let equipmentSlotsUsed = 0;
-    for (let equip of equipSlotsNeeded) {
-      if (!equip.system.equipped) {
-        equipmentSlotsUsed += 2;
+    const equippableItems = this.items.filter(item =>
+      item.type === 'outfit' || item.type === 'utility' || item.type === 'weapon' || item.type === 'equipment'
+    );
+    let slotsUsed = 0;
+    let trinketCount = 0;
+    for (const item of equippableItems) {
+      const state = item.system.carryState || "carried";
+      if (state === "inHand" || state === "active") continue;
+      // Check for Trinket keyword — counted separately
+      const keywords = Array.isArray(item.system.keywords) ? item.system.keywords : [];
+      if (keywords.some(k => k.id === "trinket")) {
+        trinketCount++;
+        continue;
       }
+      // Carried items use their effective slots value; inactive outfits cost 4 slots
+      const slots = (item.type === "outfit") ? 4 : computeEffectiveItemStats(item).slots;
+      slotsUsed += slots;
     }
-    return equipmentSlotsUsed;
+    // Trinket rule: every 5 trinket items use 1 slot
+    if (trinketCount > 0) slotsUsed += Math.ceil(trinketCount / 5);
+    return slotsUsed;
   }
 
     /* -------------------------------------------- */
@@ -722,7 +769,7 @@ export class FraggedEmpireActor extends Actor {
   getDefenseBase() {
     if (this.type == 'character') {
       let outfitBonus = 0;
-      let outfits = this.items.filter( item => (item.type == 'outfit' || item.type == 'utility') && item.system.equipped );
+      let outfits = this.items.filter(item => (item.type === 'outfit' || item.type === 'utility') && item.system.carryState !== "carried");
       for (let item of outfits) {
         if ( !isNaN(item.system.statstotal?.defence?.value)) {
           outfitBonus += Number(item.system.statstotal.defence.value);
@@ -753,7 +800,7 @@ export class FraggedEmpireActor extends Actor {
   getBaseArmour( ) {
     if (this.type == 'character') {
       let armour = 0;
-      let outfits = this.items.filter( item => (item.type == 'outfit' || item.type == 'utility') && item.system.equipped );
+      let outfits = this.items.filter(item => (item.type === 'outfit' || item.type === 'utility') && item.system.carryState !== "carried");
       for (let item of outfits) {
         if ( !isNaN(item.system.statstotal?.armour?.value)) {
           armour += Number(item.system.statstotal.armour.value);

@@ -528,159 +528,13 @@
       "variations": [],
       "modifications": [],
       "munitions": "0",
-      "equipped": false,
+      "slots": 2,
+      "hands": 2,
+      "draw": 1,
+      "reload": 2,
+      "carryState": "carried",
       "defaultskill": "",
-      "keywords": {
-        "arcoffire": {
-          "label": "FE2.Keywords.Weapon.ArcOfFire",
-          "flag": false,
-          "X": "0"
-        },
-        "attribute": {
-          "label": "FE2.Keywords.Weapon.Attribute1d3",
-          "flag": false,
-          "X": "0"
-        },
-        "biotech": {
-          "label": "FE2.Keywords.Weapon.BioTech",
-          "flag": false
-        },
-        "blunt": {
-          "label": "FE2.Keywords.Weapon.Blunt",
-          "flag": false
-        },
-        "burn": {
-          "label": "FE2.Keywords.Weapon.Burn",
-          "flag": false
-        },
-        "costspare": {
-          "label": "FE2.Keywords.Weapon.CostSpareTP",
-          "flag": false,
-          "X": "0"
-        },
-        "electrogravity": {
-          "label": "FE2.Keywords.Weapon.ElectroGravity",
-          "flag": false
-        },
-        "energy": {
-          "label": "FE2.Keywords.Weapon.Energy",
-          "flag": false
-        },
-        "foronesession": {
-          "label": "FE2.Keywords.Weapon.For1SessionOnly",
-          "flag": false
-        },
-        "gauntlet": {
-          "label": "FE2.Keywords.Weapon.Gauntlet",
-          "flag": false
-        },
-        "innate": {
-          "label": "FE2.Keywords.Weapon.Innate",
-          "flag": false
-        },
-        "jam": {
-          "label": "FE2.Keywords.Weapon.Jam",
-          "flag": false,
-          "X": "0",
-          "Y": "0"
-        },
-        "lockon": {
-          "label": "FE2.Keywords.Weapon.LockOn",
-          "flag": false,
-          "X": "0"
-        },
-        "lose": {
-          "label": "FE2.Keywords.Weapon.Lose",
-          "flag": false,
-          "X": "0"
-        },
-        "lowtech": {
-          "label": "FE2.Keywords.Weapon.LowTech",
-          "flag": false
-        },
-        "modroll": {
-          "label": "FE2.Keywords.Weapon.ModRolls",
-          "flag": false,
-          "X": "0"
-        },
-        "natural": {
-          "label": "FE2.Keywords.Weapon.Natural",
-          "flag": false
-        },
-        "norvarmod": {
-          "label": "FE2.Keywords.Weapon.NoVarOrMod",
-          "flag": false
-        },
-        "optionnal": {
-          "label": "FE2.Keywords.Weapon.Optional",
-          "flag": false
-        },
-        "only": {
-          "label": "FE2.Keywords.Weapon.Only",
-          "flag": false,
-          "X": "0"
-        },
-        "pen": {
-          "label": "FE2.Keywords.Weapon.Pen",
-          "flag": false,
-          "X": "0",
-          "labelY": "FE2.Keywords.Weapon.Min",
-          "Y": "0"
-        },
-        "prototype": {
-          "label": "FE2.Keywords.Weapon.Prototype",
-          "flag": false
-        },
-        "requires": {
-          "label": "FE2.Keywords.Weapon.Requires",
-          "flag": false,
-          "X": "0"
-        },
-        "robot": {
-          "label": "FE2.Keywords.Weapon.Robot",
-          "flag": false
-        },
-        "setup": {
-          "label": "FE2.Keywords.Weapon.Setup",
-          "flag": false,
-          "X": "0",
-          "labelY": "FE2.Keywords.Weapon.PullDown",
-          "Y": "0"
-        },
-        "slow": {
-          "label": "FE2.Keywords.Weapon.Slow",
-          "flag": false
-        },
-        "small": {
-          "label": "FE2.Keywords.Weapon.Small",
-          "flag": false
-        },
-        "splash": {
-          "label": "FE2.Keywords.Weapon.Splash",
-          "flag": false,
-          "X": "0"
-        },
-        "stealth": {
-          "label": "FE2.Keywords.Weapon.Stealth",
-          "flag": false,
-          "X": "0"
-        },
-        "stronghit": {
-          "label": "FE2.Keywords.Weapon.StrongHit",
-          "flag": false,
-          "X": "0",
-          "labelY": "FE2.Keywords.Weapon.Dash",
-          "Y": "0"
-        },
-        "worksinliquid": {
-          "label": "FE2.Keywords.Weapon.WorksInLiquid",
-          "flag": false
-        },
-        "novoid": {
-          "label": "FE2.Keywords.Weapon.NotInTheVoid",
-          "flag": false
-        }
-      },
+      "keywords": [],
       "stats": {
         "hitdice": {
           "value": "",
@@ -872,49 +726,13 @@
           "label": "FE2.Stats.Outfit.Cost"
         }
       },
-      "keywords": {
-        "biotech": {
-          "label": "FE2.Keywords.Outfit.BioTech"
-        },
-        "commshort": {
-          "label": "FE2.Keywords.Outfit.CommunicationsShort"
-        },
-        "commlong": {
-          "label": "FE2.Keywords.Outfit.CommunicationsLong"
-        },
-        "costspare": {
-          "label": "FE2.Keywords.Outfit.CostSpareTimePoint",
-          "X": "0"
-        },
-        "envgear": {
-          "label": "FE2.Keywords.Outfit.EnvironmentalGear",
-          "X": "0"
-        },
-        "flight": {
-          "label": "FE2.Keywords.Outfit.Flight"
-        },
-        "gauntlet": {
-          "label": "FE2.Keywords.Outfit.Gauntlet"
-        },
-        "innate": {
-          "label": "FE2.Keywords.Outfit.Innate",
-          "flag": false
-        },
-        "modroll": {
-          "label": "FE2.Keywords.Outfit.ModificationRolls",
-          "X": "0"
-        },
-        "setup": {
-          "label": "FE2.Keywords.Outfit.SetUpPullDown",
-          "X": "0",
-          "Y": "0"
-        },
-        "shield": {
-          "label": "FE2.Keywords.Outfit.Shield"
-        }
-      },
-      "equipped": false,
-      "description": ""
+      "keywords": [],
+      "description": "",
+      "slots": 2,
+      "hands": 2,
+      "draw": 1,
+      "reload": 2,
+      "carryState": "carried"
     },
     "utility": {
       "stats": {
@@ -985,204 +803,31 @@
           "label": "FE2.Stats.Outfit.Cost"
         }
       },
-      "keywords": {
-        "biotech": {
-          "label": "FE2.Keywords.Outfit.BioTech"
-        },
-        "commshort": {
-          "label": "FE2.Keywords.Outfit.CommunicationsShort"
-        },
-        "commlong": {
-          "label": "FE2.Keywords.Outfit.CommunicationsLong"
-        },
-        "costspare": {
-          "label": "FE2.Keywords.Outfit.CostSpareTimePoint",
-          "X": "0"
-        },
-        "envgear": {
-          "label": "FE2.Keywords.Outfit.EnvironmentalGear",
-          "X": "0"
-        },
-        "flight": {
-          "label": "FE2.Keywords.Outfit.Flight"
-        },
-        "gauntlet": {
-          "label": "FE2.Keywords.Outfit.Gauntlet"
-        },
-        "modroll": {
-          "label": "FE2.Keywords.Outfit.ModificationRolls",
-          "X": "0"
-        },
-        "setup": {
-          "label": "FE2.Keywords.Outfit.SetUpPullDown",
-          "X": "0",
-          "Y": "0"
-        },
-        "shield": {
-          "label": "FE2.Keywords.Outfit.Shield"
-        }
-      },
-      "equipped": false,
-      "description": ""
+      "keywords": [],
+      "description": "",
+      "slots": 2,
+      "hands": 2,
+      "draw": 1,
+      "reload": 2,
+      "carryState": "carried"
     },
     "equipment": {
-      "equipped": false,
       "type": "equipment",
       "cost": 0,
-      "description": ""
+      "description": "",
+      "slots": 2,
+      "hands": 2,
+      "draw": 1,
+      "reload": 2,
+      "carryState": "carried",
+      "keywords": []
     },
     "spacecraftweapon": {
       "type": "",
       "variations": [],
       "modifications": [],
       "equipped": false,
-      "keywords": {
-        "arcoffire": {
-          "label": "FE2.Keywords.Weapon.ArcOfFire",
-          "flag": false,
-          "X": "0"
-        },
-        "attribute": {
-          "label": "FE2.Keywords.Weapon.Attribute1d3",
-          "flag": false,
-          "X": "0"
-        },
-        "biotech": {
-          "label": "FE2.Keywords.Weapon.BioTech",
-          "flag": false
-        },
-        "blunt": {
-          "label": "FE2.Keywords.Weapon.Blunt",
-          "flag": false
-        },
-        "burn": {
-          "label": "FE2.Keywords.Weapon.Burn",
-          "flag": false
-        },
-        "costspare": {
-          "label": "FE2.Keywords.SpacecraftWeapon.CostSpareTimePoint",
-          "flag": false,
-          "X": "0"
-        },
-        "electrogravity": {
-          "label": "FE2.Keywords.Weapon.ElectroGravity",
-          "flag": false
-        },
-        "energy": {
-          "label": "FE2.Keywords.Weapon.Energy",
-          "flag": false
-        },
-        "foronesession": {
-          "label": "FE2.Keywords.SpacecraftWeapon.ForOneSessionOnly",
-          "flag": false
-        },
-        "gauntlet": {
-          "label": "FE2.Keywords.Weapon.Gauntlet",
-          "flag": false
-        },
-        "jam": {
-          "label": "FE2.Keywords.Weapon.Jam",
-          "flag": false,
-          "X": "0",
-          "Y": "0"
-        },
-        "lockon": {
-          "label": "FE2.Keywords.Weapon.LockOn",
-          "flag": false,
-          "X": "0"
-        },
-        "lose": {
-          "label": "FE2.Keywords.Weapon.Lose",
-          "flag": false,
-          "X": "0"
-        },
-        "lowtech": {
-          "label": "FE2.Keywords.Weapon.LowTech",
-          "flag": false
-        },
-        "modroll": {
-          "label": "FE2.Keywords.SpacecraftWeapon.ModificationRolls",
-          "flag": false,
-          "X": "0"
-        },
-        "natural": {
-          "label": "FE2.Keywords.Weapon.Natural",
-          "flag": false
-        },
-        "norvarmod": {
-          "label": "FE2.Keywords.SpacecraftWeapon.NoVarOrMod",
-          "flag": false
-        },
-        "optionnal": {
-          "label": "FE2.Keywords.Weapon.Optional",
-          "flag": false
-        },
-        "only": {
-          "label": "FE2.Keywords.Weapon.Only",
-          "flag": false,
-          "X": "0"
-        },
-        "pen": {
-          "label": "FE2.Keywords.Weapon.Pen",
-          "flag": false,
-          "X": "0",
-          "labelY": "FE2.Keywords.Weapon.Min",
-          "Y": "0"
-        },
-        "prototype": {
-          "label": "FE2.Keywords.Weapon.Prototype",
-          "flag": false
-        },
-        "requires": {
-          "label": "FE2.Keywords.Weapon.Requires",
-          "flag": false,
-          "X": "0"
-        },
-        "robot": {
-          "label": "FE2.Keywords.Weapon.Robot",
-          "flag": false
-        },
-        "setup": {
-          "label": "FE2.Keywords.Weapon.Setup",
-          "flag": false,
-          "X": "0",
-          "labelY": "FE2.Keywords.Weapon.PullDown",
-          "Y": "0"
-        },
-        "slow": {
-          "label": "FE2.Keywords.Weapon.Slow",
-          "flag": false
-        },
-        "small": {
-          "label": "FE2.Keywords.Weapon.Small",
-          "flag": false
-        },
-        "splash": {
-          "label": "FE2.Keywords.Weapon.Splash",
-          "flag": false,
-          "X": "0"
-        },
-        "stealth": {
-          "label": "FE2.Keywords.Weapon.Stealth",
-          "flag": false,
-          "X": "0"
-        },
-        "stronghit": {
-          "label": "FE2.Keywords.Weapon.StrongHit",
-          "flag": false,
-          "X": "0",
-          "labelY": "FE2.Keywords.Weapon.Dash",
-          "Y": "0"
-        },
-        "worksinliquid": {
-          "label": "FE2.Keywords.Weapon.WorksInLiquid",
-          "flag": false
-        },
-        "novoid": {
-          "label": "FE2.Keywords.SpacecraftWeapon.NotInTheVoid",
-          "flag": false
-        }
-      },
+      "keywords": [],
       "stats": {
         "hitdice": {
           "value": "",

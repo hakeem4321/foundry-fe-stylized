@@ -1,0 +1,29 @@
+<div class="fe2-keywords-section">
+  <h3>{{localize "FE2.Keywords.Title"}}</h3>
+  <div class="fe2-keywords-tags">
+    {{#each keywordsEnriched}}
+    <div class="fe2-keyword-tag" data-keyword-index="{{@index}}" title="{{this.description}}">
+      <span class="fe2-keyword-label">{{this.label}}</span>
+      {{#each this.params}}
+      <input type="text" class="fe2-keyword-param" data-param-key="{{this.key}}"
+             value="{{this.value}}" placeholder="{{this.label}}"/>
+      {{/each}}
+      <button type="button" class="fe2-keyword-remove" data-action="removeKeyword" title="{{localize 'FE2.Keywords.Remove'}}">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    {{else}}
+    <span class="fe2-keywords-empty">{{localize "FE2.Keywords.NoKeywords"}}</span>
+    {{/each}}
+  </div>
+  {{#if hasAvailableKeywords}}
+  <div class="fe2-keywords-add">
+    <select class="fe2-keyword-add-select">
+      <option value="">— {{localize "FE2.Keywords.Add"}} —</option>
+      {{#each availableKeywords}}
+      <option value="{{this.id}}">{{this.label}}</option>
+      {{/each}}
+    </select>
+  </div>
+  {{/if}}
+</div>

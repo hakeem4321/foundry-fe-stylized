@@ -307,7 +307,7 @@
                 <span class="specialisation-label">{{localize "FE2.Sheet.Character.Munitions"}}</span>
               </li>
               {{#each weapons as |weapon key|}}
-              {{#if weapon.system.equipped}}
+              {{#if (eq weapon.system.carryState "inHand")}}
               <li class="item flexrow list-item" data-item-id="{{weapon.id}}">
                 <img class="sheet-competence-img" src="{{weapon.img}}"/>
                 <span class="competence-label weapon-label"><a data-action="rollWeapon" name="{{weapon.name}}">{{weapon.name}}</a></span>
@@ -316,7 +316,7 @@
                 <span class="specialisation-label">{{weapon.system.statstotal.enddmg.value}}</span>
                 <span class="specialisation-label">{{weapon.system.statstotal.crit.value}}</span>
                 <span class="specialisation-label">{{weapon.system.statstotal.range.value}}</span>
-                <span class="specialisation-label"><input type="text" class="fe2-stat-input" name="{{weapon.id}}" value="{{weapon.system.munitions}}" data-dtype="Number"/></span>
+                <span class="specialisation-label weapon-munitions-label"><input type="text" class="fe2-stat-input" name="{{weapon.id}}" value="{{weapon.system.munitions}}" data-dtype="Number"/></span>
               </li>
               {{/if}}
               {{/each}}
@@ -346,7 +346,7 @@
                 <img class="sheet-competence-img" src="{{outfit.img}}"/>
                 <span class="stat-label outfit-label">{{outfit.name}}</span>
                 <div class="item-controls">
-                  <a class="item-control" data-action="equipItem" title="{{localize "FE2.Sheet.Common.Worn"}}">{{#if outfit.system.equipped}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
+                  <a class="item-control fe2-carry-state fe2-carry-state--{{outfit.system.carryState}}" data-action="equipItem" title="{{localize "FE2.Sheet.Common.Worn"}}">{{#if (eq outfit.system.carryState "active")}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
                   <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
                   <a class="item-control" data-action="deleteItem" title="{{localize "FE2.Sheet.Common.DeleteItem"}}"><i class="fas fa-trash"></i></a>
                 </div>
@@ -364,7 +364,7 @@
                 <img class="sheet-competence-img" src="{{utility.img}}"/>
                 <span class="stat-label outfit-label">{{utility.name}}</span>
                 <div class="item-controls">
-                  <a class="item-control" data-action="equipItem" title="{{localize "FE2.Sheet.Common.Worn"}}">{{#if utility.system.equipped}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
+                  <a class="item-control fe2-carry-state fe2-carry-state--{{utility.system.carryState}}" data-action="equipItem" title="{{localize "FE2.Sheet.Common.Worn"}}">{{#if (eq utility.system.carryState "inHand")}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
                   <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
                   <a class="item-control" data-action="deleteItem" title="{{localize "FE2.Sheet.Common.DeleteItem"}}"><i class="fas fa-trash"></i></a>
                 </div>
@@ -502,7 +502,13 @@
               <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.EquipmentModifiers"}}</h3>
               <ul>
                 <li class="item flexrow list-item stack-left">
-                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.UtilitiesMax"}} : <span class="{{modColor computed.utilitiesMax 1}}">{{computed.utilitiesMax}}</span></span></span>
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Item.Hands"}} : <span class="{{#if (gt handsUsed handsMax)}}fe2-over-capacity{{/if}}">{{handsUsed}}/{{handsMax}}</span></span></span>
+                </li>
+                <li class="item flexrow list-item stack-left">
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Weapons"}} : <span class="{{#if (gte weaponsCount weaponsMax)}}fe2-over-capacity{{/if}}">{{weaponsCount}}/{{weaponsMax}}</span></span></span>
+                </li>
+                <li class="item flexrow list-item stack-left">
+                  <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.Utilities"}} : <span class="{{#if (gte utilitiesCount computed.utilitiesMax)}}fe2-over-capacity{{/if}}">{{utilitiesCount}}/<span class="{{modColor computed.utilitiesMax 1}}">{{computed.utilitiesMax}}</span></span></span></span>
                 </li>
                 <li class="item flexrow list-item stack-left">
                   <span class="fe2-field"><span class="stat-label">{{localize "FE2.Effects.Fields.AcquisitionMod"}} : <span class="{{modColor computed.acquisitionMod 0}}">{{computed.acquisitionMod}}</span></span></span>
@@ -529,7 +535,7 @@
                 <span class="equipement-label">{{equip.name}}</span>
                 <span class="equipement-label">{{localizeType equip.type}}</span>
                 <div class="item-controls">
-                  <a class="item-control" data-action="equipItem" title="{{localize "FE2.Sheet.Common.Worn"}}">{{#if equip.system.equipped}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
+                  <a class="item-control fe2-carry-state fe2-carry-state--{{equip.system.carryState}}" data-action="equipItem" title="{{localize "FE2.Sheet.Common.Worn"}}">{{#if (ne equip.system.carryState "carried")}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
                   <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
                   <a class="item-control" data-action="deleteItem" title="{{localize "FE2.Sheet.Common.DeleteItem"}}"><i class="fas fa-trash"></i></a>
                 </div>

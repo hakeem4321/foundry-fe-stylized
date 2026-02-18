@@ -1,6 +1,6 @@
 /**
  * Effect target type constants, key parsing, and key building for the FE2 effect system.
- * All 29 target types with fe2.* key prefixes.
+ * All 31 target types with fe2.* key prefixes.
  */
 
 /* -------------------------------------------- */
@@ -34,7 +34,9 @@ export const EFFECT_TARGET_TYPES = {
   shieldRegen: "shieldRegen",
   cargoMax: "cargoMax",
   weaponSlotsMax: "weaponSlotsMax",
-  resupplyMax: "resupplyMax"
+  resupplyMax: "resupplyMax",
+  handsMax: "handsMax",
+  weaponsMax: "weaponsMax"
 };
 
 /* -------------------------------------------- */
@@ -81,7 +83,9 @@ export const EFFECT_CATEGORIES = {
       { type: EFFECT_TARGET_TYPES.utilitiesMax, label: "FE2.Effects.TargetTypes.UtilitiesMax" },
       { type: EFFECT_TARGET_TYPES.recovery, label: "FE2.Effects.TargetTypes.Recovery" },
       { type: EFFECT_TARGET_TYPES.acquisition, label: "FE2.Effects.TargetTypes.Acquisition" },
-      { type: EFFECT_TARGET_TYPES.arcane, label: "FE2.Effects.TargetTypes.Arcane" }
+      { type: EFFECT_TARGET_TYPES.arcane, label: "FE2.Effects.TargetTypes.Arcane" },
+      { type: EFFECT_TARGET_TYPES.handsMax, label: "FE2.Effects.TargetTypes.HandsMax" },
+      { type: EFFECT_TARGET_TYPES.weaponsMax, label: "FE2.Effects.TargetTypes.WeaponsMax" }
     ]
   },
   spacecraft: {
@@ -124,7 +128,9 @@ const KEY_MAP = {
   "fe2.shieldregen": { targetType: EFFECT_TARGET_TYPES.shieldRegen, targetId: null },
   "fe2.cargo.max": { targetType: EFFECT_TARGET_TYPES.cargoMax, targetId: null },
   "fe2.weaponslots.max": { targetType: EFFECT_TARGET_TYPES.weaponSlotsMax, targetId: null },
-  "fe2.resupply.max": { targetType: EFFECT_TARGET_TYPES.resupplyMax, targetId: null }
+  "fe2.resupply.max": { targetType: EFFECT_TARGET_TYPES.resupplyMax, targetId: null },
+  "fe2.hands.max": { targetType: EFFECT_TARGET_TYPES.handsMax, targetId: null },
+  "fe2.weapons.max": { targetType: EFFECT_TARGET_TYPES.weaponsMax, targetId: null }
 };
 
 /* -------------------------------------------- */
@@ -226,6 +232,10 @@ export function buildEffectKey(targetType, targetId) {
       return "fe2.weaponslots.max";
     case EFFECT_TARGET_TYPES.resupplyMax:
       return "fe2.resupply.max";
+    case EFFECT_TARGET_TYPES.handsMax:
+      return "fe2.hands.max";
+    case EFFECT_TARGET_TYPES.weaponsMax:
+      return "fe2.weapons.max";
     default:
       return "";
   }

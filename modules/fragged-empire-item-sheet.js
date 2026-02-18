@@ -1,4 +1,5 @@
 import { FraggedEmpireUtility } from "./fragged-empire-utility.js";
+import { getKeywordsForType, getKeywordById } from "./keyword-config.js";
 
 /**
  * Item sheet using Application V2.
@@ -32,7 +33,8 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
       createEffect: FraggedEmpireItemSheet.#onCreateEffect,
       editEffect: FraggedEmpireItemSheet.#onEditEffect,
       toggleEffect: FraggedEmpireItemSheet.#onToggleEffect,
-      deleteEffect: FraggedEmpireItemSheet.#onDeleteEffect
+      deleteEffect: FraggedEmpireItemSheet.#onDeleteEffect,
+      removeKeyword: FraggedEmpireItemSheet.#onRemoveKeyword
     },
     dragDrop: [{ dragSelector: null, dropSelector: null }]
   };
@@ -75,8 +77,33 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
     context.cssClass = this.isEditable ? "editable" : "locked";
     context.system = itemData.system;
     context.combatSkills = FraggedEmpireUtility.getSkillsType("personalcombat");
-    context.keywords = FraggedEmpireUtility.split3Columns(itemData.system.keywords);
     context.optionsBase = FraggedEmpireUtility.createDirectOptionList(0, 20);
+
+    // Keyword enrichment for item types that support keywords
+    const KEYWORD_ITEM_TYPES = new Set(["weapon", "outfit", "utility", "equipment", "spacecraftweapon"]);
+    if (KEYWORD_ITEM_TYPES.has(item.type)) {
+      const activeKeywords = Array.isArray(itemData.system.keywords) ? itemData.system.keywords : [];
+      const activeIds = new Set(activeKeywords.map(k => k.id));
+      context.keywordsEnriched = activeKeywords.map(kw => {
+        const def = getKeywordById(kw.id);
+        if (!def) return null;
+        return {
+          id: kw.id,
+          label: game.i18n.localize(def.label),
+          description: game.i18n.localize(def.description),
+          params: def.params.map(p => ({
+            key: p.key,
+            label: game.i18n.localize(p.label),
+            value: kw[p.key] ?? ""
+          }))
+        };
+      }).filter(Boolean);
+      context.availableKeywords = getKeywordsForType(item.type)
+        .filter(kw => !activeIds.has(kw.id))
+        .map(kw => ({ id: kw.id, label: game.i18n.localize(kw.label) }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+      context.hasAvailableKeywords = context.availableKeywords.length > 0;
+    }
     context.limited = item.limited;
     context.owner = item.isOwner;
     context.isGM = game.user.isGM;
@@ -152,6 +179,23 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
       if (!tab) continue;
       const tabElement = this.element?.querySelector(`[data-tab="${tab}"][data-group="${group}"]`);
       if (tabElement) this.changeTab(tab, group, {force: true});
+    }
+
+    // Keyword add dropdown listener
+    const addSelect = this.element?.querySelector('.fe2-keyword-add-select');
+    if (addSelect) {
+      addSelect.addEventListener('change', (event) => {
+        event.stopPropagation();
+        this.#onAddKeyword(event);
+      });
+    }
+
+    // Keyword param input listeners
+    for (const input of this.element?.querySelectorAll('.fe2-keyword-param') ?? []) {
+      input.addEventListener('change', (event) => {
+        event.stopPropagation();
+        this.#onUpdateKeywordParam(event);
+      });
     }
   }
 
@@ -236,6 +280,41 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
     });
     if (confirmed) {
       this.document.deleteEmbeddedDocuments("ActiveEffect", [effectId]);
+    }
+  }
+
+  /* -------------------------------------------- */
+  /*  Keyword Action Handlers                     */
+  /* -------------------------------------------- */
+
+  static #onRemoveKeyword(event, target) {
+    const tagEl = target.closest('.fe2-keyword-tag');
+    if (!tagEl) return;
+    const index = parseInt(tagEl.dataset.keywordIndex);
+    const keywords = foundry.utils.deepClone(this.document.system.keywords || []);
+    keywords.splice(index, 1);
+    this.document.update({ "system.keywords": keywords });
+  }
+
+  #onAddKeyword(event) {
+    const select = event.currentTarget;
+    const keywordId = select.value;
+    if (!keywordId) return;
+    const keywords = foundry.utils.deepClone(this.document.system.keywords || []);
+    keywords.push({ id: keywordId });
+    this.document.update({ "system.keywords": keywords });
+  }
+
+  #onUpdateKeywordParam(event) {
+    const input = event.currentTarget;
+    const tagEl = input.closest('.fe2-keyword-tag');
+    if (!tagEl) return;
+    const index = parseInt(tagEl.dataset.keywordIndex);
+    const paramKey = input.dataset.paramKey;
+    const keywords = foundry.utils.deepClone(this.document.system.keywords || []);
+    if (keywords[index]) {
+      keywords[index][paramKey] = input.value;
+      this.document.update({ "system.keywords": keywords });
     }
   }
 

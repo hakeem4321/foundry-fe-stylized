@@ -16,9 +16,6 @@
 
         <div class="tab" data-group="primary" data-tab="details">
           <ul>
-            <li class="flexrow"><label class="generic-label">{{localize "FE2.Sheet.Common.Equipped"}}</label>
-              <label class="attribute-value checkbox"><input type="checkbox" name="system.equipped" {{checked system.equipped}}/></label>
-            </li>
             <li class="flexrow"><label class="generic-label">{{localize "FE2.Items.Common.Weight"}}</label>
               <input type="number" class="fe2-stat-input" name="system.weight" value="{{system.weight}}" data-dtype="Number"/>
             </li>
@@ -26,6 +23,9 @@
               <input type="number" class="fe2-stat-input" name="system.cost" value="{{system.cost}}" data-dtype="Number"/>
             </li>
           </ul>
+
+          {{> "systems/foundry-fe2/templates/partial-keywords-section.html"}}
+
           <h3>{{localize "FE2.Sheet.Common.Description"}}</h3>
           <prose-mirror button="true" toggled="true" name="system.description" value="{{system.description}}">{{{enrichedDescription}}}</prose-mirror>
           

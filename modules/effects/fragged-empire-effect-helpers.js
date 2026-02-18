@@ -46,7 +46,9 @@ export function createEmptyModifiers() {
     shieldRegen: [],
     cargoMax: [],
     weaponSlotsMax: [],
-    resupplyMax: []
+    resupplyMax: [],
+    handsMax: [],
+    weaponsMax: []
   };
 }
 
@@ -153,8 +155,10 @@ export function isEquipSuppressed(effect, actor) {
   // Only suppress for equippable item types
   if (!EQUIPPABLE_TYPES.has(item.type)) return false;
 
-  // Suppress if item has equipped field and is not equipped
-  if ("equipped" in item.system && item.system.equipped === false) return true;
+  // Suppress if item is in "carried" state (only active/inHand items apply effects)
+  // Spacecraft weapons still use the legacy equipped boolean
+  if ("carryState" in item.system) return item.system.carryState === "carried";
+  if ("equipped" in item.system) return item.system.equipped === false;
 
   return false;
 }
