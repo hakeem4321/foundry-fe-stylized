@@ -59,7 +59,8 @@ export class FraggedEmpireUtility  {
       'systems/foundry-fe2/templates/effects/effect-changes-tab.html',
       'systems/foundry-fe2/templates/partial-keywords-section.html',
       'systems/foundry-fe2/templates/partial-item-tabs-nav.html',
-      'systems/foundry-fe2/templates/partial-item-stats-vertical.html'
+      'systems/foundry-fe2/templates/partial-item-stats-vertical.html',
+      'systems/foundry-fe2/templates/partial-stronghits-section.html'
     ]
     return foundry.applications.handlebars.loadTemplates(templatePaths);    
   }
@@ -714,6 +715,76 @@ export class FraggedEmpireUtility  {
     }
 
     return updates;
+  }
+
+  /* -------------------------------------------- */
+  /*  Propagation Helpers                         */
+  /* -------------------------------------------- */
+
+  /**
+   * Build propagation data from a var/mod's keywords and stronghits.
+   * Each entry gets a sourceId pointing back to the var/mod.
+   * @param {object} varModData - The cloned var/mod data object
+   * @param {string} varModId - The _id of the var/mod in the parent's array
+   * @returns {{ keywords: object[], stronghits: object[] }}
+   */
+  static buildPropagationData(varModData, varModId) {
+    const keywords = (varModData.system?.keywords ?? []).map(kw => ({
+      ...foundry.utils.deepClone(kw),
+      sourceId: varModId
+    }));
+    const stronghits = (varModData.system?.stronghits ?? []).map(sh => ({
+      ...foundry.utils.deepClone(sh),
+      _id: foundry.utils.randomID(),
+      sourceId: varModId
+    }));
+    return { keywords, stronghits };
+  }
+
+  /**
+   * Build removal data — filters out all propagated entries for a given sourceId.
+   * @param {Item} parentItem - The parent item document
+   * @param {string} removedId - The _id of the var/mod being removed
+   * @returns {{ keywords: object[], stronghits: object[], effectIdsToDelete: string[] }}
+   */
+  static buildRemovalData(parentItem, removedId) {
+    const keywords = (parentItem.system.keywords ?? []).filter(k => k.sourceId !== removedId);
+    const stronghits = (parentItem.system.stronghits ?? []).filter(sh => sh.sourceId !== removedId);
+    const effectIdsToDelete = parentItem.effects
+      .filter(e => e.flags?.["foundry-fe2"]?.sourceId === removedId)
+      .map(e => e.id);
+    return { keywords, stronghits, effectIdsToDelete };
+  }
+
+  /**
+   * Clone ActiveEffects from a source item onto a parent item with sourceId flag.
+   * @param {Item} parentItem - The parent item to receive cloned effects
+   * @param {Item} sourceItem - The source Item document (the dropped var/mod)
+   * @param {string} varModId - The _id of the var/mod in the parent's array
+   */
+  static async propagateActiveEffects(parentItem, sourceItem, varModId) {
+    if (!sourceItem.effects.size) return;
+    const clonedEffects = sourceItem.effects.map(e => {
+      const data = e.toObject();
+      delete data._id;
+      foundry.utils.setProperty(data, "flags.foundry-fe2.sourceId", varModId);
+      return data;
+    });
+    await parentItem.createEmbeddedDocuments("ActiveEffect", clonedEffects);
+  }
+
+  /**
+   * Delete all propagated ActiveEffects for a given sourceId.
+   * @param {Item} parentItem - The parent item to clean up
+   * @param {string} removedId - The _id of the var/mod being removed
+   */
+  static async cleanupPropagatedEffects(parentItem, removedId) {
+    const effectIds = parentItem.effects
+      .filter(e => e.flags?.["foundry-fe2"]?.sourceId === removedId)
+      .map(e => e.id);
+    if (effectIds.length) {
+      await parentItem.deleteEmbeddedDocuments("ActiveEffect", effectIds);
+    }
   }
 
   /* -------------------------------------------- */

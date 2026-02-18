@@ -1,0 +1,14 @@
+<h3 class="fe2-section-header">{{localize "FE2.Items.Common.StrongHits"}}</h3>
+<ul class="fe2-item-list">
+  {{#each system.stronghits as |stronghit key|}}
+  <li class="item flexrow list-item {{#if stronghit.sourceId}}fe2-stronghit-entry--propagated{{/if}}" data-item-id="{{stronghit._id}}" data-item-type="stronghits"
+      {{#if stronghit.sourceId}}title="{{stronghit.sourceName}}"{{/if}}>
+    <span class="competence-label"><a data-action="viewStrongHit">{{stronghit.name}}</a></span>
+    {{#unless stronghit.sourceId}}
+    <div class="item-controls">
+      <a class="item-control" data-action="deleteEmbedded" title="{{localize "FE2.Sheet.Common.DeleteItem"}}"><i class="fas fa-trash"></i></a>
+    </div>
+    {{/unless}}
+  </li>
+  {{/each}}
+</ul>

@@ -155,7 +155,10 @@
         "NoSystemProperties": "No system properties",
         "BaseStats": "Base Stats",
         "ComputedTotal": "Total",
-        "VariationLimitReached": "This item already has a variation. Remove the existing one first."
+        "VariationLimitReached": "This item already has a variation. Remove the existing one first.",
+        "StrongHits": "Strong Hits",
+        "PropagatedFrom": "From: {name}",
+        "PropagatedReadOnly": "This entry comes from an attached variation/modification and cannot be edited directly."
       },
       "Skill": {
         "Trained": "Trained ?",
@@ -315,7 +318,7 @@
       "MaxRange": { "Label": "Max Range", "Desc": "This weapon has a maximum range of X range increments." },
       "MunitionBoost": { "Label": "Munition Boost", "Desc": "This weapon benefits from munition boosts." },
       "CritLoc": { "Label": "Crit Loc", "Desc": "On a critical hit, roll on the critical location table." },
-      "Pierce": { "Label": "Pierce", "Desc": "This attack pierces X points of the target's armour." },
+      "Pierce": { "Label": "Pierce", "Desc": "Armour against Critical Hits from this Weapon are counted as 1 lower down to a minimum of 3 (ie: Pierce vs Armour 4 = Armour 3, Pierce vs Armour 3 = Armour 3). You may Attack through solid walls with this Weapon (Your target will have Heavy or Entrenched Cover)." },
       "AttributeDmg": { "Label": "Attribute Dmg 2+", "Desc": "This weapon deals attribute damage on a roll of 2 or more." },
       "SpecialistBonus": { "Label": "Specialist Bonus", "Desc": "This weapon grants a bonus when used by a specialist." },
       "Toolbox": { "Label": "Toolbox", "Desc": "This item functions as a toolbox for skill checks." },

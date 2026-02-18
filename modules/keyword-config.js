@@ -169,8 +169,7 @@ export const KEYWORDS = Object.freeze([
   },
   {
     id: "pierce", label: "FE2.Keywords.Pierce.Label", description: "FE2.Keywords.Pierce.Desc",
-    params: [{ key: "X", label: "FE2.Keywords.Params.Value" }],
-    itemTypes: ["weapon", "spacecraftweapon"],
+    params: [], itemTypes: ["weapon", "spacecraftweapon"],
     category: KEYWORD_CATEGORIES.rollModifier
   },
   {
@@ -370,6 +369,24 @@ export const KEYWORDS = Object.freeze([
 ]);
 
 /* -------------------------------------------- */
+/*  Var/Mod → Parent Type Mapping               */
+/* -------------------------------------------- */
+
+/**
+ * Maps variation/modification item types to their parent item type.
+ * Used to resolve keyword eligibility: a variation of a weapon
+ * should offer the same keywords as a weapon.
+ */
+export const VAR_MOD_PARENT_MAP = Object.freeze({
+  variation: "weapon",
+  modification: "weapon",
+  variationoutfit: "outfit",
+  modificationoutfit: "outfit",
+  spacecraftweaponvariation: "spacecraftweapon",
+  spacecraftweaponmodification: "spacecraftweapon"
+});
+
+/* -------------------------------------------- */
 /*  Lookup Helpers                              */
 /* -------------------------------------------- */
 
@@ -378,11 +395,13 @@ const _byId = new Map(KEYWORDS.map(kw => [kw.id, kw]));
 
 /**
  * Get all keywords applicable to a given item type.
- * @param {string} itemType - The item type (e.g., "weapon", "outfit")
+ * For var/mod types, resolves to the parent type's keywords.
+ * @param {string} itemType - The item type (e.g., "weapon", "variation")
  * @returns {object[]} Filtered keyword definitions
  */
 export function getKeywordsForType(itemType) {
-  return KEYWORDS.filter(kw => kw.itemTypes.includes(itemType));
+  const resolvedType = VAR_MOD_PARENT_MAP[itemType] ?? itemType;
+  return KEYWORDS.filter(kw => kw.itemTypes.includes(resolvedType));
 }
 
 /**

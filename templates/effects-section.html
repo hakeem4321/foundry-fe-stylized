@@ -37,12 +37,14 @@
   {{#if effects.length}}
   <ol class="effects-list">
     {{#each effects as |effect idx|}}
-    <li class="effect-entry flexrow{{#unless effect.active}} effect-inactive{{/unless}}" data-effect-id="{{effect._id}}">
+    <li class="effect-entry flexrow{{#unless effect.active}} effect-inactive{{/unless}}{{#if effect.sourceId}} effect-entry--propagated{{/if}}" data-effect-id="{{effect._id}}"
+        {{#if effect.sourceId}}title="{{effect.sourceName}}"{{/if}}>
       <div class="effect-icon-wrapper">
         <div class="effect-icon-tint" style="background-color: {{effect.tint}}"></div>
         <img class="effect-icon" src="{{effect.img}}" title="{{effect.name}}" />
       </div>
       <span class="effect-name">{{effect.name}}</span>
+      {{#unless effect.sourceId}}
       <span class="effect-controls">
         <a class="effect-control" data-action="toggleEffect" title="{{localize "FE2.Effects.UI.Toggle"}}">
           <i class="fas {{#if effect.active}}fa-check{{else}}fa-times{{/if}}"></i>
@@ -54,6 +56,7 @@
           <i class="fas fa-trash"></i>
         </a>
       </span>
+      {{/unless}}
     </li>
     {{/each}}
   </ol>

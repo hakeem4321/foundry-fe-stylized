@@ -456,6 +456,8 @@
     "modification": {
       "type": "",
       "weapontype": "",
+      "stronghits": [],
+      "keywords": [],
       "stats": {
         "hitdice": {
           "value": "",
@@ -491,6 +493,8 @@
     "variation": {
       "type": "",
       "weapontype": "",
+      "stronghits": [],
+      "keywords": [],
       "stats": {
         "hitdice": {
           "value": "",
@@ -535,6 +539,7 @@
       "carryState": "carried",
       "defaultskill": "",
       "keywords": [],
+      "stronghits": [],
       "stats": {
         "hitdice": {
           "value": "",
@@ -598,6 +603,8 @@
       "description": ""
     },
     "variationoutfit": {
+      "stronghits": [],
+      "keywords": [],
       "stats": {
         "armour": {
           "value": "",
@@ -635,6 +642,8 @@
       "description": ""
     },
     "modificationoutfit": {
+      "stronghits": [],
+      "keywords": [],
       "stats": {
         "armour": {
           "value": "",
@@ -727,6 +736,7 @@
         }
       },
       "keywords": [],
+      "stronghits": [],
       "description": "",
       "slots": 2,
       "hands": 2,
@@ -828,6 +838,7 @@
       "modifications": [],
       "equipped": false,
       "keywords": [],
+      "stronghits": [],
       "stats": {
         "hitdice": {
           "value": "",
@@ -907,6 +918,8 @@
       "description": ""
     },
     "spacecraftweaponmodification": {
+      "stronghits": [],
+      "keywords": [],
       "stats": {
         "hitdice": {
           "value": "",
@@ -948,6 +961,8 @@
       "description": ""
     },
     "spacecraftweaponvariation": {
+      "stronghits": [],
+      "keywords": [],
       "stats": {
         "hitdice": {
           "value": "",

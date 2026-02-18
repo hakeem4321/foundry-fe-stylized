@@ -17,6 +17,9 @@
         </div>
 
         <div class="tab" data-group="primary" data-tab="system">
+          {{> "systems/foundry-fe2/templates/partial-keywords-section.html"}}
+          {{> "systems/foundry-fe2/templates/partial-stronghits-section.html"}}
+
           {{> "systems/foundry-fe2/templates/partial-item-stats-vertical.html" stats=system.stats title=(localize "FE2.Items.Common.VariationStats")}}
         </div>
 

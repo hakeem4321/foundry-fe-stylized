@@ -34,7 +34,8 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
       editEffect: FraggedEmpireItemSheet.#onEditEffect,
       toggleEffect: FraggedEmpireItemSheet.#onToggleEffect,
       deleteEffect: FraggedEmpireItemSheet.#onDeleteEffect,
-      removeKeyword: FraggedEmpireItemSheet.#onRemoveKeyword
+      removeKeyword: FraggedEmpireItemSheet.#onRemoveKeyword,
+      viewStrongHit: FraggedEmpireItemSheet.#onViewStrongHit
     },
   };
 
@@ -82,14 +83,14 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
     context.optionsBase = FraggedEmpireUtility.createDirectOptionList(0, 20);
 
     // Keyword enrichment for item types that support keywords
-    const KEYWORD_ITEM_TYPES = new Set(["weapon", "outfit", "utility", "equipment", "spacecraftweapon"]);
+    const KEYWORD_ITEM_TYPES = new Set(["weapon", "outfit", "utility", "equipment", "spacecraftweapon", "variation", "modification", "variationoutfit", "modificationoutfit", "spacecraftweaponvariation", "spacecraftweaponmodification"]);
     if (KEYWORD_ITEM_TYPES.has(item.type)) {
       const activeKeywords = Array.isArray(itemData.system.keywords) ? itemData.system.keywords : [];
       const activeIds = new Set(activeKeywords.map(k => k.id));
       context.keywordsEnriched = activeKeywords.map(kw => {
         const def = getKeywordById(kw.id);
         if (!def) return null;
-        return {
+        const enriched = {
           id: kw.id,
           label: game.i18n.localize(def.label),
           description: game.i18n.localize(def.description),
@@ -99,6 +100,13 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
             value: kw[p.key] ?? ""
           }))
         };
+        if (kw.sourceId) {
+          enriched.sourceId = kw.sourceId;
+          const source = (itemData.system.variations ?? []).find(v => v._id === kw.sourceId)
+            || (itemData.system.modifications ?? []).find(m => m._id === kw.sourceId);
+          enriched.sourceName = source ? game.i18n.format("FE2.Items.Common.PropagatedFrom", { name: source.name }) : "";
+        }
+        return enriched;
       }).filter(Boolean);
       context.availableKeywords = getKeywordsForType(item.type)
         .filter(kw => !activeIds.has(kw.id))
@@ -109,15 +117,25 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
     context.limited = item.limited;
     context.owner = item.isOwner;
     context.isGM = game.user.isGM;
-    context.effects = item.effects.map(e => ({
-      _id: e.id,
-      name: e.name,
-      img: e.img,
-      tint: e.tint ?? "#ffffff",
-      disabled: e.disabled,
-      active: !e.disabled,
-      effect: e
-    }));
+    context.effects = item.effects.map(e => {
+      const data = {
+        _id: e.id,
+        name: e.name,
+        img: e.img,
+        tint: e.tint ?? "#ffffff",
+        disabled: e.disabled,
+        active: !e.disabled,
+        effect: e
+      };
+      const sourceId = e.flags?.["foundry-fe2"]?.sourceId;
+      if (sourceId) {
+        data.sourceId = sourceId;
+        const source = (itemData.system.variations ?? []).find(v => v._id === sourceId)
+          || (itemData.system.modifications ?? []).find(m => m._id === sourceId);
+        data.sourceName = source ? game.i18n.format("FE2.Items.Common.PropagatedFrom", { name: source.name }) : "";
+      }
+      return data;
+    });
 
     // Type-specific choice objects for selectOptions
     switch (item.type) {
@@ -270,6 +288,21 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
   }
 
   /* -------------------------------------------- */
+  static #onViewStrongHit(event, target) {
+    const itemRow = target.closest("[data-item-id]");
+    if (!itemRow) return;
+    const itemId = itemRow.dataset.itemId;
+    const entry = this.document.system.stronghits?.find(sh => sh._id === itemId);
+    if (!entry) return;
+    Item.create({
+      type: "stronghit",
+      name: entry.name,
+      img: entry.img,
+      system: entry.system ?? {}
+    }, { temporary: true }).then(tempItem => tempItem.sheet.render(true));
+  }
+
+  /* -------------------------------------------- */
   static async #onDeleteEmbedded(event, target) {
     const itemRow = target.closest("[data-item-id]");
     if (!itemRow) return;
@@ -277,11 +310,22 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
     const itemType = itemRow.dataset.itemType;
     const array = foundry.utils.deepClone(this.document.system[itemType]);
     const newArray = array.filter(item => item._id !== itemId);
-    await this.document.update({ [`system.${itemType}`]: newArray });
-    // Recompute statstotal after removing a variation/modification
+
+    // For variations/modifications: also clean up propagated data
     if (itemType === "variations" || itemType === "modifications") {
+      const removal = FraggedEmpireUtility.buildRemovalData(this.document, itemId);
+      await this.document.update({
+        [`system.${itemType}`]: newArray,
+        "system.keywords": removal.keywords,
+        "system.stronghits": removal.stronghits
+      });
+      // Recompute statstotal
       const statUpdates = FraggedEmpireUtility.computeItemStatsTotals(this.document);
       if (Object.keys(statUpdates).length) await this.document.update(statUpdates);
+      // Clean up propagated ActiveEffects
+      await FraggedEmpireUtility.cleanupPropagatedEffects(this.document, itemId);
+    } else {
+      await this.document.update({ [`system.${itemType}`]: newArray });
     }
   }
 
@@ -486,6 +530,23 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
       return;
     }
 
+    // Strong hit: embed into any item type that has stronghits array
+    const STRONGHIT_ITEM_TYPES = new Set(["weapon", "outfit", "spacecraftweapon", "variation", "modification", "variationoutfit", "modificationoutfit", "spacecraftweaponvariation", "spacecraftweaponmodification"]);
+    if (droppedItem.type === "stronghit" && STRONGHIT_ITEM_TYPES.has(item.type)) {
+      const stronghitsArray = foundry.utils.deepClone(item.system.stronghits ?? []);
+      stronghitsArray.push({
+        _id: foundry.utils.randomID(),
+        name: droppedItem.name,
+        img: droppedItem.img,
+        system: {
+          requirements: droppedItem.system.requirements ?? "",
+          description: droppedItem.system.description ?? ""
+        }
+      });
+      await item.update({ "system.stronghits": stronghitsArray });
+      return;
+    }
+
     // Stat items: accept type-correct variations/modifications
     const typeMap = FraggedEmpireItemSheet.VARIATION_TYPES[item.type];
     if (typeMap) {
@@ -500,19 +561,41 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
           const newItem = foundry.utils.deepClone(droppedItem.toObject());
           newItem._id = foundry.utils.randomID();
           variationsArray.push(newItem);
-          await item.update({ "system.variations": variationsArray });
+          // Build propagation data (keywords + stronghits with sourceId)
+          const propagation = FraggedEmpireUtility.buildPropagationData(newItem, newItem._id);
+          const updateData = { "system.variations": variationsArray };
+          if (propagation.keywords.length) {
+            updateData["system.keywords"] = [...(item.system.keywords ?? []), ...propagation.keywords];
+          }
+          if (propagation.stronghits.length) {
+            updateData["system.stronghits"] = [...(item.system.stronghits ?? []), ...propagation.stronghits];
+          }
+          await item.update(updateData);
           // Recompute statstotal
           const statUpdates = FraggedEmpireUtility.computeItemStatsTotals(item);
           if (Object.keys(statUpdates).length) await item.update(statUpdates);
+          // Propagate ActiveEffects from source item
+          await FraggedEmpireUtility.propagateActiveEffects(item, droppedItem, newItem._id);
         } else if (droppedItem.type === typeMap.modification) {
           const modsArray = foundry.utils.deepClone(item.system.modifications);
           const newItem = foundry.utils.deepClone(droppedItem.toObject());
           newItem._id = foundry.utils.randomID();
           modsArray.push(newItem);
-          await item.update({ "system.modifications": modsArray });
+          // Build propagation data (keywords + stronghits with sourceId)
+          const propagation = FraggedEmpireUtility.buildPropagationData(newItem, newItem._id);
+          const updateData = { "system.modifications": modsArray };
+          if (propagation.keywords.length) {
+            updateData["system.keywords"] = [...(item.system.keywords ?? []), ...propagation.keywords];
+          }
+          if (propagation.stronghits.length) {
+            updateData["system.stronghits"] = [...(item.system.stronghits ?? []), ...propagation.stronghits];
+          }
+          await item.update(updateData);
           // Recompute statstotal
           const statUpdates = FraggedEmpireUtility.computeItemStatsTotals(item);
           if (Object.keys(statUpdates).length) await item.update(statUpdates);
+          // Propagate ActiveEffects from source item
+          await FraggedEmpireUtility.propagateActiveEffects(item, droppedItem, newItem._id);
         }
       } catch (e) {
         console.error("FE2 | _onDrop: error processing drop", e);

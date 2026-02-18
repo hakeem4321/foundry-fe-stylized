@@ -457,6 +457,34 @@ Hooks.once("ready", async function () {
     }
   }
 
+  // Migration 1.07: Add stronghits and keywords arrays to var/mod item types
+  if (foundry.utils.isNewerVersion("1.07", game.settings.get("foundry-fe2", "systemMigrationVersion"))) {
+    const stronghitTypes = new Set(["weapon", "outfit", "spacecraftweapon", "variation", "modification", "variationoutfit", "modificationoutfit", "spacecraftweaponvariation", "spacecraftweaponmodification"]);
+    const varModTypes = new Set(["variation", "modification", "variationoutfit", "modificationoutfit", "spacecraftweaponvariation", "spacecraftweaponmodification"]);
+
+    const allItems = [...game.items];
+    for (const actor of game.actors) {
+      for (const item of actor.items) allItems.push(item);
+    }
+
+    for (const item of allItems) {
+      try {
+        const updates = {};
+        if (stronghitTypes.has(item.type) && item.system.stronghits === undefined) {
+          updates["system.stronghits"] = [];
+        }
+        if (varModTypes.has(item.type) && item.system.keywords === undefined) {
+          updates["system.keywords"] = [];
+        }
+        if (Object.keys(updates).length > 0) {
+          await item.update(updates);
+        }
+      } catch (error) {
+        console.error(`FE2 | Migration 1.07 failed for Item ${item.name}:`, error);
+      }
+    }
+  }
+
   await game.settings.set("foundry-fe2", "systemMigrationVersion", game.system.version);
   ui.notifications.notify(game.i18n.localize("FE2.Notifications.MigrationComplete"));
 

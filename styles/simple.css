@@ -1525,6 +1525,42 @@ ul, li {
   height: var(--fe2-input-height);
 }
 
+/* Propagated items visual distinction */
+.foundry-fe2 .fe2-keyword-tag--propagated {
+  background: var(--fe2-bg, #e8e8e8);
+  border-style: dashed;
+  cursor: default;
+}
+.foundry-fe2 .fe2-keyword-tag--propagated .fe2-keyword-remove {
+  display: none;
+}
+.foundry-fe2 .fe2-keyword-tag--propagated .fe2-keyword-param {
+  border: none;
+  background: transparent;
+  pointer-events: none;
+  width: auto;
+}
+
+.foundry-fe2 .fe2-stronghit-entry--propagated {
+  opacity: 0.7;
+  border-left: 2px dashed var(--fe2-gray-text, #888);
+  padding-left: 4px;
+  cursor: default;
+}
+.foundry-fe2 .fe2-stronghit-entry--propagated .item-controls {
+  display: none;
+}
+
+.foundry-fe2 .effect-entry--propagated {
+  opacity: 0.7;
+  border-left: 2px dashed var(--fe2-gray-text, #888);
+  padding-left: 4px;
+  cursor: default;
+}
+.foundry-fe2 .effect-entry--propagated .effect-controls {
+  display: none;
+}
+
 
 /* ============================================================
    Section M: Utility Classes
