@@ -234,7 +234,8 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
   async _preRender(context, options) {
     await super._preRender(context, options);
     const sheetBody = this.element?.querySelector('.sheet-body');
-    this._savedScrollTop = sheetBody?.scrollTop ?? 0;
+    const scrollTop = sheetBody?.scrollTop ?? 0;
+    if (scrollTop > 0) this._savedScrollTop = scrollTop;
   }
 
   /* -------------------------------------------- */

@@ -27,7 +27,10 @@ export class FraggedEmpireSpacecraftSheet extends HandlebarsApplicationMixin(fou
   };
 
   static PARTS = {
-    body: { template: "systems/foundry-fe2/templates/spacecraft-sheet.html" }
+    body: {
+      template: "systems/foundry-fe2/templates/spacecraft-sheet.html",
+      scrollable: [".sheet-body"]
+    }
   };
 
   tabGroups = { primary: "attribute" };
@@ -75,6 +78,13 @@ export class FraggedEmpireSpacecraftSheet extends HandlebarsApplicationMixin(fou
     return context;
   }
 
+  async _preRender(context, options) {
+    await super._preRender(context, options);
+    const sheetBody = this.element?.querySelector('.sheet-body');
+    const scrollTop = sheetBody?.scrollTop ?? 0;
+    if (scrollTop > 0) this._savedScrollTop = scrollTop;
+  }
+
   _onRender(context, options) {
     super._onRender(context, options);
     // Activate tabs after render (V2 does not auto-activate from tabGroups)
@@ -83,6 +93,14 @@ export class FraggedEmpireSpacecraftSheet extends HandlebarsApplicationMixin(fou
       const tabElement = this.element?.querySelector(`[data-tab="${tab}"][data-group="${group}"]`);
       if (tabElement) this.changeTab(tab, group, {force: true});
     }
+
+    // Restore scroll position after layout is complete
+    requestAnimationFrame(() => {
+      const sheetBody = this.element?.querySelector('.sheet-body');
+      if (sheetBody && this._savedScrollTop) {
+        sheetBody.scrollTop = this._savedScrollTop;
+      }
+    });
   }
 
   static #onEditItem(event, target) {

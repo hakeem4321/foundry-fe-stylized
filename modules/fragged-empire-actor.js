@@ -141,7 +141,7 @@ export class FraggedEmpireActor extends Actor {
       const attrMods = mods ? [...(mods.attributes[key] || []), ...(mods.attributes.all || [])] : [];
       effective[key] = {
         value: attrMods.length ? Math.min(Math.round(applyModifiers(attr.value, attrMods)), effectiveMax) : attr.value,
-        current: attrMods.length ? Math.min(Math.round(applyModifiers(attr.current, attrMods)), effectiveMax) : attr.current,
+        current: Math.min(attr.current, effectiveMax),
         max: effectiveMax
       };
     }
@@ -188,7 +188,7 @@ export class FraggedEmpireActor extends Actor {
     }
 
     // Defense total (uses effective reflexes, intelligence)
-    let coverBonus = coverBonusTable[this.system.defensebonus.cover] * ea.intelligence.current;
+    let coverBonus = coverBonusTable[this.system.defensebonus.cover] * this.system.attributes.intelligence.current;
     let outfitDefBonus = 0;
     let outfits = this.items.filter(item => (item.type === 'outfit' || item.type === 'utility') && item.system.carryState !== "carried");
     for (let item of outfits) {
@@ -196,7 +196,8 @@ export class FraggedEmpireActor extends Actor {
         outfitDefBonus += Number(item.system.statstotal.defence.value);
       }
     }
-    let defBase = 10 + ea.reflexes.value + outfitDefBonus;
+    let defBase = 10 + this.system.attributes.reflexes.current + outfitDefBonus;
+    this._baseValues.defenseBase = defBase;
     let defTotal = defBase + coverBonus;
     this._baseValues.defenseTotal = defTotal;
     if (mods) defTotal = Math.round(applyModifiers(defTotal, mods.defense));
@@ -206,8 +207,7 @@ export class FraggedEmpireActor extends Actor {
     }
 
     // Recovery (uses current grit)
-    let recovery = ea.grit.current;
-    console.log(ea.grit);
+    let recovery = this.system.attributes.grit.current;
     this._baseValues.recovery = recovery;
     if (mods) recovery = Math.round(applyModifiers(recovery, mods.recovery));
     if (recovery != this.system.endurance.recovery) {
@@ -228,8 +228,8 @@ export class FraggedEmpireActor extends Actor {
     this._computed.hitBonus = mods ? Math.round(applyModifiers(0, mods.hitBonus)) : 0;
     this._computed.enduranceDamage = mods ? Math.round(applyModifiers(0, mods.enduranceDamage)) : 0;
     this._computed.utilitiesMax = mods ? Math.round(applyModifiers(1, mods.utilitiesMax)) : 1;
-    this._baseValues.movementBase = ea.mobility.value;
-    this._computed.movement = mods ? Math.round(applyModifiers(ea.mobility.value, mods.movement)) : ea.mobility.value;
+    this._baseValues.movementBase = this.system.attributes.mobility.current;
+    this._computed.movement = mods ? Math.round(applyModifiers(this.system.attributes.mobility.current, mods.movement)) : this.system.attributes.mobility.current;
     this._computed.acquisitionMod = mods ? Math.round(applyModifiers(0, mods.acquisition)) : 0;
     this._computed.arcaneMod = mods ? Math.round(applyModifiers(0, mods.arcane)) : 0;
     this._computed.untrainedSkillMod = mods ? Math.round(applyModifiers(0, mods.untrainedSkill)) : 0;
@@ -774,14 +774,7 @@ export class FraggedEmpireActor extends Actor {
   /* -------------------------------------------- */
   getDefenseBase() {
     if (this.type == 'character') {
-      let outfitBonus = 0;
-      let outfits = this.items.filter(item => (item.type === 'outfit' || item.type === 'utility') && item.system.carryState !== "carried");
-      for (let item of outfits) {
-        if ( !isNaN(item.system.statstotal?.defence?.value)) {
-          outfitBonus += Number(item.system.statstotal.defence.value);
-        }
-      }
-      return 10 + this.system.attributes.reflexes.value + outfitBonus;
+      return this._baseValues?.defenseBase ?? 0;
     }
     if (this.type == 'spacecraft') {
       return 12 - this.system.size.value + this.system.attributes.engines.value;

@@ -32,7 +32,10 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
 
   /** @override */
   static PARTS = {
-    body: { template: "systems/foundry-fe2/templates/npc-sheet.html" }
+    body: {
+      template: "systems/foundry-fe2/templates/npc-sheet.html",
+      scrollable: [".sheet-body"]
+    }
   };
 
   tabGroups = { primary: "attribute" };
@@ -83,6 +86,14 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
   /* -------------------------------------------- */
 
   /** @override */
+  async _preRender(context, options) {
+    await super._preRender(context, options);
+    const sheetBody = this.element?.querySelector('.sheet-body');
+    const scrollTop = sheetBody?.scrollTop ?? 0;
+    if (scrollTop > 0) this._savedScrollTop = scrollTop;
+  }
+
+  /** @override */
   async _onRender(context, options) {
     await super._onRender(context, options);
     // Activate tabs after render (V2 does not auto-activate from tabGroups)
@@ -91,6 +102,14 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
       const tabElement = this.element?.querySelector(`[data-tab="${tab}"][data-group="${group}"]`);
       if (tabElement) this.changeTab(tab, group, {force: true});
     }
+
+    // Restore scroll position after layout is complete
+    requestAnimationFrame(() => {
+      const sheetBody = this.element?.querySelector('.sheet-body');
+      if (sheetBody && this._savedScrollTop) {
+        sheetBody.scrollTop = this._savedScrollTop;
+      }
+    });
   }
 
   /* -------------------------------------------- */

@@ -44,7 +44,10 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
 
   /* -------------------------------------------- */
   static PARTS = {
-    body: { template: "systems/foundry-fe2/templates/actor-sheet.html" }
+    body: {
+      template: "systems/foundry-fe2/templates/actor-sheet.html",
+      scrollable: [".sheet-body"]
+    }
   };
 
   /* -------------------------------------------- */
@@ -125,6 +128,14 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
   }
 
   /* -------------------------------------------- */
+  async _preRender(context, options) {
+    await super._preRender(context, options);
+    const sheetBody = this.element?.querySelector('.sheet-body');
+    const scrollTop = sheetBody?.scrollTop ?? 0;
+    if (scrollTop > 0) this._savedScrollTop = scrollTop;
+  }
+
+  /* -------------------------------------------- */
   _onRender(context, options) {
     super._onRender(context, options);
 
@@ -134,6 +145,14 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
       const tabElement = this.element?.querySelector(`[data-tab="${tab}"][data-group="${group}"]`);
       if (tabElement) this.changeTab(tab, group, {force: true});
     }
+
+    // Restore scroll position after layout is complete
+    requestAnimationFrame(() => {
+      const sheetBody = this.element?.querySelector('.sheet-body');
+      if (sheetBody && this._savedScrollTop) {
+        sheetBody.scrollTop = this._savedScrollTop;
+      }
+    });
 
     if (!this.isEditable) return;
   }

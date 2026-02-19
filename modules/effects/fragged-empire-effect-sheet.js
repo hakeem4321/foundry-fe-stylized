@@ -24,7 +24,7 @@ export class FraggedEmpireEffectSheet extends foundry.applications.sheets.Active
     ...super.PARTS,
     details: {
       template: "systems/foundry-fe2/templates/effects/effect-details-tab.html",
-      scrollable: [""]
+      scrollable: [".tab"]
     },
     changes: {
       template: "systems/foundry-fe2/templates/effects/effect-changes-tab.html",

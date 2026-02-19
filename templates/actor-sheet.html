@@ -49,7 +49,7 @@
                 <li class="fe2-attribute-row" data-attr-key="{{key}}" data-item-id="{{attr.traitId}}">
                   <span class="fe2-attribute-name"><a class="carac-roll">{{localize attr.label}}</a></span>
                   <span class="fe2-attribute-field-label">{{localize "FE2.Sheet.Common.Current"}}:</span>
-                  {{numericStepper name=(concat "system.attributes." key ".current") value=attr.current min=0 max=attr.value}}
+                  {{numericStepper name=(concat "system.attributes." key ".current") value=attr.current min=0 max=(lookup (lookup @root.effectiveAttributes key) "value")}}
                   <span class="fe2-attribute-field-label fe2-attribute-field-label--spaced">{{localize "FE2.Sheet.Common.Max"}}:</span>
                   {{numericStepper name=(concat "system.attributes." key ".value") value=attr.value min=0 max=(lookup (lookup @root.effectiveAttributes key) "max") disabled=@root.disableScore}}
                   <span class="fe2-attribute-effective {{modColor (lookup (lookup @root.effectiveAttributes key) "value") attr.value}}">({{lookup (lookup @root.effectiveAttributes key) "value"}})</span>
