@@ -19,7 +19,9 @@ export class FraggedEmpireSpacecraftSheet extends HandlebarsApplicationMixin(fou
       createEffect: FraggedEmpireSpacecraftSheet.#onCreateEffect,
       editEffect: FraggedEmpireSpacecraftSheet.#onEditEffect,
       toggleEffect: FraggedEmpireSpacecraftSheet.#onToggleEffect,
-      deleteEffect: FraggedEmpireSpacecraftSheet.#onDeleteEffect
+      deleteEffect: FraggedEmpireSpacecraftSheet.#onDeleteEffect,
+      stepUp: FraggedEmpireSpacecraftSheet.#onStepUp,
+      stepDown: FraggedEmpireSpacecraftSheet.#onStepDown
     },
     dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }]
   };
@@ -58,6 +60,7 @@ export class FraggedEmpireSpacecraftSheet extends HandlebarsApplicationMixin(fou
     context.spacecraftAttrValueChoices = FraggedEmpireUtility.createDirectOptionList(0, 6);
     context.owner = actor.isOwner;
     context.editScore = this._editScore ??= false;
+    context.disableScore = !this._editScore;
     context.isGM = game.user.isGM;
     context.effectiveAttributes = actor._effectiveAttributes || {};
     context.computed = actor._computed || {};
@@ -159,10 +162,13 @@ export class FraggedEmpireSpacecraftSheet extends HandlebarsApplicationMixin(fou
     }
   }
 
-  /* -------------------------------------------- */
-  /*  Private Helpers                             */
-  /* -------------------------------------------- */
+  static #onStepUp(event, target) {
+    FraggedEmpireUtility.handleStepperAction(this, target, "up", event);
+  }
 
+  static #onStepDown(event, target) {
+    FraggedEmpireUtility.handleStepperAction(this, target, "down", event);
+  }
 
   /* -------------------------------------------- */
   /*  Form Submission                             */

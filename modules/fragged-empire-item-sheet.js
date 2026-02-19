@@ -35,7 +35,9 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
       toggleEffect: FraggedEmpireItemSheet.#onToggleEffect,
       deleteEffect: FraggedEmpireItemSheet.#onDeleteEffect,
       removeKeyword: FraggedEmpireItemSheet.#onRemoveKeyword,
-      viewStrongHit: FraggedEmpireItemSheet.#onViewStrongHit
+      viewStrongHit: FraggedEmpireItemSheet.#onViewStrongHit,
+      stepUp: FraggedEmpireItemSheet.#onStepUp,
+      stepDown: FraggedEmpireItemSheet.#onStepDown
     },
   };
 
@@ -404,6 +406,14 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
     if (confirmed) {
       this.document.deleteEmbeddedDocuments("ActiveEffect", [effectId]);
     }
+  }
+
+  static #onStepUp(event, target) {
+    FraggedEmpireUtility.handleStepperAction(this, target, "up", event);
+  }
+
+  static #onStepDown(event, target) {
+    FraggedEmpireUtility.handleStepperAction(this, target, "down", event);
   }
 
   /* -------------------------------------------- */

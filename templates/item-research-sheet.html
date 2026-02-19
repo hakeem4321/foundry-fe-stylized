@@ -19,7 +19,7 @@
         <div class="tab" data-group="primary" data-tab="system">
           <ul class="fe2-system-fields">
             <li class="flexrow"><label class="generic-label">{{localize "FE2.Sheet.Character.ResearchUnit"}}</label>
-              <input type="number" class="fe2-stat-input" name="system.researchunit" value="{{system.researchunit}}" data-dtype="Number"/>
+              {{numericStepper name="system.researchunit" value=system.researchunit min=0}}
             </li>
             <li class="flexrow"><label class="generic-label">{{localize "FE2.Items.Research.GainAt12"}}</label>
               <select class="competence-base" name="system.research12" value="{{system.research12}}" data-dtype="String">

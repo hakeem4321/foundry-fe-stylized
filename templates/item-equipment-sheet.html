@@ -19,10 +19,10 @@
         <div class="tab" data-group="primary" data-tab="system">
           <ul class="fe2-system-fields">
             <li class="flexrow"><label class="generic-label">{{localize "FE2.Items.Common.Weight"}}</label>
-              <input type="number" class="fe2-stat-input" name="system.weight" value="{{system.weight}}" data-dtype="Number"/>
+              {{numericStepper name="system.weight" value=system.weight min=0}}
             </li>
             <li class="flexrow"><label class="generic-label">{{localize "FE2.Items.Common.Cost"}}</label>
-              <input type="number" class="fe2-stat-input" name="system.cost" value="{{system.cost}}" data-dtype="Number"/>
+              {{numericStepper name="system.cost" value=system.cost min=0}}
             </li>
           </ul>
 

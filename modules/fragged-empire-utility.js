@@ -828,6 +828,80 @@ export class FraggedEmpireUtility  {
   }
 
   /* -------------------------------------------- */
+  static handleStepperAction(sheet, button, direction, event) {
+    const wrapper = button.closest(".fe2-numeric-stepper");
+    if (!wrapper) return;
+    const fieldName = wrapper.dataset.field;
+    const min = wrapper.dataset.min !== undefined ? Number(wrapper.dataset.min) : -Infinity;
+    const max = wrapper.dataset.max !== undefined ? Number(wrapper.dataset.max) : Infinity;
+    const step = Number(wrapper.dataset.step) || 1;
+    const currentValue = Number(wrapper.querySelector(".fe2-stepper-value")?.textContent) || 0;
+
+    if (event?.shiftKey) {
+      const shiftTarget = direction === "up" ? max : min;
+      if (isFinite(shiftTarget)) {
+        // Bounded: jump to min/max
+        if (shiftTarget === currentValue) return;
+        FraggedEmpireUtility._updateStepperValue(sheet, wrapper, fieldName, shiftTarget);
+      } else {
+        // Unbounded: show inline input for free-form entry
+        FraggedEmpireUtility._showStepperInput(sheet, wrapper, fieldName, currentValue, min, max);
+      }
+      return;
+    }
+
+    const delta = direction === "up" ? step : -step;
+    const newValue = Math.max(min, Math.min(max, currentValue + delta));
+    if (newValue === currentValue) return;
+    FraggedEmpireUtility._updateStepperValue(sheet, wrapper, fieldName, newValue);
+  }
+
+  /* -------------------------------------------- */
+  static _updateStepperValue(sheet, wrapper, fieldName, newValue) {
+    if (fieldName && !fieldName.startsWith("system.")) {
+      const item = sheet.document.items?.get(fieldName);
+      if (item) {
+        item.update({ "system.munitions": newValue });
+        return;
+      }
+    }
+    sheet.document.update({ [fieldName]: newValue });
+  }
+
+  /* -------------------------------------------- */
+  static _showStepperInput(sheet, wrapper, fieldName, currentValue, min, max) {
+    const valueSpan = wrapper.querySelector(".fe2-stepper-value");
+    if (!valueSpan) return;
+
+    // Hide buttons, replace value span with input
+    const buttons = wrapper.querySelectorAll(".fe2-stepper-btn");
+    buttons.forEach(btn => btn.style.display = "none");
+
+    const input = document.createElement("input");
+    input.type = "number";
+    input.value = currentValue;
+    input.className = "fe2-stepper-inline-input";
+    if (isFinite(min)) input.min = min;
+    if (isFinite(max)) input.max = max;
+    valueSpan.replaceWith(input);
+    input.focus();
+    input.select();
+
+    const commit = () => {
+      let val = Number(input.value) || 0;
+      if (isFinite(min)) val = Math.max(min, val);
+      if (isFinite(max)) val = Math.min(max, val);
+      FraggedEmpireUtility._updateStepperValue(sheet, wrapper, fieldName, val);
+    };
+
+    input.addEventListener("blur", commit, { once: true });
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") { e.preventDefault(); input.blur(); }
+      if (e.key === "Escape") { e.preventDefault(); input.value = currentValue; input.blur(); }
+    });
+  }
+
+  /* -------------------------------------------- */
   static async confirmDelete(actor, itemId) {
     const confirmed = await foundry.applications.api.DialogV2.confirm({
       window: { title: game.i18n.localize("FE2.Dialog.ConfirmRemoveTitle") },

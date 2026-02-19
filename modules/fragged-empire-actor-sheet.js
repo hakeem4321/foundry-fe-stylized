@@ -36,7 +36,9 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
       createEffect: FraggedEmpireActorSheet.#onCreateEffect,
       editEffect: FraggedEmpireActorSheet.#onEditEffect,
       toggleEffect: FraggedEmpireActorSheet.#onToggleEffect,
-      deleteEffect: FraggedEmpireActorSheet.#onDeleteEffect
+      deleteEffect: FraggedEmpireActorSheet.#onDeleteEffect,
+      stepUp: FraggedEmpireActorSheet.#onStepUp,
+      stepDown: FraggedEmpireActorSheet.#onStepDown
     }
   };
 
@@ -105,6 +107,7 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
       optionsBase: FraggedEmpireUtility.createDirectOptionList(0, 20),
       owner: actor.isOwner,
       editScore: this._editScore,
+      disableScore: !this._editScore,
       isGM: game.user.isGM,
       effectiveAttributes: actor._effectiveAttributes || {},
       computed: actor._computed || {},
@@ -133,16 +136,6 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
     }
 
     if (!this.isEditable) return;
-
-    // Munitions field change handler (special case for inline weapon munitions inputs)
-    const munitionsInputs = this.element.querySelectorAll(".weapon-munitions-label input");
-    for (const input of munitionsInputs) {
-      input.addEventListener("change", (event) => {
-        const weaponId = event.target.name;
-        const value = event.target.value;
-        this.document.updateWeaponMunitions(weaponId, value);
-      });
-    }
   }
 
   /* -------------------------------------------- */
@@ -317,6 +310,15 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
   }
 
   /* -------------------------------------------- */
+  static #onStepUp(event, target) {
+    FraggedEmpireUtility.handleStepperAction(this, target, "up", event);
+  }
+
+  static #onStepDown(event, target) {
+    FraggedEmpireUtility.handleStepperAction(this, target, "down", event);
+  }
+
+  /* -------------------------------------------- */
   /*  Private Helpers                             */
   /* -------------------------------------------- */
 
@@ -428,8 +430,6 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
   /* -------------------------------------------- */
 
   async _onChangeForm(formConfig, event) {
-    // Munitions inputs are handled by dedicated event listeners in _onRender
-    if (event?.target?.closest(".weapon-munitions-label")) return;
     const target = event?.target;
     if (!target?.name) return;
     // Build update from the single changed field only — collecting the entire form

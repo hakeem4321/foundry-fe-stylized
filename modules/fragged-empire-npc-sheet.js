@@ -23,7 +23,9 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
       createEffect: FraggedEmpireNPCSheet.#onCreateEffect,
       editEffect: FraggedEmpireNPCSheet.#onEditEffect,
       toggleEffect: FraggedEmpireNPCSheet.#onToggleEffect,
-      deleteEffect: FraggedEmpireNPCSheet.#onDeleteEffect
+      deleteEffect: FraggedEmpireNPCSheet.#onDeleteEffect,
+      stepUp: FraggedEmpireNPCSheet.#onStepUp,
+      stepDown: FraggedEmpireNPCSheet.#onStepDown
     },
     dragDrop: [{ dragSelector: ".item-list .item", dropSelector: null }]
   };
@@ -64,6 +66,7 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
     context.owner = actor.isOwner;
     context.npcTypeChoices = FraggedEmpireUtility.buildNPCTypeChoices();
     context.editScore = this._editScore ??= false;
+    context.disableScore = !this._editScore;
     context.isGM = game.user.isGM;
     context.computed = actor._computed || {};
     context.baseValues = actor._baseValues || {};
@@ -226,10 +229,13 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
     }
   }
 
-  /* -------------------------------------------- */
-  /*  Private Helpers                             */
-  /* -------------------------------------------- */
+  static #onStepUp(event, target) {
+    FraggedEmpireUtility.handleStepperAction(this, target, "up", event);
+  }
 
+  static #onStepDown(event, target) {
+    FraggedEmpireUtility.handleStepperAction(this, target, "down", event);
+  }
 
   /* -------------------------------------------- */
   /*  Form Submission                             */

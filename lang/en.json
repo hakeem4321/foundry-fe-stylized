@@ -68,7 +68,10 @@
         "Influence": "Influence",
         "StrongHits": "Strong Hits",
         "TradeGoods": "Trade goods",
-        "PostToChat": "Post to Chat"
+        "PostToChat": "Post to Chat",
+        "SpeciesMax": "Species Max:",
+        "StepDown": "Decrease (Shift+Click: set to minimum)",
+        "StepUp": "Increase (Shift+Click: set to maximum)"
       },
       "Character": {
         "Resources": "Resources",

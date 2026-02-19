@@ -81,12 +81,12 @@
                   <li class="item flexrow list-item stack-left" data-attr-key="{{key}}" data-item-id="{{stat.traitId}}">
                     <span class="stat-label " name="{{key}}">{{localize stat.label}}</span>
                     {{#if stat.bonus}}
-                    <input type="text" class="input-numeric-short fe2-stat-input padd-right" name="system.stats.{{key}}.bonus" value="{{stat.bonus}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/>
+                    {{numericStepper name=(concat "system.stats." key ".bonus") value=stat.bonus disabled=@root.disableScore}}
                     {{/if}}
                     {{#if stat.max}}
                     <span class="stat-label padd-left" name="{{key}}"> <span class="{{modColor stat.max (lookup @root.baseValues.statMaxes key)}}">{{stat.max}}</span></span>
                     {{/if}}
-                    <input type="text" class="input-numeric-short fe2-stat-input padd-right" name="system.stats.{{key}}.value" value="{{stat.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/>
+                    {{numericStepper name=(concat "system.stats." key ".value") value=stat.value disabled=@root.disableScore}}
                   </li>
                   {{/each}}
                 </ul>    
@@ -105,11 +105,11 @@
             <div class="flexrow stack-left">     
               <span class="stat-label packed-left padd-right"><strong>{{localize fight.label}}</strong></span>
               {{#if fight.valueonly}}
-              <input type="text" class="input-numeric-short fe2-stat-input padd-right"  name="system.fight.{{key}}.value" value="{{fight.value}}" data-dtype="Number"/>
+              {{numericStepper name=(concat "system.fight." key ".value") value=fight.value min=0}}
               {{else}}
               <span class="stat-label padd-right padd-left packed-left">{{localize "FE2.Sheet.Common.Base"}} : {{fight.base}}</span>
               <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
-              <input type="text" class="input-numeric-short fe2-stat-input padd-right"  name="system.fight.{{key}}.bonus" value="{{fight.bonus}}" data-dtype="Number"/>
+              {{numericStepper name=(concat "system.fight." key ".bonus") value=fight.bonus}}
               <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Total"}} : <span class="{{modColor fight.total (lookup @root.baseValues.fightTotals key)}}">{{fight.total}}</span></span>
               {{/if}}
             </div>         
@@ -118,10 +118,10 @@
               <li class="item flexrow list-item stack-left">
                 <span class="stat-label padd-left padd-right packed-left">{{localize derivated.label}}</span>
                 {{#if derivated.valueonly}}
-                <input type="text" class="input-numeric-short fe2-stat-input padd-right"  name="system.fight.{{key}}.derivated.{{keydev}}.value" value="{{derivated.value}}" data-dtype="Number"/>
+                {{numericStepper name=(concat "system.fight." key ".derivated." keydev ".value") value=derivated.value min=0}}
                 {{else}}
                 <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Bonus"}} :</span>
-                <input type="text" class="input-numeric-short fe2-stat-input padd-right"  name="system.fight.{{key}}.derivated.{{keydev}}.bonus" value="{{derivated.bonus}}" data-dtype="Number"/>
+                {{numericStepper name=(concat "system.fight." key ".derivated." keydev ".bonus") value=derivated.bonus}}
                 <span class="stat-label padd-left padd-right packed-left">{{localize "FE2.Sheet.Common.Total"}} : {{derivated.total}}</span>
                 {{/if}}
               </li>

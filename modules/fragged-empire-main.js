@@ -43,6 +43,51 @@ Hooks.once("init", async function () {
   });
 
   /* -------------------------------------------- */
+  // Custom Handlebars helper: numeric stepper component
+  Handlebars.registerHelper("numericStepper", function (options) {
+    const name = options.hash.name ?? "";
+    const rawValue = options.hash.value;
+    const strValue = String(rawValue ?? "");
+    const isNumeric = strValue.trim() === "" || !isNaN(Number(strValue));
+    const value = isNumeric ? Number(strValue) : 0;
+    const min = options.hash.min !== undefined ? Number(options.hash.min) : -Infinity;
+    const max = options.hash.max !== undefined ? Number(options.hash.max) : Infinity;
+    const step = Number(options.hash.step) || 1;
+    const disabled = options.hash.disabled;
+
+    // Non-numeric values: fall back to plain display or input
+    if (!isNumeric) {
+      if (disabled) {
+        return new Handlebars.SafeString(
+          `<div class="fe2-numeric-stepper fe2-numeric-stepper--disabled"><span class="fe2-stepper-value">${Handlebars.Utils.escapeExpression(strValue)}</span></div>`
+        );
+      }
+      return new Handlebars.SafeString(
+        `<input type="text" class="input-numeric-short fe2-stat-input" name="${Handlebars.Utils.escapeExpression(name)}" value="${Handlebars.Utils.escapeExpression(strValue)}" data-dtype="String"/>`
+      );
+    }
+
+    if (disabled) {
+      return new Handlebars.SafeString(
+        `<div class="fe2-numeric-stepper fe2-numeric-stepper--disabled"><span class="fe2-stepper-value">${value}</span></div>`
+      );
+    }
+
+    const downDisabled = value <= min ? ' disabled' : '';
+    const upDisabled = value >= max ? ' disabled' : '';
+    const downTitle = game.i18n.localize("FE2.Sheet.Common.StepDown");
+    const upTitle = game.i18n.localize("FE2.Sheet.Common.StepUp");
+
+    return new Handlebars.SafeString(
+      `<div class="fe2-numeric-stepper" data-field="${name}" data-min="${min}" data-max="${max}" data-step="${step}">` +
+        `<button type="button" class="fe2-stepper-btn" data-action="stepDown" title="${downTitle}"${downDisabled}><i class="fas fa-minus"></i></button>` +
+        `<span class="fe2-stepper-value">${value}</span>` +
+        `<button type="button" class="fe2-stepper-btn" data-action="stepUp" title="${upTitle}"${upDisabled}><i class="fas fa-plus"></i></button>` +
+      `</div>`
+    );
+  });
+
+  /* -------------------------------------------- */
   // Custom Handlebars helper: return CSS class name for color-coding modified values
   Handlebars.registerHelper("modColor", function (effective, base) {
     const eff = Number(effective);

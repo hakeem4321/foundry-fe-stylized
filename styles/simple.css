@@ -524,6 +524,83 @@ ul, li {
   background: var(--fe2-input-bg);
 }
 
+/* Numeric Stepper Component */
+.foundry-fe2 .fe2-numeric-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  height: var(--fe2-input-compact-height);
+  flex: 0 0 auto;
+}
+
+.foundry-fe2 .fe2-numeric-stepper .fe2-stepper-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: var(--fe2-input-compact-height);
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  border-radius: var(--fe2-border-radius);
+  color: var(--fe2-text-value);
+  cursor: pointer;
+  font-size: var(--fe2-font-size-xs);
+  line-height: 1;
+}
+
+.foundry-fe2 .fe2-numeric-stepper .fe2-stepper-btn:hover:not(:disabled) {
+  border: 1px solid var(--fe2-input-border);
+  color: var(--fe2-text-heading);
+}
+
+.foundry-fe2 .fe2-numeric-stepper .fe2-stepper-btn:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.foundry-fe2 .fe2-numeric-stepper .fe2-stepper-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: var(--fe2-input-compact-height);
+  text-align: center;
+  color: var(--fe2-text-value);
+  font-family: var(--fe2-font-body);
+}
+
+.foundry-fe2 .fe2-stepper-inline-input {
+  width: 4rem;
+  height: var(--fe2-input-compact-height);
+  text-align: center;
+  font-family: var(--fe2-font-body);
+  color: var(--fe2-text-value);
+  border: 1px solid var(--fe2-accent);
+  border-radius: 3px;
+  padding: 0 var(--fe2-space-xs);
+}
+
+.foundry-fe2 .fe2-numeric-stepper--disabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--fe2-input-compact-height);
+  flex: 0 0 auto;
+}
+
+.foundry-fe2 .fe2-numeric-stepper--disabled .fe2-stepper-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: var(--fe2-input-compact-height);
+  text-align: center;
+  color: var(--fe2-text-value);
+  font-family: var(--fe2-font-body);
+}
+
 /* Stat tables: header styling + alternating rows */
 .fe2-stat-table {
   width: 100%;
@@ -1206,6 +1283,63 @@ ul, li {
   font-size: var(--fe2-font-size-xs);
   color: var(--fe2-text);
   margin-left: var(--fe2-space-xs);
+}
+
+/* Attribute row — inline layout */
+.foundry-fe2 .fe2-attribute-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.foundry-fe2 .fe2-attribute-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fe2-space-xs);
+  padding: var(--fe2-space-xs) 0;
+  width: 100%;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--fe2-border);
+}
+
+.foundry-fe2 .fe2-attribute-name {
+  font-family: var(--fe2-font-heading);
+  font-weight: bold;
+  min-width: 5rem;
+}
+
+.foundry-fe2 .fe2-attribute-name a {
+  color: var(--fe2-text-value);
+}
+
+.foundry-fe2 .fe2-attribute-field-label {
+  font-size: var(--fe2-font-size-xs);
+  color: var(--fe2-text-label);
+}
+
+.foundry-fe2 .fe2-attribute-field-label--spaced {
+  margin-left: var(--fe2-space-sm);
+}
+
+.foundry-fe2 .fe2-attribute-effective {
+  color: var(--fe2-text);
+}
+
+.foundry-fe2 .fe2-attribute-effective.fe2-mod-up {
+  color: var(--fe2-green);
+}
+
+.foundry-fe2 .fe2-attribute-effective.fe2-mod-down {
+  color: var(--fe2-red);
+}
+
+.foundry-fe2 .fe2-attribute-species-max {
+  font-size: var(--fe2-font-size-sm);
+  font-weight: bold;
+}
+
+.foundry-fe2 .fe2-attribute-edit {
+  margin-left: auto;
 }
 
 /* Active Effect Config Sheet */

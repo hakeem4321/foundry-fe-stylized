@@ -13,9 +13,7 @@
         <div class="flexrow fe2-header-subrow">
           <span class="fe2-field">
             <span class="stat-label">{{localize "FE2.Sheet.Common.Level"}}</span>
-            <input type="text" class="input-numeric-short fe2-stat-input"
-                   name="system.level.value" value="{{system.level.value}}"
-                   data-dtype="Number" {{#unless editScore}}disabled{{/unless}}/>
+            {{numericStepper name="system.level.value" value=system.level.value min=0 disabled=disableScore}}
           </span>
           {{#if species}}
           <a class="fe2-species-name" data-action="editItem" data-item-id="{{species.id}}"
@@ -45,20 +43,21 @@
           <div class="grid grid-2col">
             <div class="">
 
-              <h3 class="fe2-section-header">{{localize "FE2.Tabs.Attributes"}} ({{localize "FE2.Sheet.Common.Current"}}/{{localize "FE2.Sheet.Common.Max"}})</h3>
-              <ul>
+              <h3 class="fe2-section-header">{{localize "FE2.Tabs.Attributes"}}</h3>
+              <ul class="fe2-attribute-list">
                 {{#each system.attributes as |attr key|}}
-                <li class="item flexrow list-item" data-attr-key="{{key}}" data-item-id="{{attr.traitId}}">
-                  <span class="stat-label flexrow" name="{{key}}"><a class="carac-roll">{{localize attr.label}}</a></span>
-                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.attributes.{{key}}.current" value="{{attr.current}}" data-dtype="Number"/>
-                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.attributes.{{key}}.value" value="{{attr.value}}" data-dtype="Number"/>
-                  <span class="{{modColor (lookup (lookup @root.effectiveAttributes key) "value") attr.value}}">{{lookup (lookup @root.effectiveAttributes key) "value"}}</span>
-                  <span class="attribute-max-label" title="{{localize "FE2.Effects.Fields.AttributeMax"}}">/ <span class="{{modColor (lookup (lookup @root.effectiveAttributes key) "max") (lookup @root.baseValues.attributeMaxes key)}}">{{lookup (lookup @root.effectiveAttributes key) "max"}}</span></span>
-                  <div class="item-controls">
-                    {{#if (ne attr.traitId "")}}
-                    <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
-                    {{/if}}
-                  </div>
+                <li class="fe2-attribute-row" data-attr-key="{{key}}" data-item-id="{{attr.traitId}}">
+                  <span class="fe2-attribute-name"><a class="carac-roll">{{localize attr.label}}</a></span>
+                  <span class="fe2-attribute-field-label">{{localize "FE2.Sheet.Common.Current"}}:</span>
+                  {{numericStepper name=(concat "system.attributes." key ".current") value=attr.current min=0 max=attr.value}}
+                  <span class="fe2-attribute-field-label fe2-attribute-field-label--spaced">{{localize "FE2.Sheet.Common.Max"}}:</span>
+                  {{numericStepper name=(concat "system.attributes." key ".value") value=attr.value min=0 max=(lookup (lookup @root.effectiveAttributes key) "max") disabled=@root.disableScore}}
+                  <span class="fe2-attribute-effective {{modColor (lookup (lookup @root.effectiveAttributes key) "value") attr.value}}">({{lookup (lookup @root.effectiveAttributes key) "value"}})</span>
+                  <span class="fe2-attribute-field-label fe2-attribute-field-label--spaced">{{localize "FE2.Sheet.Common.SpeciesMax"}}</span>
+                  <span class="fe2-attribute-species-max {{modColor (lookup (lookup @root.effectiveAttributes key) "max") (lookup @root.baseValues.attributeMaxes key)}}">{{lookup (lookup @root.effectiveAttributes key) "max"}}</span>
+                  {{#if (ne attr.traitId "")}}
+                  <a class="item-control fe2-attribute-edit" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
+                  {{/if}}
                 </li>
                 {{/each}}
               </ul>  
@@ -72,7 +71,7 @@
               <ul>
                 <li class="item flexrow list-item stack-left" data-attr-key="fate" data-item-id="{{system.influence.traitId}}">
                   <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Current"}} :</span>
-                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.influence.value" value="{{system.influence.value}}" data-dtype="Number"/></span>
+                  {{numericStepper name="system.influence.value" value=system.influence.value min=0 max=system.influence.total}}</span>
                   <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : <span class="{{modColor system.influence.total baseValues.influenceTotal}}">{{system.influence.total}}</span></span></span>
                   <div class="item-controls">
                     {{#if (ne system.influence.traitId "")}}
@@ -86,7 +85,7 @@
               <ul>
                 <li class="item flexrow list-item stack-left" data-item-id="{{lang.id}}">
                   <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.SpareTimePoints"}} :</span>
-                  <input type="text" class="input-numeric-short fe2-stat-input" name="system.sparetimepoints.value" value="{{system.sparetimepoints.value}}" data-dtype="Number"/></span>
+                  {{numericStepper name="system.sparetimepoints.value" value=system.sparetimepoints.value min=0}}</span>
                 </li>                  
               </ul>
 
@@ -225,7 +224,7 @@
           <ul>
             <li class="item flexrow list-item stack-left">
               <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Character.GritRerolls"}} :</span>
-              <input type="text" class="input-numeric-short fe2-stat-input" name="system.gritreroll.value" value="{{system.gritreroll.value}}" data-dtype="Number"/></span>
+              {{numericStepper name="system.gritreroll.value" value=system.gritreroll.value min=0 max=system.gritreroll.max}}</span>
               <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : <span class="{{modColor system.gritreroll.max baseValues.gritRerollMax}}">{{system.gritreroll.max}}</span></span></span>
             </li>
             <li class="item flexrow list-item stack-left">
@@ -273,7 +272,7 @@
                 <ul>
                   <li class="item flexrow list-item stack-left">
                     <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Current"}} :</span>
-                    <input type="text" class="input-numeric-short fe2-stat-input" name="system.endurance.value" value="{{system.endurance.value}}" data-dtype="Number"/></span>
+                    {{numericStepper name="system.endurance.value" value=system.endurance.value min=0 max=system.endurance.max}}</span>
                     <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} : <span class="{{modColor system.endurance.max baseValues.enduranceMax}}">{{system.endurance.max}}</span></span></span>
                   </li>
                   <li class="item flexrow list-item stack-left">
@@ -316,7 +315,7 @@
                 <span class="specialisation-label">{{weapon.system.statstotal.enddmg.value}}</span>
                 <span class="specialisation-label">{{weapon.system.statstotal.crit.value}}</span>
                 <span class="specialisation-label">{{weapon.system.statstotal.range.value}}</span>
-                <span class="specialisation-label weapon-munitions-label"><input type="text" class="fe2-stat-input" name="{{weapon.id}}" value="{{weapon.system.munitions}}" data-dtype="Number"/></span>
+                <span class="specialisation-label weapon-munitions-label">{{numericStepper name=weapon.id value=weapon.system.munitions min=0}}</span>
               </li>
               {{/if}}
               {{/each}}
