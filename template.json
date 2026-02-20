@@ -732,9 +732,13 @@
           "value": "",
           "label": "FE2.Stats.Outfit.OutfitType"
         },
+        "acquire": {
+          "value": "",
+          "label": "FE2.Stats.Equipment.Acquire"
+        },
         "resources": {
           "value": "",
-          "label": "FE2.Stats.Outfit.Cost"
+          "label": "FE2.Stats.Equipment.Resource"
         }
       },
       "statstotal": {
@@ -758,9 +762,13 @@
           "value": "",
           "label": "FE2.Stats.Outfit.OutfitType"
         },
+        "acquire": {
+          "value": "",
+          "label": "FE2.Stats.Equipment.Acquire"
+        },
         "resources": {
           "value": "",
-          "label": "FE2.Stats.Outfit.Cost"
+          "label": "FE2.Stats.Equipment.Resource"
         }
       },
       "keywords": [],
@@ -774,84 +782,37 @@
     },
     "utility": {
       "stats": {
-        "armour": {
+        "acquire": {
           "value": "",
-          "label": "FE2.Stats.Outfit.Armour"
+          "label": "FE2.Stats.Equipment.Acquire"
         },
-        "defence": {
+        "resources": {
           "value": "",
-          "label": "FE2.Stats.Outfit.Defence"
-        },
-        "endurance": {
-          "value": "",
-          "label": "FE2.Stats.Outfit.Endurance"
-        },
-        "cover": {
-          "value": "",
-          "label": "FE2.Stats.Outfit.Cover"
-        },
-        "frontcover": {
-          "value": "",
-          "label": "FE2.Stats.Outfit.FrontCover"
-        },
-        "equipmentslots": {
-          "value": "",
-          "label": "FE2.Stats.Outfit.EquippedEquipmentSlots"
-        },
-        "weight": {
-          "value": "",
-          "label": "FE2.Stats.Outfit.Weight"
-        },
-        "cost": {
-          "value": "",
-          "label": "FE2.Stats.Outfit.Cost"
+          "label": "FE2.Stats.Equipment.Resource"
         }
       },
       "statstotal": {
-        "armour": {
+        "acquire": {
           "value": "",
-          "label": "FE2.Stats.Outfit.Armour"
+          "label": "FE2.Stats.Equipment.Acquire"
         },
-        "defence": {
+        "resources": {
           "value": "",
-          "label": "FE2.Stats.Outfit.Defence"
-        },
-        "endurance": {
-          "value": "",
-          "label": "FE2.Stats.Outfit.Endurance"
-        },
-        "cover": {
-          "value": "",
-          "label": "FE2.Stats.Outfit.Cover"
-        },
-        "frontcover": {
-          "value": "",
-          "label": "FE2.Stats.Outfit.FrontCover"
-        },
-        "equipmentslots": {
-          "value": "",
-          "label": "FE2.Stats.Outfit.EquippedEquipmentSlots"
-        },
-        "weight": {
-          "value": "",
-          "label": "FE2.Stats.Outfit.Weight"
-        },
-        "cost": {
-          "value": "",
-          "label": "FE2.Stats.Outfit.Cost"
+          "label": "FE2.Stats.Equipment.Resource"
         }
       },
       "keywords": [],
       "description": "",
       "slots": 2,
-      "hands": 2,
+      "hands": 0,
       "draw": 1,
       "reload": 2,
       "carryState": "carried"
     },
     "equipment": {
       "type": "equipment",
-      "cost": 0,
+      "acquire": 0,
+      "resource": 0,
       "description": "",
       "slots": 2,
       "hands": 2,

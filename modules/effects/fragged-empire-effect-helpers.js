@@ -48,7 +48,20 @@ export function createEmptyModifiers() {
     weaponSlotsMax: [],
     resupplyMax: [],
     handsMax: [],
-    weaponsMax: []
+    weaponsMax: [],
+    // NPC-specific
+    npcAttribute: [],
+    npcMobility: [],
+    npcBodies: [],
+    npcDurability: [],
+    // Attack-specific (stored, applied later)
+    attackTargetArmour: [],
+    attackTargetArmourCrit: [],
+    attackTargetCover: [],
+    attackSelfCover: [],
+    // Skill tools (stored, applied later)
+    skillToolbox: {},
+    skillWorkshop: {}
   };
 }
 
@@ -93,6 +106,18 @@ export function addModifier(modifiers, parsed, change, effectName, effectId) {
       if (!modifiers.attributeMax[parsed.targetId]) modifiers.attributeMax[parsed.targetId] = [];
       modifiers.attributeMax[parsed.targetId].push(entry);
       break;
+    case EFFECT_TARGET_TYPES.skillToolbox: {
+      const id = parsed.targetId || "all";
+      if (!modifiers.skillToolbox[id]) modifiers.skillToolbox[id] = [];
+      modifiers.skillToolbox[id].push(entry);
+      break;
+    }
+    case EFFECT_TARGET_TYPES.skillWorkshop: {
+      const id = parsed.targetId || "all";
+      if (!modifiers.skillWorkshop[id]) modifiers.skillWorkshop[id] = [];
+      modifiers.skillWorkshop[id].push(entry);
+      break;
+    }
     default: {
       // Simple target types map directly to a bucket array
       const bucket = modifiers[parsed.targetType];

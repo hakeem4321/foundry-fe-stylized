@@ -1821,6 +1821,36 @@ ul, li {
   color: var(--fe2-text);
 }
 
+/* L.2: Inline keyword tags for fight tab item lists */
+.foundry-fe2 .fe2-item-keywords-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fe2-space-xs);
+  padding: 0 0 var(--fe2-space-xs) calc(var(--fe2-icon-sm) + 0.25rem);
+}
+
+.foundry-fe2 .fe2-keyword-tag-inline {
+  display: inline-block;
+  padding: 1px var(--fe2-space-xs);
+  font-size: var(--fe2-font-size-xs);
+  background: var(--fe2-green-light);
+  border-radius: var(--fe2-border-radius);
+  color: var(--fe2-text);
+  cursor: default;
+}
+
+/* L.3: Utility description row in fight tab */
+.foundry-fe2 .fe2-item-description-row {
+  padding: 0 var(--fe2-space-sm) var(--fe2-space-xs) calc(var(--fe2-icon-sm) + 0.25rem);
+  font-size: var(--fe2-font-size-sm);
+  color: var(--fe2-text);
+  line-height: 1.3;
+}
+
+.foundry-fe2 .fe2-item-description-row p {
+  margin: 0;
+}
+
 /* ============================================================
    Section M: Utility Classes
    ============================================================ */

@@ -74,6 +74,20 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
     context.computed = actor._computed || {};
     context.baseValues = actor._baseValues || {};
 
+    // Effect-modified value indicators for fight tab
+    const comp = actor._computed || {};
+    const base = actor._baseValues || {};
+    context.hasEffectMods = {
+      defence: comp.defence !== base.defence,
+      armour: comp.armour !== base.armour,
+      enduranceMax: comp.enduranceMax !== base.enduranceMax,
+      movement: comp.movement !== base.movement,
+      attribute: comp.attribute !== base.attribute,
+      mobility: comp.mobility !== base.mobility,
+      bodies: comp.bodies !== base.bodies,
+      durability: comp.durability !== base.durability
+    };
+
     // NPC type flags
     context.isCompanion = actor.system.npctype === "companion";
 
@@ -86,6 +100,9 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
         context.controllerAttributes = controller.system.attributes;
       }
     }
+
+    // Race/species for header display
+    context.species = actor.getRaces()?.[0] ?? null;
 
     // Keywords, variations, modifications (owned items)
     context.keywords = actor.system.getKeywords();
@@ -183,7 +200,7 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
 
   static #onCreateEffect(event, target) {
     const effectData = {
-      name: game.i18n.localize("FE2.Effects.UI.AddEffect"),
+      name: this.document.name,
       img: "icons/svg/aura.svg",
       origin: this.document.uuid,
       transfer: false,
@@ -242,11 +259,17 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
       const item = await fromUuid(data.uuid);
       if (!item) return super._onDrop(event);
 
-      // Enforce single-variation limit: replace existing variation
-      if (item.type === "variation") {
-        const existing = this.document.items.filter(i => i.type === "variation");
-        if (existing.length > 0) {
-          await this.document.deleteEmbeddedDocuments("Item", existing.map(i => i.id));
+      // Reject utility items on NPCs
+      if (item.type === "utility") {
+        ui.notifications.warn(game.i18n.localize("FE2.Notifications.UtilityNotAllowed"));
+        return;
+      }
+
+      // Race drag-replace: delete existing race before accepting new one
+      if (item.type === "race") {
+        const existingRaces = this.document.items.filter(i => i.type === "race");
+        if (existingRaces.length > 0) {
+          await this.document.deleteEmbeddedDocuments("Item", existingRaces.map(i => i.id));
         }
       }
     }

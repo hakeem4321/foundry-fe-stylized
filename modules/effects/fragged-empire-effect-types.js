@@ -36,7 +36,20 @@ export const EFFECT_TARGET_TYPES = {
   weaponSlotsMax: "weaponSlotsMax",
   resupplyMax: "resupplyMax",
   handsMax: "handsMax",
-  weaponsMax: "weaponsMax"
+  weaponsMax: "weaponsMax",
+  // NPC-specific
+  npcAttribute: "npcAttribute",
+  npcMobility: "npcMobility",
+  npcBodies: "npcBodies",
+  npcDurability: "npcDurability",
+  // Attack-specific (stored only, applied in attack dialog later)
+  attackTargetArmour: "attackTargetArmour",
+  attackTargetArmourCrit: "attackTargetArmourCrit",
+  attackTargetCover: "attackTargetCover",
+  attackSelfCover: "attackSelfCover",
+  // Skill tool effects (stored only, applied in roll dialog later)
+  skillToolbox: "skillToolbox",
+  skillWorkshop: "skillWorkshop"
 };
 
 /* -------------------------------------------- */
@@ -49,7 +62,9 @@ export const EFFECT_CATEGORIES = {
     types: [
       { type: EFFECT_TARGET_TYPES.skill, label: "FE2.Effects.TargetTypes.Skill", hasSubtype: true },
       { type: EFFECT_TARGET_TYPES.allSkills, label: "FE2.Effects.TargetTypes.AllSkills" },
-      { type: EFFECT_TARGET_TYPES.untrainedSkill, label: "FE2.Effects.TargetTypes.UntrainedSkill" }
+      { type: EFFECT_TARGET_TYPES.untrainedSkill, label: "FE2.Effects.TargetTypes.UntrainedSkill" },
+      { type: EFFECT_TARGET_TYPES.skillToolbox, label: "FE2.Effects.TargetTypes.SkillToolbox", hasSubtype: true },
+      { type: EFFECT_TARGET_TYPES.skillWorkshop, label: "FE2.Effects.TargetTypes.SkillWorkshop", hasSubtype: true }
     ]
   },
   attributes: {
@@ -97,6 +112,24 @@ export const EFFECT_CATEGORIES = {
       { type: EFFECT_TARGET_TYPES.weaponSlotsMax, label: "FE2.Effects.TargetTypes.WeaponSlotsMax" },
       { type: EFFECT_TARGET_TYPES.resupplyMax, label: "FE2.Effects.TargetTypes.ResupplyMax" }
     ]
+  },
+  npc: {
+    label: "FE2.Effects.Categories.NPC",
+    types: [
+      { type: EFFECT_TARGET_TYPES.npcAttribute, label: "FE2.Effects.TargetTypes.NPCAttribute" },
+      { type: EFFECT_TARGET_TYPES.npcMobility, label: "FE2.Effects.TargetTypes.NPCMobility" },
+      { type: EFFECT_TARGET_TYPES.npcBodies, label: "FE2.Effects.TargetTypes.NPCBodies" },
+      { type: EFFECT_TARGET_TYPES.npcDurability, label: "FE2.Effects.TargetTypes.NPCDurability" }
+    ]
+  },
+  attack: {
+    label: "FE2.Effects.Categories.Attack",
+    types: [
+      { type: EFFECT_TARGET_TYPES.attackTargetArmour, label: "FE2.Effects.TargetTypes.AttackTargetArmour" },
+      { type: EFFECT_TARGET_TYPES.attackTargetArmourCrit, label: "FE2.Effects.TargetTypes.AttackTargetArmourCrit" },
+      { type: EFFECT_TARGET_TYPES.attackTargetCover, label: "FE2.Effects.TargetTypes.AttackTargetCover" },
+      { type: EFFECT_TARGET_TYPES.attackSelfCover, label: "FE2.Effects.TargetTypes.AttackSelfCover" }
+    ]
   }
 };
 
@@ -130,7 +163,17 @@ const KEY_MAP = {
   "fe2.weaponslots.max": { targetType: EFFECT_TARGET_TYPES.weaponSlotsMax, targetId: null },
   "fe2.resupply.max": { targetType: EFFECT_TARGET_TYPES.resupplyMax, targetId: null },
   "fe2.hands.max": { targetType: EFFECT_TARGET_TYPES.handsMax, targetId: null },
-  "fe2.weapons.max": { targetType: EFFECT_TARGET_TYPES.weaponsMax, targetId: null }
+  "fe2.weapons.max": { targetType: EFFECT_TARGET_TYPES.weaponsMax, targetId: null },
+  // NPC
+  "fe2.npc.attribute": { targetType: EFFECT_TARGET_TYPES.npcAttribute, targetId: null },
+  "fe2.npc.mobility": { targetType: EFFECT_TARGET_TYPES.npcMobility, targetId: null },
+  "fe2.npc.bodies": { targetType: EFFECT_TARGET_TYPES.npcBodies, targetId: null },
+  "fe2.npc.durability": { targetType: EFFECT_TARGET_TYPES.npcDurability, targetId: null },
+  // Attack
+  "fe2.attack.targetarmour": { targetType: EFFECT_TARGET_TYPES.attackTargetArmour, targetId: null },
+  "fe2.attack.targetarmourcrit": { targetType: EFFECT_TARGET_TYPES.attackTargetArmourCrit, targetId: null },
+  "fe2.attack.targetcover": { targetType: EFFECT_TARGET_TYPES.attackTargetCover, targetId: null },
+  "fe2.attack.selfcover": { targetType: EFFECT_TARGET_TYPES.attackSelfCover, targetId: null }
 };
 
 /* -------------------------------------------- */
@@ -160,6 +203,16 @@ export function parseEffectKey(key) {
     }
     if (parts[1] === "attributemax") {
       return { targetType: EFFECT_TARGET_TYPES.attributeMax, targetId: parts[2] };
+    }
+  }
+
+  // fe2.skill.toolbox.<skillId|all>, fe2.skill.workshop.<skillId|all>
+  if (parts.length === 4 && parts[1] === "skill") {
+    if (parts[2] === "toolbox") {
+      return { targetType: EFFECT_TARGET_TYPES.skillToolbox, targetId: parts[3] };
+    }
+    if (parts[2] === "workshop") {
+      return { targetType: EFFECT_TARGET_TYPES.skillWorkshop, targetId: parts[3] };
     }
   }
 
@@ -236,6 +289,29 @@ export function buildEffectKey(targetType, targetId) {
       return "fe2.hands.max";
     case EFFECT_TARGET_TYPES.weaponsMax:
       return "fe2.weapons.max";
+    // NPC
+    case EFFECT_TARGET_TYPES.npcAttribute:
+      return "fe2.npc.attribute";
+    case EFFECT_TARGET_TYPES.npcMobility:
+      return "fe2.npc.mobility";
+    case EFFECT_TARGET_TYPES.npcBodies:
+      return "fe2.npc.bodies";
+    case EFFECT_TARGET_TYPES.npcDurability:
+      return "fe2.npc.durability";
+    // Attack
+    case EFFECT_TARGET_TYPES.attackTargetArmour:
+      return "fe2.attack.targetarmour";
+    case EFFECT_TARGET_TYPES.attackTargetArmourCrit:
+      return "fe2.attack.targetarmourcrit";
+    case EFFECT_TARGET_TYPES.attackTargetCover:
+      return "fe2.attack.targetcover";
+    case EFFECT_TARGET_TYPES.attackSelfCover:
+      return "fe2.attack.selfcover";
+    // Skill tools
+    case EFFECT_TARGET_TYPES.skillToolbox:
+      return `fe2.skill.toolbox.${targetId || "all"}`;
+    case EFFECT_TARGET_TYPES.skillWorkshop:
+      return `fe2.skill.workshop.${targetId || "all"}`;
     default:
       return "";
   }

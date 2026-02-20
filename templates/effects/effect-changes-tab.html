@@ -19,8 +19,9 @@
 
       {{!-- Skill subtype (always rendered, shown/hidden via CSS) --}}
       <select class="effect-field-skill" data-index="{{idx}}" data-field="skillId"
-        style="{{#unless (eq change.targetType 'skill')}}display:none{{/unless}}">
+        style="{{#unless (or (eq change.targetType 'skill') (eq change.targetType 'skillToolbox') (eq change.targetType 'skillWorkshop'))}}display:none{{/unless}}">
         <option value="">{{localize "FE2.Effects.UI.SelectSubtype"}}</option>
+        <option value="all" {{#if (eq change.targetId "all")}}selected{{/if}}>{{localize "FE2.Effects.TargetTypes.AllSkills"}}</option>
         {{#each ../skillOptions as |opt oKey|}}
         <option value="{{opt.value}}" {{#if (eq opt.value change.targetId)}}selected{{/if}}>{{opt.label}}</option>
         {{/each}}

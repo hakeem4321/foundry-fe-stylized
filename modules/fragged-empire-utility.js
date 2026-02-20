@@ -62,7 +62,8 @@ export class FraggedEmpireUtility  {
       'systems/foundry-fe2/templates/partial-item-tabs-nav.html',
       'systems/foundry-fe2/templates/partial-item-stats-vertical.html',
       'systems/foundry-fe2/templates/partial-stronghits-section.html',
-      'systems/foundry-fe2/templates/item-keyword-sheet.html'
+      'systems/foundry-fe2/templates/item-keyword-sheet.html',
+      'systems/foundry-fe2/templates/partial-item-keywords-row.html'
     ]
     return foundry.applications.handlebars.loadTemplates(templatePaths);    
   }

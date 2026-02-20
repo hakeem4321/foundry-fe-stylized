@@ -262,6 +262,10 @@
       }
     },
     "Stats": {
+      "Equipment": {
+        "Acquire": "Acquire",
+        "Resource": "Resource"
+      },
       "Weapon": {
         "HitDice": "Hit Dice",
         "HitBonus": "Hit Bonus",
@@ -489,7 +493,9 @@
       "MigrationComplete": "Migration Complete",
       "SkillNotFound": "Skill not found !",
       "TargetNotFound": "Target not found! You must have a target before firing a weapon.",
-      "WeaponNotFound": "Weapon not found !"
+      "WeaponNotFound": "Weapon not found !",
+      "UtilityNotAllowed": "Utility items cannot be added to NPCs.",
+      "CompanionOnly": "Only companion NPCs can be linked to characters."
     },
     "Difficulty": {
       "None": "None",
@@ -518,7 +524,9 @@
         "Attributes": "Attributes",
         "Combat": "Combat",
         "Resources": "Resources",
-        "Spacecraft": "Spacecraft"
+        "Spacecraft": "Spacecraft",
+        "NPC": "NPC",
+        "Attack": "Attack"
       },
       "TargetTypes": {
         "Skill": "Skill",
@@ -551,7 +559,17 @@
         "WeaponSlotsMax": "Weapon Slots (Max)",
         "ResupplyMax": "Resupply (Max)",
         "HandsMax": "Hands (Max)",
-        "WeaponsMax": "Weapons (Max)"
+        "WeaponsMax": "Weapons (Max)",
+        "NPCAttribute": "NPC Attribute",
+        "NPCMobility": "NPC Mobility",
+        "NPCBodies": "NPC Bodies",
+        "NPCDurability": "NPC Durability",
+        "AttackTargetArmour": "Target Armor (on attack)",
+        "AttackTargetArmourCrit": "Target Armor (on critical)",
+        "AttackTargetCover": "Target Cover (on attack)",
+        "AttackSelfCover": "Self Cover (when attacked)",
+        "SkillToolbox": "Toolbox",
+        "SkillWorkshop": "Workshop"
       },
       "Modes": {
         "Add": "Add",

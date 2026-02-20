@@ -293,7 +293,7 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
 
   static #onCreateEffect(event, target) {
     const effectData = {
-      name: game.i18n.localize("FE2.Effects.UI.AddEffect"),
+      name: this.document.name,
       img: "icons/svg/aura.svg",
       origin: this.document.uuid,
       transfer: false,
@@ -418,6 +418,10 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
     if (data && data.type === "Actor" && data.uuid) {
       const droppedActor = await fromUuid(data.uuid);
       if (droppedActor) {
+        if (droppedActor.type !== "npc" || droppedActor.system.npctype !== "companion") {
+          ui.notifications.warn(game.i18n.localize("FE2.Notifications.CompanionOnly"));
+          return;
+        }
         this.document.addSubActor(droppedActor.id);
         return;
       }

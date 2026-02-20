@@ -10,6 +10,9 @@
             <i class="fas {{#if editScore}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
           </a>
         </div>
+        {{#if species}}
+        <span class="fe2-npc-species">{{species.name}}</span>
+        {{/if}}
       </div>
     </header>
 
@@ -52,17 +55,15 @@
                   <span class="fe2-npc-controller-name">{{controllerName}}</span>
                   {{/if}}
                 </div>
-                {{#if controllerAttributes}}
-                  <h3 class="fe2-section-header">{{localize "FE2.Sheet.NPC.Controller"}} {{localize "FE2.Tabs.Attributes"}}</h3>
-                  <ul class="fe2-npc-stat-list">
-                    {{#each controllerAttributes as |attr key|}}
-                    <li class="fe2-npc-stat-row">
-                      <span class="fe2-npc-stat-name">{{localize attr.label}}</span>
-                      <span class="fe2-npc-stat-value">{{attr.current}}</span>
-                    </li>
-                    {{/each}}
-                  </ul>
-                {{/if}}
+                {{!-- Companion: show Attribute + Mobility (own stats, editable) --}}
+                <ul class="fe2-npc-stat-list">
+                  {{#each system.stats as |stat key|}}
+                  <li class="fe2-npc-stat-row" data-attr-key="{{key}}">
+                    <span class="fe2-npc-stat-name">{{localize stat.label}}</span>
+                    {{numericStepper name=(concat "system.stats." key ".value") value=stat.value disabled=@root.disableScore}}
+                  </li>
+                  {{/each}}
+                </ul>
               {{else}}
                 {{!-- Henchman/Troop: show Attribute + Mobility --}}
                 <ul class="fe2-npc-stat-list">
@@ -151,9 +152,10 @@
                 <ul>
                   <li class="item flexrow list-item stack-left">
                     <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Current"}} :</span>
-                    {{numericStepper name="system.fight.endurance.value" value=system.fight.endurance.value min=0 max=system.fight.endurance.max}}</span>
+                    {{numericStepper name="system.fight.endurance.value" value=system.fight.endurance.value min=0 max=computed.enduranceMax}}</span>
                     <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} :</span>
                     {{numericStepper name="system.fight.endurance.max" value=system.fight.endurance.max min=0 disabled=disableScore}}</span>
+                    {{#if hasEffectMods.enduranceMax}}<span class="fe2-field"><span class="stat-label {{modColor computed.enduranceMax baseValues.enduranceMax}}">= {{computed.enduranceMax}}</span></span>{{/if}}
                   </li>
                 </ul>
 
@@ -161,9 +163,10 @@
                 <ul>
                   <li class="item flexrow list-item stack-left">
                     <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Current"}} :</span>
-                    {{numericStepper name="system.fight.durability.value" value=system.fight.durability.value min=0 max=system.fight.durability.max}}</span>
+                    {{numericStepper name="system.fight.durability.value" value=system.fight.durability.value min=0 max=computed.durability}}</span>
                     <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} :</span>
                     {{numericStepper name="system.fight.durability.max" value=system.fight.durability.max min=0 disabled=disableScore}}</span>
+                    {{#if hasEffectMods.durability}}<span class="fe2-field"><span class="stat-label {{modColor computed.durability baseValues.durability}}">= {{computed.durability}}</span></span>{{/if}}
                   </li>
                 </ul>
 
@@ -226,6 +229,7 @@
                 <span class="specialisation-label">{{weapon.system.statstotal.range.value}}</span>
                 <span class="specialisation-label weapon-munitions-label">{{numericStepper name=weapon.id value=weapon.system.munitions min=0}}</span>
               </li>
+              {{> "systems/foundry-fe2/templates/partial-item-keywords-row.html" keywords=weapon.system.keywords}}
               {{/each}}
             </ul>
 
@@ -259,6 +263,8 @@
                 <span class="fe2-icon-spacer"></span>
                 <span class="equipement-label">{{localize "FE2.Sheet.Common.Name"}}</span>
                 <span class="equipement-label">{{localize "FE2.Sheet.Common.Type"}}</span>
+                <span class="specialisation-label">{{localize "FE2.Stats.Equipment.Acquire"}}</span>
+                <span class="specialisation-label">{{localize "FE2.Stats.Equipment.Resource"}}</span>
                 <div class="item-controls">
                   <span class="equipement-label">&nbsp;</span>
                   <span class="equipement-label">&nbsp;</span>
@@ -270,8 +276,10 @@
                 <img class="sheet-competence-img" src="{{equip.img}}"/>
                 <span class="equipement-label">{{equip.name}}</span>
                 <span class="equipement-label">{{localizeType equip.type}}</span>
+                <span class="specialisation-label">{{#if equip.system.stats}}{{equip.system.statstotal.acquire.value}}{{else}}{{equip.system.acquire}}{{/if}}</span>
+                <span class="specialisation-label">{{#if equip.system.stats}}{{equip.system.statstotal.resources.value}}{{else}}{{equip.system.resource}}{{/if}}</span>
                 <div class="item-controls">
-                  <a class="item-control" data-action="equipItem" title="{{localize "FE2.Sheet.Common.Worn"}}">{{#if equip.system.equipped}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
+                  <a class="item-control fe2-carry-state fe2-carry-state--{{equip.system.carryState}}" data-action="equipItem" title="{{localize "FE2.Sheet.Common.Worn"}}">{{#if (ne equip.system.carryState "carried")}}<i class="fas fa-circle"></i>{{else}}<i class="fas fa-genderless"></i>{{/if}}</a>
                   <a class="item-control" data-action="editItem" title="{{localize "FE2.Sheet.Common.EditItem"}}"><i class="fas fa-edit"></i></a>
                   <a class="item-control" data-action="deleteItem" title="{{localize "FE2.Sheet.Common.DeleteItem"}}"><i class="fas fa-trash"></i></a>
                 </div>

@@ -81,10 +81,11 @@ export class FraggedEmpireEffectSheet extends foundry.applications.sheets.Active
     const skillSel = row.querySelector(".effect-field-skill");
     const attrSel = row.querySelector(".effect-field-attribute");
 
-    // Show skill dropdown only for "skill" type
+    // Show skill dropdown for skill, toolbox, and workshop types
+    const showSkill = (targetType === EFFECT_TARGET_TYPES.skill || targetType === EFFECT_TARGET_TYPES.skillToolbox || targetType === EFFECT_TARGET_TYPES.skillWorkshop);
     if (skillSel) {
-      skillSel.style.display = (targetType === EFFECT_TARGET_TYPES.skill) ? "" : "none";
-      if (targetType !== EFFECT_TARGET_TYPES.skill) skillSel.value = "";
+      skillSel.style.display = showSkill ? "" : "none";
+      if (!showSkill) skillSel.value = "";
     }
 
     // Show attribute dropdown for "attribute" and "attributeMax" types
@@ -177,7 +178,7 @@ export class FraggedEmpireEffectSheet extends foundry.applications.sheets.Active
 
       // Get the appropriate target ID based on target type
       let targetId = null;
-      if (targetType === EFFECT_TARGET_TYPES.skill) {
+      if (targetType === EFFECT_TARGET_TYPES.skill || targetType === EFFECT_TARGET_TYPES.skillToolbox || targetType === EFFECT_TARGET_TYPES.skillWorkshop) {
         targetId = el.querySelector("[data-field='skillId']")?.value || null;
       } else if (targetType === EFFECT_TARGET_TYPES.attribute || targetType === EFFECT_TARGET_TYPES.attributeMax) {
         targetId = el.querySelector("[data-field='attributeId']")?.value || null;

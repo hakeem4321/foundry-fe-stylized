@@ -374,7 +374,7 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
 
   static #onCreateEffect(event, target) {
     const effectData = {
-      name: game.i18n.localize("FE2.Effects.UI.AddEffect"),
+      name: this.document.name,
       img: "icons/svg/aura.svg",
       origin: this.document.uuid,
       transfer: true,

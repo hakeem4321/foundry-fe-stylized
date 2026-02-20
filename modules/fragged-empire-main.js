@@ -601,6 +601,68 @@ Hooks.once("ready", async function () {
     }
   }
 
+  // Migration 1.09: Standardize equipment economic fields (acquire/resource), fix utility stats, fix outfit labels
+  if (foundry.utils.isNewerVersion("1.09", game.settings.get("foundry-fe2", "systemMigrationVersion"))) {
+    const allItems = [...game.items];
+    for (const actor of game.actors) {
+      for (const item of actor.items) allItems.push(item);
+    }
+
+    for (const item of allItems) {
+      try {
+        const updates = {};
+        const t = item.type;
+
+        // Utility items: replace 8 combat stats with acquire/resources, set hands=0
+        if (t === "utility") {
+          const oldCostVal = item.system.stats?.cost?.value ?? "";
+          updates["system.stats"] = {
+            acquire: { value: oldCostVal, label: "FE2.Stats.Equipment.Acquire" },
+            resources: { value: item.system.stats?.resources?.value ?? "", label: "FE2.Stats.Equipment.Resource" }
+          };
+          updates["system.statstotal"] = {
+            acquire: { value: oldCostVal, label: "FE2.Stats.Equipment.Acquire" },
+            resources: { value: item.system.statstotal?.resources?.value ?? "", label: "FE2.Stats.Equipment.Resource" }
+          };
+          updates["system.hands"] = 0;
+        }
+
+        // Equipment items: rename cost→acquire, add resource
+        if (t === "equipment") {
+          if (item.system.cost !== undefined && item.system.acquire === undefined) {
+            updates["system.acquire"] = Number(item.system.cost) || 0;
+            updates["system.-=cost"] = null;
+          }
+          if (item.system.resource === undefined) {
+            updates["system.resource"] = 0;
+          }
+        }
+
+        // Outfit items: add acquire stat, fix resources label
+        if (t === "outfit") {
+          if (!item.system.stats?.acquire) {
+            updates["system.stats.acquire"] = { value: "", label: "FE2.Stats.Equipment.Acquire" };
+          }
+          if (!item.system.statstotal?.acquire) {
+            updates["system.statstotal.acquire"] = { value: "", label: "FE2.Stats.Equipment.Acquire" };
+          }
+          if (item.system.stats?.resources?.label === "FE2.Stats.Outfit.Cost") {
+            updates["system.stats.resources.label"] = "FE2.Stats.Equipment.Resource";
+          }
+          if (item.system.statstotal?.resources?.label === "FE2.Stats.Outfit.Cost") {
+            updates["system.statstotal.resources.label"] = "FE2.Stats.Equipment.Resource";
+          }
+        }
+
+        if (Object.keys(updates).length > 0) {
+          await item.update(updates);
+        }
+      } catch (error) {
+        console.error(`FE2 | Migration 1.09 failed for Item ${item.name}:`, error);
+      }
+    }
+  }
+
   await game.settings.set("foundry-fe2", "systemMigrationVersion", game.system.version);
   ui.notifications.notify(game.i18n.localize("FE2.Notifications.MigrationComplete"));
 

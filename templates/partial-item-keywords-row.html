@@ -1,0 +1,8 @@
+{{!-- Keyword tags row for item lists (weapons, utilities, etc.) --}}
+{{#if keywords.length}}
+<div class="fe2-item-keywords-row">
+  {{#each keywords}}
+  <span class="fe2-keyword-tag-inline" title="{{this.system.description}}">{{this.name}}</span>
+  {{/each}}
+</div>
+{{/if}}

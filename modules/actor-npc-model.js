@@ -97,12 +97,33 @@ export class NPCDataModel extends foundry.abstract.TypeDataModel {
     const mobilityValue = Number(this.stats.Mobility.value) || 0;
     this.fight.movement.value = mobilityValue;
 
+    // Store base values for effect indicator comparison
+    actor._baseValues.defence = this.fight.defence.value;
+    actor._baseValues.armour = this.fight.armour.value;
+    actor._baseValues.enduranceMax = this.fight.endurance.max;
+    actor._baseValues.movement = mobilityValue;
+    actor._baseValues.attribute = Number(this.stats.Attribute.value) || 0;
+    actor._baseValues.mobility = mobilityValue;
+    actor._baseValues.bodies = this.spec.bodies.max;
+    actor._baseValues.durability = this.fight.durability.max;
+
     // NPC fight values are user-editable, so compute effective values separately.
     // Keys match system.fight keys (British spelling) so templates can use {{lookup}}.
     actor._computed.defence = mods ? Math.round(applyModifiers(this.fight.defence.value, mods.defense)) : this.fight.defence.value;
     actor._computed.armour = mods ? Math.round(applyModifiers(this.fight.armour.value, mods.armour)) : this.fight.armour.value;
-    actor._computed.endurance = mods ? Math.round(applyModifiers(this.fight.endurance.value, mods.enduranceMax)) : this.fight.endurance.value;
+    actor._computed.enduranceMax = mods ? Math.round(applyModifiers(this.fight.endurance.max, mods.enduranceMax)) : this.fight.endurance.max;
     actor._computed.movement = mods ? Math.round(applyModifiers(mobilityValue, mods.movement)) : mobilityValue;
+
+    // NPC-specific effect buckets
+    const baseAttr = Number(this.stats.Attribute.value) || 0;
+    actor._computed.attribute = mods ? Math.round(applyModifiers(baseAttr, mods.npcAttribute)) : baseAttr;
+    actor._computed.mobility = mods ? Math.round(applyModifiers(mobilityValue, mods.npcMobility)) : mobilityValue;
+    // Mobility effects also feed into movement
+    if (mods && mods.npcMobility.length) {
+      actor._computed.movement = Math.round(applyModifiers(actor._computed.mobility, mods.movement));
+    }
+    actor._computed.bodies = mods ? Math.round(applyModifiers(this.spec.bodies.max, mods.npcBodies)) : this.spec.bodies.max;
+    actor._computed.durability = mods ? Math.round(applyModifiers(this.fight.durability.max, mods.npcDurability)) : this.fight.durability.max;
   }
 
   /* -------------------------------------------- */

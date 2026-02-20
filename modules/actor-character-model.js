@@ -391,15 +391,44 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
     for (const item of equipItems) {
       let cost = 0;
       if (item.type === 'equipment') {
-        cost = Number(item.system.cost) || 0;
+        cost = Number(item.system.acquire) || 0;
       } else if (item.type === 'utility') {
-        cost = Number(item.system.statstotal?.cost?.value || item.system.stats?.cost?.value) || 0;
+        cost = Number(item.system.statstotal?.resources?.value || item.system.stats?.resources?.value) || 0;
       } else {
         cost = Number(item.system.statstotal?.resources?.value || item.system.stats?.resources?.value) || 0;
       }
       allotted += cost;
     }
     return allotted;
+  }
+
+  /* -------------------------------------------- */
+  getSubActors() {
+    let subActors = [];
+    for (let id of this.subactors) {
+      subActors.push(foundry.utils.deepClone(game.actors.get(id)));
+    }
+    return subActors;
+  }
+
+  /* -------------------------------------------- */
+  async addSubActor(subActorId) {
+    const actor = this.parent;
+    let subActors = foundry.utils.deepClone(this.subactors);
+    subActors.push(subActorId);
+    await actor.update({ 'system.subactors': subActors });
+  }
+
+  /* -------------------------------------------- */
+  async delSubActor(subActorId) {
+    const actor = this.parent;
+    let newArray = [];
+    for (let id of this.subactors) {
+      if (id != subActorId) {
+        newArray.push(id);
+      }
+    }
+    await actor.update({ 'system.subactors': newArray });
   }
 
   /* -------------------------------------------- */
