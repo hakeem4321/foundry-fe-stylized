@@ -134,12 +134,13 @@ export function addModifier(modifiers, parsed, change, effectName, effectId) {
 /**
  * Apply a list of modifiers to a base value.
  * Additions are summed first, then multiplications are compounded.
- * Result is clamped to a minimum of 0.
+ * Stat totals (default) are clamped to 0; pure bonuses/penalties pass clamp=false.
  * @param {number} baseValue - The starting value
  * @param {Array} modifiers - Array of { value, mode } modifier entries
+ * @param {boolean} [clamp=true] - Clamp result at 0 (false for pure modifiers like hitBonus)
  * @returns {number}
  */
-export function applyModifiers(baseValue, modifiers) {
+export function applyModifiers(baseValue, modifiers, clamp = true) {
   if (!modifiers || modifiers.length === 0) return baseValue;
 
   let sumAdds = 0;
@@ -154,7 +155,7 @@ export function applyModifiers(baseValue, modifiers) {
   }
 
   const result = (baseValue + sumAdds) * productMultiplies;
-  return Math.max(0, result);
+  return clamp ? Math.max(0, result) : result;
 }
 
 /* -------------------------------------------- */

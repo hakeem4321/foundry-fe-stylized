@@ -19,11 +19,11 @@
     {{#if toolsAvailable}}
     <h3>{{localize "FE2.Roll.Labels.ApplyToolsBonus"}} : </h3>
     <div class="flexrow">
-      {{#if skill.system.toolbox}}
+      {{#if hasToolbox}}
       <label class="generic-label">{{localize "FE2.Roll.Labels.ApplyToolboxBonus"}}</label>
       <label class="attribute-value checkbox"><input type="checkbox" id="useToolbox" name="useToolbox" {{checked useToolbox}}/></label>
       {{/if}}
-      {{#if skill.system.dedicatedworkshop}}
+      {{#if hasWorkshop}}
       <label class="generic-label">{{localize "FE2.Roll.Labels.ApplyDedicatedWorkshopBonus"}}</label>
       <label class="attribute-value checkbox"><input type="checkbox" id="useDedicatedworkshop" name="useDedicatedworkshop" {{checked useDedicatedworkshop}}/></label>
       {{/if}}

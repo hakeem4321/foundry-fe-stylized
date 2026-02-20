@@ -54,6 +54,19 @@ export class FraggedEmpireEffectSheet extends foundry.applications.sheets.Active
 
   /* -------------------------------------------- */
   /** @override */
+  async _preRender(context, options) {
+    await super._preRender(context, options);
+    // Save scroll positions for all tabs before re-render
+    this._savedScrollPositions = {};
+    this.element?.querySelectorAll('.tab[data-group="sheet"]').forEach(tab => {
+      if (tab.scrollTop > 0) {
+        this._savedScrollPositions[tab.dataset.tab] = tab.scrollTop;
+      }
+    });
+  }
+
+  /* -------------------------------------------- */
+  /** @override */
   _onRender(context, options) {
     super._onRender(context, options);
 
@@ -64,6 +77,15 @@ export class FraggedEmpireEffectSheet extends foundry.applications.sheets.Active
     this.element.querySelectorAll('.tab[data-group="sheet"]')
       .forEach(el => el.classList.toggle("active", el.dataset.tab === activeTab));
 
+    // Restore scroll positions after layout is complete
+    requestAnimationFrame(() => {
+      if (this._savedScrollPositions) {
+        this.element?.querySelectorAll('.tab[data-group="sheet"]').forEach(tab => {
+          const saved = this._savedScrollPositions[tab.dataset.tab];
+          if (saved) tab.scrollTop = saved;
+        });
+      }
+    });
   }
 
   /* -------------------------------------------- */

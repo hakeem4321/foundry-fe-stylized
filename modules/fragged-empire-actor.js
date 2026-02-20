@@ -65,7 +65,40 @@ export class FraggedEmpireActor extends Actor {
 
   /* -------------------------------------------- */
   prepareDerivedData() {
+    // Compute statstotal for all embedded items before TypeDataModel reads them.
+    // statstotal defaults to empty strings in template.json and only gets
+    // computed during manual item sheet edits (computeItemStatsTotals).
+    // This ensures derived calculations and template display always see correct totals.
+    this._initItemStatsTotals();
     super.prepareDerivedData();
+  }
+
+  /* -------------------------------------------- */
+  _initItemStatsTotals() {
+    const isNumeric = (v) => /^-?\d+(\.\d+)?$/.test(String(v).trim());
+    for (const item of this.items) {
+      const stats = item.system.stats;
+      const statstotal = item.system.statstotal;
+      if (!stats || !statstotal) continue;
+      for (const key of Object.keys(stats)) {
+        if (!statstotal[key]) continue;
+        const baseVal = stats[key]?.value ?? "";
+        if (!isNumeric(baseVal)) {
+          statstotal[key].value = baseVal;
+          continue;
+        }
+        let total = Number(baseVal);
+        for (const v of (item.system.variations ?? [])) {
+          const vVal = v?.system?.stats?.[key]?.value;
+          if (isNumeric(vVal)) total += Number(vVal);
+        }
+        for (const m of (item.system.modifications ?? [])) {
+          const mVal = m?.system?.stats?.[key]?.value;
+          if (isNumeric(mVal)) total += Number(mVal);
+        }
+        statstotal[key].value = String(total);
+      }
+    }
   }
 
   /* -------------------------------------------- */

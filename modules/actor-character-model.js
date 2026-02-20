@@ -181,8 +181,14 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       actor.update({ 'system.influence.total': inftotal });
     }
 
-    // Endurance max (uses effective strength)
+    // Endurance max (uses effective strength + active outfit endurance bonus)
     let endmax = 10 + (ea.strength.value * 5);
+    let activeOutfits = actor.items.filter(item => (item.type === 'outfit' || item.type === 'utility') && item.system.carryState !== "carried");
+    for (let item of activeOutfits) {
+      if (!isNaN(item.system.statstotal?.endurance?.value)) {
+        endmax += Number(item.system.statstotal.endurance.value);
+      }
+    }
     actor._baseValues.enduranceMax = endmax;
     if (mods) endmax = Math.round(applyModifiers(endmax, mods.enduranceMax));
     if (endmax != this.endurance.max) {
@@ -193,8 +199,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
     // Defense total (uses effective reflexes, intelligence)
     let coverBonus = coverBonusTable[this.defensebonus.cover] * this.attributes.intelligence.current;
     let outfitDefBonus = 0;
-    let outfits = actor.items.filter(item => (item.type === 'outfit' || item.type === 'utility') && item.system.carryState !== "carried");
-    for (let item of outfits) {
+    for (let item of activeOutfits) {
       if (!isNaN(item.system.statstotal?.defence?.value)) {
         outfitDefBonus += Number(item.system.statstotal.defence.value);
       }
@@ -228,16 +233,24 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
     }
 
     // Computed modifier values (not persisted, for rolls and display — base is 0, only effects contribute)
-    actor._computed.hitBonus = mods ? Math.round(applyModifiers(0, mods.hitBonus)) : 0;
-    actor._computed.enduranceDamage = mods ? Math.round(applyModifiers(0, mods.enduranceDamage)) : 0;
+    // Pure bonuses/penalties use clamp=false since their results can be negative
+    actor._computed.hitBonus = mods ? Math.round(applyModifiers(0, mods.hitBonus, false)) : 0;
+    actor._computed.enduranceDamage = mods ? Math.round(applyModifiers(0, mods.enduranceDamage, false)) : 0;
     actor._computed.utilitiesMax = mods ? Math.round(applyModifiers(1, mods.utilitiesMax)) : 1;
     actor._baseValues.movementBase = this.attributes.mobility.current;
     actor._computed.movement = mods ? Math.round(applyModifiers(this.attributes.mobility.current, mods.movement)) : this.attributes.mobility.current;
-    actor._computed.acquisitionMod = mods ? Math.round(applyModifiers(0, mods.acquisition)) : 0;
-    actor._computed.arcaneMod = mods ? Math.round(applyModifiers(0, mods.arcane)) : 0;
-    actor._computed.untrainedSkillMod = mods ? Math.round(applyModifiers(0, mods.untrainedSkill)) : 0;
-    actor._computed.combatOrder = mods ? Math.round(applyModifiers(0, mods.combatOrder)) : 0;
-    actor._computed.armourZeroEnd = mods ? Math.round(applyModifiers(0, mods.armourZeroEnd)) : 0;
+    actor._computed.acquisitionMod = mods ? Math.round(applyModifiers(0, mods.acquisition, false)) : 0;
+    actor._computed.arcaneMod = mods ? Math.round(applyModifiers(0, mods.arcane, false)) : 0;
+    actor._computed.untrainedSkillMod = mods ? Math.round(applyModifiers(0, mods.untrainedSkill, false)) : 0;
+    actor._computed.combatOrder = mods ? Math.round(applyModifiers(0, mods.combatOrder, false)) : 0;
+    // Armour at zero endurance (base from active outfits + AE modifiers)
+    let armourZeroEndBase = 0;
+    for (let item of activeOutfits) {
+      if (!isNaN(item.system.statstotal?.zeroend?.value)) {
+        armourZeroEndBase += Number(item.system.statstotal.zeroend.value);
+      }
+    }
+    actor._computed.armourZeroEnd = mods ? Math.round(applyModifiers(armourZeroEndBase, mods.armourZeroEnd)) : armourZeroEndBase;
 
     // Hands max (base 2 + AE modifiers)
     actor._baseValues.handsMax = 2;
@@ -256,8 +269,9 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
     actor._baseValues.weaponsMax = 3;
     actor._computed.weaponsMax = mods ? Math.round(applyModifiers(3, mods.weaponsMax)) : 3;
 
-    // Weapons count
-    actor._computed.weaponsCount = actor.items.filter(item => item.type === "weapon").length;
+    // Weapons count (companions count as weapons)
+    actor._computed.weaponsCount = actor.items.filter(item => item.type === "weapon").length
+      + (this.subactors?.length || 0);
   }
 
   /* -------------------------------------------- */
@@ -280,7 +294,7 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       const skillMods = actor._effectModifiers?.skills?.[item.id] || [];
       const allSkillMods = actor._effectModifiers?.skills?.all || [];
       const combinedMods = [...skillMods, ...allSkillMods];
-      item.system._effectMod = combinedMods.length ? Math.round(applyModifiers(0, combinedMods)) : 0;
+      item.system._effectMod = combinedMods.length ? Math.round(applyModifiers(0, combinedMods, false)) : 0;
       item.system._effectiveStaticMod = (item.system.staticmod || 0) + item.system._effectMod;
       item.system._effectiveTotal = item.system.total + item.system._effectMod;
 
@@ -510,6 +524,11 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
     const actor = this.parent;
     let skill = actor.items.find(item => item.type == 'skill' && item.id == competenceId);
     if (skill) {
+      // Check effect modifiers for toolbox/workshop bonuses
+      const skillEffectMods = actor._effectModifiers || {};
+      const hasEffectToolbox = !!(skillEffectMods.skillToolbox?.[skill.id]?.length || skillEffectMods.skillToolbox?.all?.length);
+      const hasEffectWorkshop = !!(skillEffectMods.skillWorkshop?.[skill.id]?.length || skillEffectMods.skillWorkshop?.all?.length);
+
       let rollData = {
         mode: "skill",
         alias: actor.name,
@@ -526,10 +545,13 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
         difficulty: 0,
         useToolbox: false,
         useDedicatedworkshop: false,
-        toolsAvailable: skill.system.toolbox || skill.system.useDedicatedworkshop
+        toolsAvailable: skill.system.toolbox || skill.system.dedicatedworkshop || hasEffectToolbox || hasEffectWorkshop,
+        hasToolbox: skill.system.toolbox || hasEffectToolbox,
+        hasWorkshop: skill.system.dedicatedworkshop || hasEffectWorkshop
       };
       if (skill.system.staticmod) { rollData.bonusMalus += skill.system.staticmod; }
-      if (skill.system.toolbox == true) { rollData.useToolbox = true; }
+      if (skill.system.toolbox || hasEffectToolbox) { rollData.useToolbox = true; }
+      if (hasEffectWorkshop) { rollData.useDedicatedworkshop = true; }
       rollData.effectModifiers = actor._effectModifiers;
       rollData.untrainedSkillMod = actor._computed?.untrainedSkillMod || 0;
       rollData.arcaneMod = actor._computed?.arcaneMod || 0;
@@ -548,6 +570,10 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       ui.notifications.warn(game.i18n.localize("FE2.Notifications.SkillNotFound"));
       return;
     }
+    const acqMods = actor._effectModifiers || {};
+    const acqHasEffectToolbox = !!(acqMods.skillToolbox?.[skill.id]?.length || acqMods.skillToolbox?.all?.length);
+    const acqHasEffectWorkshop = !!(acqMods.skillWorkshop?.[skill.id]?.length || acqMods.skillWorkshop?.all?.length);
+
     let rollData = {
       mode: "skill",
       alias: actor.name,
@@ -564,11 +590,14 @@ export class CharacterDataModel extends foundry.abstract.TypeDataModel {
       difficulty: 0,
       useToolbox: false,
       useDedicatedworkshop: false,
-      toolsAvailable: skill.system.toolbox || skill.system.dedicatedworkshop,
+      toolsAvailable: skill.system.toolbox || skill.system.dedicatedworkshop || acqHasEffectToolbox || acqHasEffectWorkshop,
+      hasToolbox: skill.system.toolbox || acqHasEffectToolbox,
+      hasWorkshop: skill.system.dedicatedworkshop || acqHasEffectWorkshop,
       acquisitionMod: actor._computed?.acquisitionMod || 0
     };
     if (skill.system.staticmod) rollData.bonusMalus += skill.system.staticmod;
-    if (skill.system.toolbox) rollData.useToolbox = true;
+    if (skill.system.toolbox || acqHasEffectToolbox) rollData.useToolbox = true;
+    if (acqHasEffectWorkshop) rollData.useDedicatedworkshop = true;
     rollData.effectModifiers = actor._effectModifiers;
     rollData.untrainedSkillMod = actor._computed?.untrainedSkillMod || 0;
     rollData.arcaneMod = actor._computed?.arcaneMod || 0;

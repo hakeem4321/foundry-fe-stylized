@@ -35,6 +35,7 @@
   --fe2-text: var(--fe2-gray-text);
   --fe2-text-heading: var(--fe2-off-white);
   --fe2-text-value: var(--fe2-black);
+  --fe2-text-label: var(--fe2-gray-text);
   --fe2-alert: var(--fe2-red);
   --fe2-accent: var(--fe2-blue);
   --fe2-highlight: var(--fe2-green);
@@ -801,6 +802,14 @@ ul, li {
   font-weight: bold;
   color: var(--fe2-text-value);
 }
+.foundry-fe2 .fe2-npc-stat-mod {
+  font-weight: bold;
+  font-size: var(--fe2-font-size-sm);
+  margin-left: var(--fe2-space-xs);
+}
+.foundry-fe2 .fe2-npc-stat-sep {
+  color: var(--fe2-text-label);
+}
 
 /* NPC controller section (Companion type) */
 .foundry-fe2 .fe2-npc-controller-section {
@@ -819,6 +828,19 @@ ul, li {
   color: var(--fe2-text-label);
 }
 
+/* NPC species display in header */
+.foundry-fe2 .fe2-npc-species {
+  color: var(--fe2-text-label);
+  font-size: var(--fe2-font-size-sm);
+}
+.foundry-fe2 .fe2-npc-species a {
+  color: var(--fe2-text-value);
+  text-decoration: none;
+}
+.foundry-fe2 .fe2-npc-species a:hover {
+  color: var(--fe2-highlight);
+}
+
 /* Stack-left: prevent flex children from spreading in flex rows */
 .foundry-fe2 .stack-left {
   justify-content: flex-start;
@@ -827,7 +849,7 @@ ul, li {
 
 /* NPC fight tab: stat row pairs (base/total, current/max) */
 .foundry-fe2.npc .tab.fight .fe2-field {
-  min-width: 8rem;
+  min-width: auto;
 }
 
 /* NPC controller attributes read-only display */
@@ -1489,8 +1511,26 @@ ul, li {
   flex-direction: column;
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 0;
   gap: var(--fe2-space-sm);
   padding: var(--fe2-space-sm);
+}
+
+/* Constrain form-group inputs within dialog bounds */
+.foundry-fe2.active-effect .form-group {
+  min-width: 0;
+}
+
+.foundry-fe2.active-effect .form-group .form-fields {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.foundry-fe2.active-effect .form-group .form-fields input,
+.foundry-fe2.active-effect .form-group .form-fields select,
+.foundry-fe2.active-effect .form-group .form-fields multi-select {
+  min-width: 0;
 }
 
 /* Prose-mirror in effect details: restore Foundry flex layout
@@ -1819,6 +1859,14 @@ ul, li {
 .foundry-fe2 .fe2-keyword-statmod-row label {
   font-weight: bold;
   color: var(--fe2-text);
+}
+
+/* L.1b: Item group — weapon/outfit/utility + keywords in a single li for consistent alternation */
+.foundry-fe2 .fe2-item-group {
+  padding: 0;
+}
+.foundry-fe2 .fe2-item-group > .list-item {
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
 }
 
 /* L.2: Inline keyword tags for fight tab item lists */

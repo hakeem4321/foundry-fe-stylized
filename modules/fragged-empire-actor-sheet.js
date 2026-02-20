@@ -83,7 +83,9 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
       species: actor.getRaces()[0] || null,
       races: actor.getRaces(),
       outfits: actor.getOutfits(),
+      activeOutfits: actor.getOutfits().filter(o => o.system.carryState === "active"),
       utilities: actor.getUtilities(),
+      inHandWeapons: actor.getWeapons().filter(w => w.system.carryState === "inHand"),
       equipments: actor.getEquipments(),
       languages: actor.getLanguages(),
       defenseBase: actor.getDefenseBase(),
@@ -420,6 +422,14 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
       if (droppedActor) {
         if (droppedActor.type !== "npc" || droppedActor.system.npctype !== "companion") {
           ui.notifications.warn(game.i18n.localize("FE2.Notifications.CompanionOnly"));
+          return;
+        }
+        // Companions count toward the weapon limit
+        const computed = this.document._computed || {};
+        const weaponsMax = computed.weaponsMax ?? 3;
+        const weaponsCount = computed.weaponsCount ?? 0;
+        if (weaponsCount >= weaponsMax) {
+          ui.notifications.warn(game.i18n.format("FE2.Limits.WeaponsMax", { max: weaponsMax }));
           return;
         }
         this.document.addSubActor(droppedActor.id);

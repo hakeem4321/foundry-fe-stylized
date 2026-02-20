@@ -63,6 +63,7 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
     context.armourBase = actor.getBaseArmour();
     context.armourTotal = actor.getTotalArmour();
     context.weapons = actor.getWeapons();
+    context.outfits = actor.getOutfits();
     context.traits = actor.getTraits();
     context.optionsDMDP = FraggedEmpireUtility.createDirectOptionList(-3, +3);
     context.optionsBase = FraggedEmpireUtility.createDirectOptionList(0, 20);

@@ -10,9 +10,7 @@
             <i class="fas {{#if editScore}}fa-lock-open{{else}}fa-lock{{/if}}"></i>
           </a>
         </div>
-        {{#if species}}
-        <span class="fe2-npc-species">{{species.name}}</span>
-        {{/if}}
+        <span class="fe2-npc-species">{{localize "FE2.Sheet.Character.Race"}} : {{#if species}}<a data-action="editItem" data-item-id="{{species.id}}" title="{{localize "FE2.Sheet.Common.EditItem"}}">{{species.name}}</a>{{else}}-{{/if}}</span>
       </div>
     </header>
 
@@ -55,37 +53,36 @@
                   <span class="fe2-npc-controller-name">{{controllerName}}</span>
                   {{/if}}
                 </div>
-                {{!-- Companion: show Attribute + Mobility (own stats, editable) --}}
-                <ul class="fe2-npc-stat-list">
-                  {{#each system.stats as |stat key|}}
-                  <li class="fe2-npc-stat-row" data-attr-key="{{key}}">
-                    <span class="fe2-npc-stat-name">{{localize stat.label}}</span>
-                    {{numericStepper name=(concat "system.stats." key ".value") value=stat.value disabled=@root.disableScore}}
-                  </li>
-                  {{/each}}
-                </ul>
-              {{else}}
-                {{!-- Henchman/Troop: show Attribute + Mobility --}}
-                <ul class="fe2-npc-stat-list">
-                  {{#each system.stats as |stat key|}}
-                  <li class="fe2-npc-stat-row" data-attr-key="{{key}}">
-                    <span class="fe2-npc-stat-name">{{localize stat.label}}</span>
-                    {{numericStepper name=(concat "system.stats." key ".value") value=stat.value disabled=@root.disableScore}}
-                  </li>
-                  {{/each}}
-                </ul>
               {{/if}}
+              {{!-- Attribute + Mobility (own stats, editable) with effect indicators --}}
+              <ul class="fe2-npc-stat-list">
+                <li class="fe2-npc-stat-row" data-attr-key="Attribute">
+                  <span class="fe2-npc-stat-name">{{localize system.stats.Attribute.label}}</span>
+                  {{numericStepper name="system.stats.Attribute.value" value=system.stats.Attribute.value disabled=@root.disableScore}}
+                  {{#if hasEffectMods.attribute}}<span class="fe2-npc-stat-mod {{modColor computed.attribute baseValues.attribute}}">({{computed.attribute}})</span>{{/if}}
+                </li>
+                <li class="fe2-npc-stat-row" data-attr-key="Mobility">
+                  <span class="fe2-npc-stat-name">{{localize system.stats.Mobility.label}}</span>
+                  {{numericStepper name="system.stats.Mobility.value" value=system.stats.Mobility.value disabled=@root.disableScore}}
+                  {{#if hasEffectMods.mobility}}<span class="fe2-npc-stat-mod {{modColor computed.mobility baseValues.mobility}}">({{computed.mobility}})</span>{{/if}}
+                </li>
+              </ul>
             </div>
 
             <div>
               <h3 class="fe2-section-header">{{localize "FE2.Sheet.NPC.OtherDatas"}}</h3>
               <ul class="fe2-npc-stat-list">
-                {{#each system.spec as |spec key|}}
-                <li class="fe2-npc-stat-row" data-attr-key="{{key}}">
-                  <span class="fe2-npc-stat-name">{{localize spec.label}}</span>
-                  {{numericStepper name=(concat "system.spec." key ".value") value=spec.value disabled=@root.disableScore}}
+                <li class="fe2-npc-stat-row" data-attr-key="bodies">
+                  <span class="fe2-npc-stat-name">{{localize system.spec.bodies.label}}</span>
+                  {{numericStepper name="system.spec.bodies.value" value=system.spec.bodies.value disabled=disableScore}}
+                  <span class="fe2-npc-stat-sep">/</span>
+                  {{numericStepper name="system.spec.bodies.max" value=system.spec.bodies.max disabled=disableScore}}
+                  {{#if hasEffectMods.bodies}}<span class="fe2-npc-stat-mod {{modColor computed.bodies baseValues.bodies}}">({{computed.bodies}})</span>{{/if}}
                 </li>
-                {{/each}}
+                <li class="fe2-npc-stat-row" data-attr-key="avgplayerres">
+                  <span class="fe2-npc-stat-name">{{localize system.spec.avgplayerres.label}}</span>
+                  {{numericStepper name="system.spec.avgplayerres.value" value=system.spec.avgplayerres.value disabled=disableScore}}
+                </li>
               </ul>
 
               {{!-- Keywords Section --}}
@@ -105,7 +102,8 @@
                 {{/each}}
               </div>
 
-              {{!-- Variation Section (max 1) --}}
+              {{#if variations.length}}
+              {{!-- Variation Section --}}
               <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Variations"}}</h3>
               <ul class="fe2-item-list">
                 {{#each variations as |variation key|}}
@@ -121,7 +119,9 @@
                 </li>
                 {{/each}}
               </ul>
+              {{/if}}
 
+              {{#if modifications.length}}
               {{!-- Modifications Section --}}
               <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Modifications"}}</h3>
               <ul class="fe2-item-list">
@@ -138,6 +138,7 @@
                 </li>
                 {{/each}}
               </ul>
+              {{/if}}
             </div>
           </div>
         </div>
@@ -155,7 +156,7 @@
                     {{numericStepper name="system.fight.endurance.value" value=system.fight.endurance.value min=0 max=computed.enduranceMax}}</span>
                     <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} :</span>
                     {{numericStepper name="system.fight.endurance.max" value=system.fight.endurance.max min=0 disabled=disableScore}}</span>
-                    {{#if hasEffectMods.enduranceMax}}<span class="fe2-field"><span class="stat-label {{modColor computed.enduranceMax baseValues.enduranceMax}}">= {{computed.enduranceMax}}</span></span>{{/if}}
+                    {{#if hasEffectMods.enduranceMax}}<span class="fe2-field"><span class="stat-label {{modColor computed.enduranceMax baseValues.enduranceMax}}">({{computed.enduranceMax}})</span></span>{{/if}}
                   </li>
                 </ul>
 
@@ -166,7 +167,7 @@
                     {{numericStepper name="system.fight.durability.value" value=system.fight.durability.value min=0 max=computed.durability}}</span>
                     <span class="fe2-field"><span class="stat-label">{{localize "FE2.Sheet.Common.Max"}} :</span>
                     {{numericStepper name="system.fight.durability.max" value=system.fight.durability.max min=0 disabled=disableScore}}</span>
-                    {{#if hasEffectMods.durability}}<span class="fe2-field"><span class="stat-label {{modColor computed.durability baseValues.durability}}">= {{computed.durability}}</span></span>{{/if}}
+                    {{#if hasEffectMods.durability}}<span class="fe2-field"><span class="stat-label {{modColor computed.durability baseValues.durability}}">({{computed.durability}})</span></span>{{/if}}
                   </li>
                 </ul>
 
@@ -206,6 +207,7 @@
               </div>
             </div>
 
+            {{#if weapons.length}}
             <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Weapons"}}</h3>
             <ul class="fe2-item-list">
               <li class="item flexrow fe2-list-header">
@@ -219,25 +221,56 @@
                 <span class="specialisation-label">{{localize "FE2.Sheet.Character.Munitions"}}</span>
               </li>
               {{#each weapons as |weapon key|}}
-              <li class="item flexrow list-item" data-item-id="{{weapon.id}}">
-                <img class="sheet-competence-img" src="{{weapon.img}}"/>
-                <span class="competence-label weapon-label"><a data-action="rollWeapon" name="{{weapon.name}}">{{weapon.name}}</a></span>
-                <span class="specialisation-label">{{weapon.system.statstotal.hitdice.value}}</span>
-                <span class="specialisation-label">{{weapon.system.statstotal.hit.value}}</span>
-                <span class="specialisation-label">{{weapon.system.statstotal.enddmg.value}}</span>
-                <span class="specialisation-label">{{weapon.system.statstotal.crit.value}}</span>
-                <span class="specialisation-label">{{weapon.system.statstotal.range.value}}</span>
-                <span class="specialisation-label weapon-munitions-label">{{numericStepper name=weapon.id value=weapon.system.munitions min=0}}</span>
+              <li class="item fe2-item-group" data-item-id="{{weapon.id}}">
+                <div class="flexrow list-item">
+                  <img class="sheet-competence-img" src="{{weapon.img}}"/>
+                  <span class="competence-label weapon-label"><a data-action="rollWeapon" name="{{weapon.name}}">{{weapon.name}}</a></span>
+                  <span class="specialisation-label">{{weapon.system.statstotal.hitdice.value}}</span>
+                  <span class="specialisation-label">{{weapon.system.statstotal.hit.value}}</span>
+                  <span class="specialisation-label">{{weapon.system.statstotal.enddmg.value}}</span>
+                  <span class="specialisation-label">{{weapon.system.statstotal.crit.value}}</span>
+                  <span class="specialisation-label">{{weapon.system.statstotal.range.value}}</span>
+                  <span class="specialisation-label weapon-munitions-label">{{numericStepper name=weapon.id value=weapon.system.munitions min=0}}</span>
+                </div>
+                {{> "systems/foundry-fe2/templates/partial-item-keywords-row.html" keywords=weapon.system.keywords}}
               </li>
-              {{> "systems/foundry-fe2/templates/partial-item-keywords-row.html" keywords=weapon.system.keywords}}
               {{/each}}
             </ul>
+            {{/if}}
+
+            {{#if outfits.length}}
+            <h3 class="fe2-section-header">{{localize "FE2.Sheet.Character.Outfits"}}</h3>
+            <ul class="fe2-item-list">
+              <li class="item flexrow fe2-list-header">
+                <span class="fe2-icon-spacer"></span>
+                <span class="competence-label">{{localize "FE2.Sheet.Common.Name"}}</span>
+                <span class="specialisation-label">{{localize "FE2.Stats.Outfit.Armour"}}</span>
+                <span class="specialisation-label">{{localize "FE2.Stats.Outfit.Defence"}}</span>
+                <span class="specialisation-label">{{localize "FE2.Stats.Outfit.Endurance"}}</span>
+                <span class="specialisation-label">{{localize "FE2.Stats.Outfit.AtZeroEndurance"}}</span>
+              </li>
+              {{#each outfits as |outfit key|}}
+              <li class="item fe2-item-group" data-item-id="{{outfit.id}}">
+                <div class="flexrow list-item">
+                  <img class="sheet-competence-img" src="{{outfit.img}}"/>
+                  <span class="competence-label weapon-label">{{outfit.name}}</span>
+                  <span class="specialisation-label">{{outfit.system.statstotal.armour.value}}</span>
+                  <span class="specialisation-label">{{outfit.system.statstotal.defence.value}}</span>
+                  <span class="specialisation-label">{{outfit.system.statstotal.endurance.value}}</span>
+                  <span class="specialisation-label">{{outfit.system.statstotal.zeroend.value}}</span>
+                </div>
+                {{> "systems/foundry-fe2/templates/partial-item-keywords-row.html" keywords=outfit.system.keywords}}
+              </li>
+              {{/each}}
+            </ul>
+            {{/if}}
 
           </div>
         </div>
 
         {{!-- Traits Tab --}}
         <div class="tab traits" data-group="primary" data-tab="traits">
+          {{#if traits.length}}
           <h3 class="fe2-section-header">{{localize "FE2.Sheet.NPC.TraitsList"}}</h3>
           <ul>
             {{#each traits as |trait key|}}
@@ -252,11 +285,13 @@
             </li>
             {{/each}}
           </ul>
+          {{/if}}
         </div>
 
         {{!-- Equipment Tab --}}
         <div class="tab equipment" data-group="primary" data-tab="equipment">
           <div class="flexcol">
+            {{#if equipments.length}}
             <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Equipment"}}</h3>
             <ul class="item-list alternate-list fe2-item-list">
               <li class="item flexrow fe2-list-header">
@@ -286,6 +321,7 @@
               </li>
               {{/each}}
             </ul>
+            {{/if}}
           </div>
         </div>
 

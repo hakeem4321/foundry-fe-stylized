@@ -61,7 +61,6 @@ export const EFFECT_CATEGORIES = {
     label: "FE2.Effects.Categories.Skills",
     types: [
       { type: EFFECT_TARGET_TYPES.skill, label: "FE2.Effects.TargetTypes.Skill", hasSubtype: true },
-      { type: EFFECT_TARGET_TYPES.allSkills, label: "FE2.Effects.TargetTypes.AllSkills" },
       { type: EFFECT_TARGET_TYPES.untrainedSkill, label: "FE2.Effects.TargetTypes.UntrainedSkill" },
       { type: EFFECT_TARGET_TYPES.skillToolbox, label: "FE2.Effects.TargetTypes.SkillToolbox", hasSubtype: true },
       { type: EFFECT_TARGET_TYPES.skillWorkshop, label: "FE2.Effects.TargetTypes.SkillWorkshop", hasSubtype: true }
