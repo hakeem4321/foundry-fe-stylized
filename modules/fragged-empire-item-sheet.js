@@ -30,6 +30,7 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
       viewModification: FraggedEmpireItemSheet.#onViewModification,
       viewTrait: FraggedEmpireItemSheet.#onViewTrait,
       deleteEmbedded: FraggedEmpireItemSheet.#onDeleteEmbedded,
+      viewRaceSubitem: FraggedEmpireItemSheet.#onViewRaceSubitem,
       createEffect: FraggedEmpireItemSheet.#onCreateEffect,
       editEffect: FraggedEmpireItemSheet.#onEditEffect,
       toggleEffect: FraggedEmpireItemSheet.#onToggleEffect,
@@ -342,6 +343,15 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
   }
 
   /* -------------------------------------------- */
+  static #onViewRaceSubitem(event, target) {
+    const itemRow = target.closest("[data-item-id]");
+    if (!itemRow) return;
+    const itemId = itemRow.dataset.itemId;
+    const arrayName = itemRow.dataset.itemType;
+    this.#viewEmbeddedItem(arrayName, itemId);
+  }
+
+  /* -------------------------------------------- */
   static async #onDeleteEmbedded(event, target) {
     const itemRow = target.closest("[data-item-id]");
     if (!itemRow) return;
@@ -539,6 +549,14 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
   /*  Drag and Drop                               */
   /* -------------------------------------------- */
 
+  /** Mapping from dropped sub-item type to the race system array name */
+  static RACE_SUBITEM_ARRAYS = {
+    complication: "complications",
+    perk: "perks",
+    language: "languages",
+    stronghit: "stronghits"
+  };
+
   /** Type-correct variation/modification mapping per parent item type */
   static VARIATION_TYPES = {
     weapon: { variation: "variation", modification: "modification" },
@@ -574,6 +592,21 @@ export class FraggedEmpireItemSheet extends HandlebarsApplicationMixin(foundry.a
         traitArray.push(newItem);
         await item.update({ "system.traits": traitArray });
       }
+      return;
+    }
+
+    // Race: accept complications, perks, languages, strong hits as sub-items
+    if (item.type === "race") {
+      const arrayName = FraggedEmpireItemSheet.RACE_SUBITEM_ARRAYS[droppedItem.type];
+      if (!arrayName) {
+        ui.notifications.warn(game.i18n.localize("FE2.Notifications.RaceSubitemNotAllowed"));
+        return;
+      }
+      const subArray = foundry.utils.deepClone(item.system[arrayName] ?? []);
+      const newItem = foundry.utils.deepClone(droppedItem.toObject());
+      newItem._id = foundry.utils.randomID();
+      subArray.push(newItem);
+      await item.update({ [`system.${arrayName}`]: subArray });
       return;
     }
 

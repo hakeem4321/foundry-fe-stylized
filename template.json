@@ -407,7 +407,11 @@
     "race": {
       "requirements": "",
       "benefits": "",
-      "disadvantages": ""
+      "disadvantages": "",
+      "complications": [],
+      "perks": [],
+      "languages": [],
+      "stronghits": []
     },
     "stronghit": {
       "requirements": "",

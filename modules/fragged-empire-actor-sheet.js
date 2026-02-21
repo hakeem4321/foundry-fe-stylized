@@ -441,12 +441,20 @@ export class FraggedEmpireActorSheet extends HandlebarsApplicationMixin(foundry.
       const item = await fromUuid(data.uuid);
       if (item?.type === "race") {
         const existingRaces = this.document.getRaces();
+        // Clean up sub-items from existing races before removing them
+        for (const race of existingRaces) {
+          await FraggedEmpireUtility.cleanupRaceSubitems(this.document, race.id);
+        }
         if (existingRaces.length > 0) {
           await this.document.deleteEmbeddedDocuments("Item",
             existingRaces.map(r => r.id));
         }
         const itemData = item.toObject();
-        await this.document.createEmbeddedDocuments("Item", [itemData]);
+        const created = await this.document.createEmbeddedDocuments("Item", [itemData]);
+        // Transfer sub-items from new race to actor
+        if (created.length) {
+          await FraggedEmpireUtility.transferRaceSubitems(this.document, created[0].system, created[0].id);
+        }
         return;
       }
       // Block equippable items that exceed character limits

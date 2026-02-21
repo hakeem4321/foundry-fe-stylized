@@ -266,12 +266,21 @@ export class FraggedEmpireNPCSheet extends HandlebarsApplicationMixin(foundry.ap
         return;
       }
 
-      // Race drag-replace: delete existing race before accepting new one
+      // Race drag-replace: cleanup sub-items, delete existing race, transfer new sub-items
       if (item.type === "race") {
         const existingRaces = this.document.items.filter(i => i.type === "race");
+        for (const race of existingRaces) {
+          await FraggedEmpireUtility.cleanupRaceSubitems(this.document, race.id);
+        }
         if (existingRaces.length > 0) {
           await this.document.deleteEmbeddedDocuments("Item", existingRaces.map(i => i.id));
         }
+        const itemData = item.toObject();
+        const created = await this.document.createEmbeddedDocuments("Item", [itemData]);
+        if (created.length) {
+          await FraggedEmpireUtility.transferRaceSubitems(this.document, created[0].system, created[0].id);
+        }
+        return;
       }
     }
 

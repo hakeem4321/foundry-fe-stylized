@@ -27,7 +27,10 @@
         </div>
 
         <div class="tab" data-group="primary" data-tab="system">
-          <p class="fe2-no-system-props">{{localize "FE2.Items.Common.NoSystemProperties"}}</p>
+          {{> "systems/foundry-fe2/templates/race-subitem-section.html" items=system.complications arrayName="complications" headerKey="FE2.Items.Race.Complications"}}
+          {{> "systems/foundry-fe2/templates/race-subitem-section.html" items=system.perks arrayName="perks" headerKey="FE2.Items.Race.Perks"}}
+          {{> "systems/foundry-fe2/templates/race-subitem-section.html" items=system.languages arrayName="languages" headerKey="FE2.Items.Race.Languages"}}
+          {{> "systems/foundry-fe2/templates/race-subitem-section.html" items=system.stronghits arrayName="stronghits" headerKey="FE2.Items.Race.StrongHits"}}
         </div>
 
         <div class="tab" data-group="primary" data-tab="effects">

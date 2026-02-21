@@ -65,7 +65,8 @@ export class FraggedEmpireUtility  {
       'systems/foundry-fe2/templates/partial-stronghits-section.html',
       'systems/foundry-fe2/templates/item-keyword-sheet.html',
       'systems/foundry-fe2/templates/partial-item-keywords-row.html',
-      'systems/foundry-fe2/templates/partials/roll-conditional-effects.html'
+      'systems/foundry-fe2/templates/partials/roll-conditional-effects.html',
+      'systems/foundry-fe2/templates/race-subitem-section.html'
     ]
     return foundry.applications.handlebars.loadTemplates(templatePaths);    
   }
@@ -989,6 +990,49 @@ export class FraggedEmpireUtility  {
   }
 
   /* -------------------------------------------- */
+  /*  Race Sub-Item Transfer & Cleanup            */
+  /* -------------------------------------------- */
+
+  static RACE_SUBITEM_ARRAYS = ["complications", "perks", "languages", "stronghits"];
+
+  /**
+   * Transfer all sub-items from a race's system data to the actor as independent items.
+   * Each created item is flagged with sourceRaceId for later cleanup.
+   * @param {Actor} actor - The actor receiving the sub-items
+   * @param {object} raceSystemData - The race item's system data containing sub-item arrays
+   * @param {string} raceItemId - The ID of the race item on the actor
+   */
+  static async transferRaceSubitems(actor, raceSystemData, raceItemId) {
+    const itemsToCreate = [];
+    for (const arrayName of this.RACE_SUBITEM_ARRAYS) {
+      const subItems = raceSystemData[arrayName] ?? [];
+      for (const data of subItems) {
+        const clone = foundry.utils.deepClone(data);
+        delete clone._id;
+        foundry.utils.setProperty(clone, "flags.foundry-fe2.sourceRaceId", raceItemId);
+        itemsToCreate.push(clone);
+      }
+    }
+    if (itemsToCreate.length) {
+      await actor.createEmbeddedDocuments("Item", itemsToCreate);
+    }
+  }
+
+  /**
+   * Remove all actor items that were transferred from a specific race.
+   * @param {Actor} actor - The actor to clean up
+   * @param {string} raceItemId - The ID of the race item whose sub-items to remove
+   */
+  static async cleanupRaceSubitems(actor, raceItemId) {
+    const toDelete = actor.items
+      .filter(i => i.flags?.["foundry-fe2"]?.sourceRaceId === raceItemId)
+      .map(i => i.id);
+    if (toDelete.length) {
+      await actor.deleteEmbeddedDocuments("Item", toDelete);
+    }
+  }
+
+  /* -------------------------------------------- */
   static async confirmDelete(actor, itemId) {
     const confirmed = await foundry.applications.api.DialogV2.confirm({
       window: { title: game.i18n.localize("FE2.Dialog.ConfirmRemoveTitle") },
@@ -1003,7 +1047,12 @@ export class FraggedEmpireUtility  {
       }
     });
     if (confirmed) {
-      actor.deleteEmbeddedDocuments("Item", [itemId]);
+      // Cascade-delete race sub-items before deleting the race itself
+      const item = actor.items.get(itemId);
+      if (item?.type === "race") {
+        await FraggedEmpireUtility.cleanupRaceSubitems(actor, itemId);
+      }
+      await actor.deleteEmbeddedDocuments("Item", [itemId]);
     }
   }
 

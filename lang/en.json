@@ -182,6 +182,12 @@
         "SecretKnowledge": "Secret Knowledge",
         "MinorPerk": "Minor Perk"
       },
+      "Race": {
+        "Complications": "Complications",
+        "Perks": "Perks",
+        "Languages": "Languages",
+        "StrongHits": "Strong Hits"
+      },
       "Complication": {
         "InfluenceLevel": "Influence level",
         "Minor": "Minor",
@@ -495,7 +501,8 @@
       "TargetNotFound": "Target not found! You must have a target before firing a weapon.",
       "WeaponNotFound": "Weapon not found !",
       "UtilityNotAllowed": "Utility items cannot be added to NPCs.",
-      "CompanionOnly": "Only companion NPCs can be linked to characters."
+      "CompanionOnly": "Only companion NPCs can be linked to characters.",
+      "RaceSubitemNotAllowed": "Only complications, perks, languages, and strong hits can be added to a race."
     },
     "Difficulty": {
       "None": "None",
