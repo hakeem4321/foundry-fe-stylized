@@ -168,7 +168,8 @@ ul, li {
 .carac-ul {
   gap: 5px;
   display: flex;
-  flex-direction: column
+  flex-direction: column;
+  margin-bottom: 10px;
 }
 
 .carac-input {
@@ -188,7 +189,9 @@ ul, li {
 }
 
 h3.hex-label {
-  margin-top: 10px;
+  /* margin-bottom: 10px; */
+  text-align: left;
+  padding-left: 10px;
 }
 
 .attribute-column {

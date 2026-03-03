@@ -59,20 +59,9 @@
             </div>
 
             <div class="">
-              <span class="generic-label"><h3 class="hex-label">Level</h3></span>
-              <ul>
-                <li class="item flexrow list-item stack-left" data-attr-key="level" data-item-id="{{system.level.traitId}}">
-                  <span class="carac-roll" name="level">Level</span>
-                  <input type="text" class="carac-input" name="system.level.value" value="{{system.level.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/>
-                  <div class="item-controls">
-                    {{#if (ne system.level.traitId "")}}
-                      <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
-                    {{/if}}
-                  </div>                  
-                </li>
-              </ul>
+              <span class="flexrow"><h3 class="carac-roll">Level</h3><input type="text" class="carac-input" name="system.level.value" value="{{system.level.value}}" data-dtype="Number" {{#unless @root.editScore}}disabled{{/unless}}/></span>
               <span class="generic-label"><h3 class="hex-label">Resources</h3></span>
-              <ul>
+              <ul class="carac-ul">
                 <li class="item flexrow list-item packed-left" data-attr-key="fate" data-item-id="{{system.resources.traitId}}">
                   <span class="carac-roll" name="level">Current</span>                
                   <input type="text" class="carac-input" name="system.resources.value" value="{{system.resources.value}}" data-dtype="Number"/>
@@ -90,7 +79,7 @@
             </ul>
 
               <span class="generic-label"><h3 class="hex-label">Influence</h3></span>
-              <ul>
+              <ul class="carac-ul">
                 <li class="item flexrow list-item stack-left" data-attr-key="fate" data-item-id="{{system.influence.traitId}}">
                   <span class="stat-label carac-roll" name="level">Current </span>
                   <input type="text" class="carac-input" name="system.influence.value" value="{{system.influence.value}}" data-dtype="Number"/>
