@@ -672,7 +672,9 @@ export class FraggedEmpireActor extends Actor {
         toolsAvailable: skill.system.toolbox || skill.system.useDedicatedworkshop,
         successMargin: 0,
         positiveOutcome: false,
-        negativeOutcome: false
+        negativeOutcome: false,
+        criticalSuccess: false,
+        criticalFailure: false
       }
       if (skill.system.staticmod) {rollData.bonusMalus += skill.system.staticmod}
       if (skill.system.toolbox == true) {rollData.useToolbox = true}

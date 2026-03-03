@@ -240,8 +240,14 @@ export class FraggedEmpireUtility  {
     if (rollData.successMargin >= 4){
       rollData.positiveOutcome = true;
     }
-    if (rollData.successMargin <= 4){
+    else if (rollData.successMargin <= 4){
       rollData.negativeOutcome = true;
+    }
+    if (rollData.diceResults.every((die) => die === 6)){
+      rollData.criticalSuccess = true;
+    }
+    else if (rollData.diceResults.every((die) => die === 1)){
+      rollData.criticalFailure = true;
     }
     console.log("ROLLLL!!!!", rollData);
 
