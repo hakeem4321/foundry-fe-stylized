@@ -240,7 +240,7 @@ export class FraggedEmpireUtility  {
     if (rollData.successMargin >= 4){
       rollData.positiveOutcome = true;
     }
-    else if (rollData.successMargin <= 4){
+    else if (rollData.successMargin <= -4){
       rollData.negativeOutcome = true;
     }
     if (rollData.diceResults.every((die) => die === 6)){
