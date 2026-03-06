@@ -1,69 +1,96 @@
-  /* ==================== (A) Fonts ==================== */
-  @font-face {
-    font-family: "MiddleSaxonyText";
-    src: url('../fonts/middlesaxonytext.ttf') format("truetype");
-  }
-  @font-face {
-    font-family: "ZagRegular";
-    src: url('../fonts/zag_regular.otf');
-  }
-  @font-face {
-    font-family: "ZagBold";
-    src: url('../fonts/zag_bold.otf');
-  }
+/* ============================================================
+   Section A: Font Faces
+   ============================================================ */
 
-  :root {
-  /* =================== 1. ACTOR SHEET FONT STYLES =========== */
-    --window-header-title-font-family: ZagBold;
-    --window-header-title-font-size: 1.3rem;
-    --window-header-title-font-weight: normal;
-    --window-header-title-color: #f5f5f5;
-
-    --major-button-font-family: ZagBold;
-    --major-button-font-size: 1.05rem;
-    --major-button-font-weight: normal;
-    --major-button-color: #dadada;
-
-    --tab-header-font-family: ZagBold;
-    --tab-header-font-size: 1.0rem;
-    --tab-header-font-weight: 700;
-    --tab-header-color: #403f3e;
-    --tab-header-color-active: #4a0404;
-
-    --actor-input-font-family: ZagRegular;
-    --actor-input-font-size: 1.0rem;
-    --actor-input-font-weight: 500;
-    --actor-input-color: black;
-
-    --actor-label-font-family: ZagRegular;
-    --actor-label-font-size: 1.0rem;
-    --actor-label-font-weight: 700;
-    --actor-label-color: #464331c4;
-
-  /* =================== 2. DEBUGGING HIGHLIGHTERS ============ */ 
-    --debug-background-color-red: #ff000054;
-    --debug-background-color-blue: #1d00ff54;
-    --debug-background-color-green: #54ff0054;
-
-    --debug-box-shadow-red: inset 0 0 2px red;
-    --debug-box-shadow-blue: inset 0 0 2px blue;
-    --debug-box-shadow-green: inset 0 0 2px green;
-  }
-
-.window-app {
-  font-family: ZagRegular;
-  text-align: justify;
-  font-size: 16px;
-  letter-spacing: 1px;
+@font-face {
+  font-family: "MiddleSaxonyText";
+  src: url('../fonts/middlesaxonytext.ttf') format("truetype");
 }
+@font-face {
+  font-family: "ZagRegular";
+  src: url('../fonts/zag_regular.otf');
+}
+@font-face {
+  font-family: "ZagBold";
+  src: url('../fonts/zag_bold.otf');
+}
+
+/* ============================================================
+   Section B: Design Tokens (Custom Properties)
+   ============================================================ */
+
+:root {
+  /* B.1: Color Primitives (Tier 1) */
+  --fe2-black: rgb(0, 0, 0);
+  --fe2-off-white: rgb(253, 253, 253);
+  --fe2-gray-text: rgb(88, 89, 91);
+  --fe2-green: rgb(141, 198, 63);
+  --fe2-red: rgb(167, 45, 50);
+  --fe2-blue: rgb(135, 171, 196);
+  --fe2-green-light: rgb(223, 237, 197);
+  --fe2-light-gray: #e8e8e8d5;
+
+  /* B.2: Semantic Colors (Tier 2) */
+  --fe2-bg: var(--fe2-off-white);
+  --fe2-text: var(--fe2-gray-text);
+  --fe2-text-heading: var(--fe2-off-white);
+  --fe2-text-value: var(--fe2-black);
+  --fe2-text-label: var(--fe2-gray-text);
+  --fe2-alert: var(--fe2-red);
+  --fe2-accent: var(--fe2-blue);
+  --fe2-highlight: var(--fe2-green);
+  --fe2-header-bg: var(--fe2-black);
+  --fe2-row-alt: var(--fe2-green-light);
+  --fe2-border: rgba(0, 0, 0, 0.15);
+  --fe2-img-bg: var(--fe2-light-gray);
+
+  /* B.3: Component Colors (Tier 3) */
+  --fe2-tab-bg: var(--fe2-header-bg);
+  --fe2-tab-text: var(--fe2-text-heading);
+  --fe2-tab-active-bg: var(--fe2-highlight);
+  --fe2-tab-active-text: var(--fe2-text-heading);
+  --fe2-btn-primary-bg: var(--fe2-highlight);
+  --fe2-btn-primary-text: var(--fe2-text-heading);
+  --fe2-input-bg: transparent;
+  --fe2-input-border: var(--fe2-border);
+
+  /* B.4: Spacing Scale */
+  --fe2-space-xs: 0.25rem;
+  --fe2-space-sm: 0.5rem;
+  --fe2-space-md: 0.75rem;
+  --fe2-space-lg: 1rem;
+  --fe2-space-xl: 1.5rem;
+
+  /* B.5: Typography */
+  --fe2-font-heading: ZagBold, sans-serif;
+  --fe2-font-body: ZagRegular, sans-serif;
+  --fe2-font-size-lg: 1.2rem;
+  --fe2-font-size-md: 1rem;
+  --fe2-font-size-sm: 0.875rem;
+  --fe2-font-size-xs: 0.75rem;
+
+  /* B.6: Layout */
+  --fe2-input-compact-width: 3.5rem;
+  --fe2-input-compact-height: 1.75rem;
+  --fe2-input-height: 3rem;
+  --fe2-icon-sm: 24px;
+  --fe2-icon-md: 48px;
+  --fe2-icon-lg: 64px;
+  --fe2-profile-size: 100px;
+  --fe2-border-radius: 2px;
+}
+
+/* ============================================================
+   Section C: Base Styles & Resets
+   ============================================================ */
 
 h1, h2, h3, h4 {
   font-weight: bold;
 }
 
 ul, ol {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 ul, li {
   list-style-type: none;
@@ -75,6 +102,1106 @@ ul, li {
   flex-grow: 0;
   margin-right: 0.25rem;
 }
+
+/* ============================================================
+   Section D: Application Shell (V2)
+   - Sheet header, sheet body, sheet tabs
+   ============================================================ */
+
+/* Apply base font and colors to V2 application frames */
+.application.foundry-fe2 {
+  font-family: var(--fe2-font-body);
+  text-align: justify;
+  font-size: var(--fe2-font-size-md);
+  letter-spacing: 1px;
+  color: var(--fe2-text);
+  min-width: 400px;
+
+  /* Foundry CSS variable overrides — neutralize dark theme colors */
+
+  /* Application-level */
+  --background: var(--fe2-bg);
+  --color-header-background: rgba(0, 0, 0, 0.5);
+  --color-scrollbar: var(--fe2-blue);
+  --color-scrollbar-track: transparent;
+  --color-shadow-primary: var(--fe2-highlight);
+  --color-border: var(--fe2-border);
+  --color-tabs-border: var(--fe2-border);
+  --color-fieldset-border: var(--fe2-border);
+  --color-form-label: var(--fe2-text);
+  --color-form-label-hover: var(--fe2-text-value);
+  --color-form-hint: var(--fe2-text);
+  --color-form-hint-hover: var(--fe2-text-value);
+  --color-select-option-bg: var(--fe2-bg);
+
+  /* Inputs */
+  --input-background-color: var(--fe2-input-bg);
+  --input-border-color: var(--fe2-input-border);
+  --input-text-color: var(--fe2-text-value);
+  --input-placeholder-color: var(--fe2-text);
+  --input-focus-outline-color: var(--fe2-highlight);
+  --input-focus-text-color: var(--fe2-text-value);
+  --input-box-shadow: none;
+
+  /* Checkboxes */
+  --checkbox-background-color: var(--fe2-gray-text);
+  --checkbox-checked-color: var(--fe2-highlight);
+  --checkbox-checkmark-color: var(--fe2-bg);
+  --checkbox-disabled-color: var(--fe2-border);
+
+  /* Buttons */
+  --button-background-color: var(--fe2-bg);
+  --button-border-color: var(--fe2-border);
+  --button-text-color: var(--fe2-text-value);
+  --button-hover-background-color: var(--fe2-highlight);
+  --button-hover-border-color: var(--fe2-highlight);
+  --button-hover-text-color: var(--fe2-text-heading);
+  --button-focus-outline-color: var(--fe2-highlight);
+
+  /* ProseMirror */
+  --menu-background: var(--fe2-bg);
+  --dropdown-background: var(--fe2-bg);
+  --dropdown-border: var(--fe2-border);
+  --dialog-background: var(--fe2-bg);
+  --dialog-border: var(--fe2-border);
+}
+
+/*
+ * Direct property overrides for ALL Foundry form elements.
+ * Foundry uses CSS @layer + element selectors (input[type=text], button, etc.)
+ * with CSS variables. Neither container-level variable overrides nor
+ * element-level variable overrides reliably work across all layer/specificity
+ * combinations. The only reliable approach is to set the actual CSS properties
+ * directly with high specificity.
+ */
+
+/* All text inputs, number inputs, selects, textareas */
+.application.foundry-fe2 input[type="text"],
+.application.foundry-fe2 input[type="number"],
+.application.foundry-fe2 input[type="password"],
+.application.foundry-fe2 input[type="search"],
+.application.foundry-fe2 select,
+.application.foundry-fe2 textarea {
+  background: var(--fe2-input-bg);
+  border: 1px solid var(--fe2-input-border);
+  border-radius: var(--fe2-border-radius);
+  color: var(--fe2-text-value);
+  font-family: var(--fe2-font-body);
+  font-size: inherit;
+  height: var(--fe2-input-compact-height);
+  box-shadow: none;
+  outline: none;
+}
+
+.application.foundry-fe2 input[type="text"]:focus,
+.application.foundry-fe2 input[type="number"]:focus,
+.application.foundry-fe2 select:focus,
+.application.foundry-fe2 textarea:focus {
+  color: var(--fe2-text-value);
+  outline: 2px solid var(--fe2-highlight);
+  outline-offset: -2px;
+}
+
+.application.foundry-fe2 input:disabled,
+.application.foundry-fe2 select:disabled,
+.application.foundry-fe2 textarea:disabled {
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--fe2-text);
+}
+
+.application.foundry-fe2 input[readonly] {
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--fe2-text);
+}
+
+/* Checkboxes */
+.application.foundry-fe2 input[type="checkbox"] {
+  --checkbox-size: 20px;
+  --checkbox-font-weight: 400;
+  padding: 0;
+}
+.application.foundry-fe2 input[type="checkbox"]::before {
+  color: var(--fe2-gray-text);
+}
+.application.foundry-fe2 input[type="checkbox"]:checked::before {
+  color: var(--fe2-off-white);
+}
+.application.foundry-fe2 input[type="checkbox"]:checked::after {
+  color: var(--fe2-gray-text);
+}
+
+/* Window header (title bar) */
+.application.foundry-fe2 .window-header {
+  background: var(--fe2-header-bg);
+}
+
+/* Buttons inside sheet content (excludes Foundry window-header buttons) */
+.application.foundry-fe2 .window-content button,
+.application.foundry-fe2 .window-content a.button {
+  background: var(--fe2-bg);
+  border: 1px solid var(--fe2-border);
+  color: var(--fe2-text-value);
+  font-family: var(--fe2-font-body);
+}
+
+.application.foundry-fe2 .window-content button:hover,
+.application.foundry-fe2 .window-content a.button:hover {
+  background: var(--fe2-highlight);
+  border-color: var(--fe2-highlight);
+  color: var(--fe2-text-heading);
+}
+
+.application.foundry-fe2 .window-content button:focus,
+.application.foundry-fe2 .window-content a.button:focus {
+  outline: 2px solid var(--fe2-highlight);
+  box-shadow: none;
+}
+
+/* ProseMirror editors */
+.application.foundry-fe2 .prosemirror,
+.application.foundry-fe2 prose-mirror {
+  background: var(--fe2-bg);
+  color: var(--fe2-text-value);
+}
+.application.foundry-fe2 .prosemirror menu {
+  background: var(--fe2-bg);
+  border-bottom: 1px solid var(--fe2-border);
+}
+.application.foundry-fe2 .prosemirror .prosemirror-dropdown-menu {
+  background: var(--fe2-bg);
+  border: 1px solid var(--fe2-border);
+}
+
+/* Scrollbar: FE2 design token colors (Chromium/Electron only) */
+.application.foundry-fe2 ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.application.foundry-fe2 ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.application.foundry-fe2 ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.application.foundry-fe2 ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* Remove Foundry backdrop-filter blur */
+.application.foundry-fe2 .window-content {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Template part fills window-content area */
+.foundry-fe2 [data-application-part] {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Template root div must participate in flex layout for scroll preservation */
+.foundry-fe2 [data-application-part] > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Sheet header: fixed, flex row, system colors */
+.foundry-fe2 .sheet-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  background: var(--fe2-bg);
+  padding: var(--fe2-space-sm);
+}
+
+.foundry-fe2 .sheet-header .header-fields {
+  flex: 1;
+}
+
+/* Profile image: constrained size, border from tokens */
+.foundry-fe2 .profile-img {
+  flex: 0 0 var(--fe2-profile-size);
+  width: var(--fe2-profile-size);
+  height: var(--fe2-profile-size);
+  object-fit: cover;
+  border: 2px solid var(--fe2-border);
+  border-radius: var(--fe2-border-radius);
+  margin-right: var(--fe2-space-sm);
+  background: var(--fe2-img-bg);
+  cursor: pointer;
+}
+
+/* Character name input fills remaining space */
+.foundry-fe2 .charname {
+  flex: 1;
+  margin: 0;
+  border-bottom: none;
+}
+
+.foundry-fe2 .charname input[type="text"] {
+  height: var(--fe2-input-height);
+}
+
+.foundry-fe2 .charname input {
+  height: auto;
+  line-height: 1.4;
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  margin: 0;
+  width: 100%;
+  font-family: var(--fe2-font-heading);
+  color: var(--fe2-text-value);
+  font-size: var(--fe2-font-size-lg);
+}
+
+/* Lock/unlock button in sheet header */
+.foundry-fe2 .fe2-lock-btn {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  color: var(--fe2-text);
+  font-size: var(--fe2-font-size-md);
+  margin-left: var(--fe2-space-sm);
+}
+
+.foundry-fe2 .fe2-lock-btn:hover {
+  color: var(--fe2-highlight);
+}
+
+/* Species + Level sub-row in sheet header */
+.foundry-fe2 .fe2-header-subrow {
+  align-items: center;
+  gap: var(--fe2-space-sm);
+  padding: 0 var(--fe2-space-sm);
+  margin-top: 2px;
+  min-height: 1.5rem;
+}
+
+.foundry-fe2 .fe2-species-name {
+  color: var(--fe2-text-value);
+  font-family: var(--fe2-font-body);
+  font-size: var(--fe2-font-size-sm);
+  cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-left: var(--fe2-space-sm);
+}
+
+.foundry-fe2 .fe2-species-name:hover {
+  color: var(--fe2-highlight);
+}
+
+/* Tab navigation: fixed height, colors from tokens */
+.foundry-fe2 .sheet-tabs {
+  flex: 0 0 auto;
+  background: var(--fe2-tab-bg);
+  display: flex;
+  gap: 0;
+  border: none;
+}
+
+.foundry-fe2 nav.tabs[data-group] [data-tab] {
+  color: var(--fe2-tab-text);
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-sm);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  text-decoration: none;
+  text-shadow: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  flex: 1;
+}
+
+.foundry-fe2 nav.tabs[data-group] [data-tab]:hover {
+  color: var(--fe2-tab-text);
+  background: rgba(255, 255, 255, 0.1);
+  text-shadow: none;
+}
+
+.foundry-fe2 nav.tabs[data-group] [data-tab].active {
+  background: var(--fe2-tab-active-bg);
+  color: var(--fe2-tab-active-text);
+  text-shadow: none;
+}
+
+/* Sheet body: fills remaining space, scrolls */
+.foundry-fe2 .sheet-body {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+  background: var(--fe2-bg);
+  padding: var(--fe2-space-sm);
+}
+
+/* V1 window-app fallback */
+.window-app {
+  font-family: ZagRegular;
+  text-align: justify;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+/* ============================================================
+   Section E: Sheet Components
+   - Section headers, sub-headers
+   - Item lists (alternating rows)
+   - Stat inputs (compact numeric)
+   - Stat tables
+   - Prose-mirror editors
+   ============================================================ */
+
+/* Section headers: clean text with bottom border */
+.fe2-section-header {
+  background: none;
+  color: var(--fe2-text-value);
+  padding: var(--fe2-space-xs) 0;
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-md);
+  font-weight: bold;
+  margin: var(--fe2-space-sm) 0 var(--fe2-space-xs);
+  border-bottom: 2px solid var(--fe2-border);
+}
+
+/* Column header rows for item lists (black bg, off-white text) */
+.foundry-fe2 .fe2-list-header {
+  background: var(--fe2-header-bg);
+  color: var(--fe2-text-heading);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-sm);
+  font-weight: bold;
+  border-radius: var(--fe2-border-radius);
+}
+
+.foundry-fe2 .fe2-list-header.item.flexrow .generic-label,
+.foundry-fe2 .fe2-list-header.item.flexrow .competence-label,
+.foundry-fe2 .fe2-list-header.item.flexrow .specialisation-label,
+.foundry-fe2 .fe2-list-header.item.flexrow .equipement-label,
+.foundry-fe2 .fe2-list-header.item.flexrow .stat-label {
+  color: var(--fe2-text-heading);
+}
+
+/* Sub-headers: accent blue bg, off-white text */
+.fe2-sub-header {
+  background: var(--fe2-accent);
+  color: var(--fe2-text-heading);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-md);
+  margin: var(--fe2-space-xs) 0;
+  border-radius: var(--fe2-border-radius);
+}
+
+/* Item lists: alternating row colors */
+.fe2-item-list .item:nth-child(even),
+.fe2-item-list .effect-entry:nth-child(even),
+.fe2-item-list li:nth-child(even) {
+  background: var(--fe2-row-alt);
+}
+
+/* Compact stat inputs for numeric values — flex: 0 0 auto prevents flex stretching
+   from the generic .tab ul > li.flexrow > input rule (which sets flex: 1). */
+.foundry-fe2 input.fe2-stat-input,
+.foundry-fe2 select.fe2-stat-input {
+  flex: 0 0 auto;
+  width: var(--fe2-input-compact-width);
+  height: var(--fe2-input-compact-height);
+  text-align: center;
+  color: var(--fe2-text-value);
+  font-family: var(--fe2-font-body);
+  border: 1px solid var(--fe2-input-border);
+  border-radius: var(--fe2-border-radius);
+  background: var(--fe2-input-bg);
+}
+
+/* Numeric Stepper Component */
+.foundry-fe2 .fe2-numeric-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  height: var(--fe2-input-compact-height);
+  flex: 0 0 auto;
+}
+
+.foundry-fe2 .fe2-numeric-stepper .fe2-stepper-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: var(--fe2-input-compact-height);
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  border-radius: var(--fe2-border-radius);
+  color: var(--fe2-text-value);
+  cursor: pointer;
+  font-size: var(--fe2-font-size-xs);
+  line-height: 1;
+}
+
+.foundry-fe2 .fe2-numeric-stepper .fe2-stepper-btn:hover:not(:disabled) {
+  border: 1px solid var(--fe2-input-border);
+  color: var(--fe2-text-heading);
+}
+
+.foundry-fe2 .fe2-numeric-stepper .fe2-stepper-btn:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.foundry-fe2 .fe2-numeric-stepper .fe2-stepper-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: var(--fe2-input-compact-height);
+  text-align: center;
+  color: var(--fe2-text-value);
+  font-family: var(--fe2-font-body);
+}
+
+.foundry-fe2 .fe2-stepper-inline-input {
+  width: 4rem;
+  height: var(--fe2-input-compact-height);
+  text-align: center;
+  font-family: var(--fe2-font-body);
+  color: var(--fe2-text-value);
+  border: 1px solid var(--fe2-accent);
+  border-radius: 3px;
+  padding: 0 var(--fe2-space-xs);
+}
+
+.foundry-fe2 .fe2-numeric-stepper--disabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--fe2-input-compact-height);
+  flex: 0 0 auto;
+}
+
+.foundry-fe2 .fe2-numeric-stepper--disabled .fe2-stepper-value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: var(--fe2-input-compact-height);
+  text-align: center;
+  color: var(--fe2-text-value);
+  font-family: var(--fe2-font-body);
+}
+
+/* Stat tables: header styling + alternating rows */
+.fe2-stat-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.fe2-stat-table thead th,
+.fe2-stat-table tr:first-child td {
+  background: var(--fe2-header-bg);
+  color: var(--fe2-text-heading);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-sm);
+}
+
+.fe2-stat-table tbody tr:nth-child(even),
+.fe2-stat-table tr:nth-child(even) {
+  background: var(--fe2-row-alt);
+}
+
+.fe2-stat-table td {
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  text-align: center;
+}
+
+/* Computed total value in dual-mode stat rows */
+.foundry-fe2 .fe2-stat-total {
+  flex: 0 0 auto;
+  min-width: 2.5rem;
+  text-align: center;
+  font-weight: bold;
+  color: var(--fe2-text-value);
+}
+
+/* Label+input field group: keeps label and input together in flex rows */
+.fe2-field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fe2-space-xs);
+  flex: 0 0 auto;
+}
+
+/* Spacer to align list headers with rows that have icons */
+.foundry-fe2 .fe2-icon-spacer {
+  width: 24px;
+  flex: 0 0 24px;
+  margin-right: 0.25rem;
+}
+
+/* Prose-mirror editor block display */
+.foundry-fe2 .small-editor {
+  display: block;
+}
+.foundry-fe2 prose-mirror {
+  display: flex;
+  flex-direction: column;
+  margin: var(--fe2-space-xs) 0;
+}
+
+/* Alternating row colors for ALL lists in the sheet body */
+.foundry-fe2 .sheet-body ul > li:nth-child(even) {
+  background: var(--fe2-row-alt);
+}
+
+.foundry-fe2 .item-list .item,
+.foundry-fe2 .alternate-list .item,
+.foundry-fe2 .alterne-list .item {
+  color: var(--fe2-text);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+}
+
+.foundry-fe2 .item-list .item .stat-label,
+.foundry-fe2 .item-list .item .competence-label,
+.foundry-fe2 .item-list .item .equipement-label {
+  color: var(--fe2-text);
+}
+
+.foundry-fe2 .generic-label {
+  color: var(--fe2-text-value);
+}
+
+.foundry-fe2 .specialisation-label {
+  color: var(--fe2-text-value);
+  text-align: center;
+}
+
+/* Form element spacing */
+.foundry-fe2 .flexrow {
+  gap: var(--fe2-space-sm);
+}
+
+.foundry-fe2 .grid-2col {
+  gap: var(--fe2-space-md);
+}
+
+.foundry-fe2 .grid-3col {
+  gap: var(--fe2-space-md);
+}
+
+.foundry-fe2 .tab.fight .grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.foundry-fe2 .fe2-equip-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--fe2-space-md);
+}
+
+/* List row padding */
+.foundry-fe2 .list-item {
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+}
+
+/* Existing input-numeric-short: compact sizing via tokens */
+.foundry-fe2 .input-numeric-short {
+  width: var(--fe2-input-compact-width);
+  height: var(--fe2-input-compact-height);
+  text-align: center;
+  color: var(--fe2-text-value);
+}
+
+/* Text inputs: stretch to fill remaining space */
+.foundry-fe2 .competence-label,
+.foundry-fe2 .equipement-label {
+  flex: 1;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Typography hierarchy */
+.foundry-fe2 h3 {
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-md);
+  color: var(--fe2-text-value);
+  margin: 0;
+}
+
+.foundry-fe2 h4 {
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-sm);
+  color: var(--fe2-text-value);
+}
+
+.foundry-fe2 .stat-label {
+  flex: 1;
+  font-size: var(--fe2-font-size-sm);
+}
+
+/* Item names in lists: truncate with ellipsis */
+.foundry-fe2 .weapon-label,
+.foundry-fe2 .spacecraft-weapon-label,
+.foundry-fe2 .outfit-label,
+.foundry-fe2 .competence-label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   Section F: Actor Sheets (Character, NPC, Spacecraft)
+   - Sheet-type-specific overrides
+   ============================================================ */
+
+/* NPC stat labels (legacy) */
+.foundry-fe2 .npc-stat-label {
+  font-family: var(--fe2-font-heading);
+  color: var(--fe2-text-value);
+}
+
+/* NPC stat list — attribute/spec rows */
+.foundry-fe2 .fe2-npc-stat-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.foundry-fe2 .fe2-npc-stat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--fe2-space-xs);
+  padding: var(--fe2-space-xs) 0;
+  border-bottom: 1px solid var(--fe2-border);
+}
+
+.foundry-fe2 .fe2-npc-stat-name {
+  font-family: var(--fe2-font-heading);
+  font-weight: bold;
+  min-width: 5rem;
+  color: var(--fe2-text-value);
+}
+
+.foundry-fe2 .fe2-npc-stat-value {
+  font-family: var(--fe2-font-heading);
+  font-weight: bold;
+  color: var(--fe2-text-value);
+}
+.foundry-fe2 .fe2-npc-stat-mod {
+  font-weight: bold;
+  font-size: var(--fe2-font-size-sm);
+  margin-left: var(--fe2-space-xs);
+}
+.foundry-fe2 .fe2-npc-stat-sep {
+  color: var(--fe2-text-label);
+}
+
+/* NPC controller section (Companion type) */
+.foundry-fe2 .fe2-npc-controller-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fe2-space-xs);
+  padding: var(--fe2-space-xs) 0;
+}
+
+.foundry-fe2 .fe2-npc-controller-section select {
+  width: 100%;
+}
+
+.foundry-fe2 .fe2-npc-controller-name {
+  font-style: italic;
+  color: var(--fe2-text-label);
+}
+
+/* NPC species display in header */
+.foundry-fe2 .fe2-npc-species {
+  color: var(--fe2-text-label);
+  font-size: var(--fe2-font-size-sm);
+}
+.foundry-fe2 .fe2-npc-species a {
+  color: var(--fe2-text-value);
+  text-decoration: none;
+}
+.foundry-fe2 .fe2-npc-species a:hover {
+  color: var(--fe2-highlight);
+}
+
+/* Stack-left: prevent flex children from spreading in flex rows */
+.foundry-fe2 .stack-left {
+  justify-content: flex-start;
+  gap: var(--fe2-space-sm);
+}
+
+/* NPC fight tab: stat row pairs (base/total, current/max) */
+.foundry-fe2.npc .tab.fight .fe2-field {
+  min-width: auto;
+}
+
+/* NPC controller attributes read-only display */
+.foundry-fe2.npc .fe2-npc-stat-list {
+  border-top: 1px solid var(--fe2-border);
+}
+
+/* Weapon and outfit labels */
+.foundry-fe2 .weapon-label,
+.foundry-fe2 .spacecraft-weapon-label,
+.foundry-fe2 .outfit-label {
+  color: var(--fe2-text-value);
+  font-family: var(--fe2-font-body);
+}
+
+.foundry-fe2 .weapon-label a,
+.foundry-fe2 .spacecraft-weapon-label a,
+.foundry-fe2 .npc-fight a,
+.foundry-fe2 .competence-label a,
+.foundry-fe2 .carac-roll {
+  color: var(--fe2-text-value);
+}
+
+.foundry-fe2 .weapon-label a:hover,
+.foundry-fe2 .spacecraft-weapon-label a:hover,
+.foundry-fe2 .npc-fight a:hover,
+.foundry-fe2 .competence-label a:hover,
+.foundry-fe2 .carac-roll:hover {
+  color: var(--fe2-highlight);
+}
+
+/* ============================================================
+   Section G: Item Sheets
+   - Item tabs, item-type-specific rules
+   ============================================================ */
+
+/* Item sheet tab navigation */
+.foundry-fe2 .item-sheet-tabs {
+  display: flex;
+  background: var(--fe2-tab-bg);
+  margin-bottom: var(--fe2-space-sm);
+  border-bottom: none;
+}
+
+.foundry-fe2 .item-sheet-tabs a {
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  cursor: pointer;
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-sm);
+  color: var(--fe2-tab-text);
+  text-decoration: none;
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.foundry-fe2 .item-sheet-tabs a:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.foundry-fe2 .item-sheet-tabs a.active {
+  background: var(--fe2-tab-active-bg);
+  color: var(--fe2-tab-active-text);
+  border-bottom: none;
+}
+
+/* Item sheet body inherits system colors */
+.foundry-fe2 .sheet-body {
+  color: var(--fe2-text);
+}
+
+/* Label-input rows inside item sheet detail tabs */
+.foundry-fe2 .tab ul > li.flexrow {
+  gap: var(--fe2-space-sm);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+}
+.foundry-fe2 .tab ul > li.flexrow > label {
+  flex: 0 0 auto;
+  min-width: 8rem;
+}
+.foundry-fe2 .tab ul > li.flexrow > input[type="text"],
+.foundry-fe2 .tab ul > li.flexrow > input[type="number"] {
+  flex: 1;
+  max-width: 12rem;
+}
+.foundry-fe2 .tab ul > li.flexrow > select {
+  flex: 1;
+  max-width: 16rem;
+}
+
+.foundry-fe2 .item-controls {
+  flex: none;
+  width: 100px;
+  text-align: right;
+}
+
+/* Standalone h3+select pairs in item sheets */
+.foundry-fe2 .tab > h3 + select {
+  max-width: 16rem;
+  margin-bottom: var(--fe2-space-sm);
+}
+
+/* System tab: vertical single-column layout */
+.foundry-fe2 .fe2-system-fields {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.foundry-fe2 .fe2-system-fields > li.flexrow {
+  display: flex;
+  align-items: center;
+  gap: var(--fe2-space-sm);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+}
+
+.foundry-fe2 .fe2-system-fields > li.flexrow > label {
+  flex: 0 0 auto;
+  min-width: 8rem;
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-sm);
+  color: var(--fe2-text-value);
+}
+
+.foundry-fe2 .fe2-system-fields > li.flexrow > input,
+.foundry-fe2 .fe2-system-fields > li.flexrow > select {
+  flex: 1;
+  max-width: 16rem;
+}
+/* Stat inputs stay compact inside system-fields rows */
+.foundry-fe2 .fe2-system-fields > li.flexrow > input.fe2-stat-input {
+  flex: 0 0 auto;
+  width: var(--fe2-input-compact-width);
+  max-width: var(--fe2-input-compact-width);
+}
+
+/* "No system properties" placeholder message */
+.foundry-fe2 .fe2-no-system-props {
+  text-align: center;
+  color: var(--fe2-text);
+  font-style: italic;
+  padding: var(--fe2-space-lg);
+}
+
+/* ============================================================
+   Section H: Roll Dialogs
+   ============================================================ */
+
+/* Direct property overrides for roll dialogs */
+.fraggedempiredialog input[type="text"],
+.fraggedempiredialog input[type="number"],
+.fraggedempiredialog select {
+  background: var(--fe2-input-bg);
+  border: 1px solid var(--fe2-input-border);
+  color: var(--fe2-text-value);
+  height: var(--fe2-input-compact-height);
+  box-shadow: none;
+}
+.fraggedempiredialog input[type="text"]:focus,
+.fraggedempiredialog input[type="number"]:focus,
+.fraggedempiredialog select:focus {
+  outline: 2px solid var(--fe2-highlight);
+  outline-offset: -2px;
+}
+.fraggedempiredialog button {
+  background: var(--fe2-bg);
+  border: 1px solid var(--fe2-border);
+  color: var(--fe2-text-value);
+}
+.fraggedempiredialog button:hover {
+  background: var(--fe2-highlight);
+  color: var(--fe2-text-heading);
+}
+
+/* DialogV2 form fills available space */
+.fraggedempiredialog .dialog-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Content area scrolls */
+.fraggedempiredialog .dialog-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--fe2-space-sm);
+}
+
+/* Button footer stays pinned at bottom */
+.fraggedempiredialog .form-footer {
+  flex: 0 0 auto;
+}
+
+/* Roll dialog system styling */
+.fe2-roll-dialog {
+  background: var(--fe2-bg);
+  padding: var(--fe2-space-md);
+  font-family: var(--fe2-font-body);
+  color: var(--fe2-text);
+}
+
+.fe2-roll-dialog h2 {
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-lg);
+  color: var(--fe2-text-value);
+  margin-bottom: var(--fe2-space-sm);
+}
+
+.fe2-roll-dialog h3 {
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-md);
+  color: var(--fe2-text-value);
+  margin: var(--fe2-space-sm) 0 var(--fe2-space-xs);
+  border-bottom: 1px solid var(--fe2-border);
+  padding-bottom: var(--fe2-space-xs);
+}
+
+.fe2-roll-dialog .flexrow {
+  align-items: center;
+  gap: var(--fe2-space-sm);
+  margin-bottom: var(--fe2-space-xs);
+}
+
+.fe2-roll-dialog select {
+  background: var(--fe2-input-bg);
+  border: 1px solid var(--fe2-input-border);
+  border-radius: var(--fe2-border-radius);
+  color: var(--fe2-text-value);
+  height: var(--fe2-input-compact-height);
+  max-width: 16rem;
+}
+
+.fe2-roll-dialog .competence-base {
+  font-size: var(--fe2-font-size-sm);
+  color: var(--fe2-text);
+}
+
+/* Dialog window — remove border and match actor/item sheet background */
+.fraggedempiredialog {
+  border: none;
+  --background: var(--fe2-bg);
+}
+
+/* Keep dialog header dark like actor/item sheets */
+.fraggedempiredialog .window-header {
+  background: var(--fe2-header-bg);
+}
+
+/* Checkbox styling for roll dialogs (mirrors .application.foundry-fe2 checkbox rules) */
+.fraggedempiredialog input[type="checkbox"] {
+  --checkbox-size: 20px;
+  --checkbox-font-weight: 400;
+  --checkbox-background-color: var(--fe2-gray-text);
+  --checkbox-checked-color: var(--fe2-highlight);
+  --checkbox-checkmark-color: var(--fe2-bg);
+  --checkbox-disabled-color: var(--fe2-border);
+  padding: 0;
+}
+.fraggedempiredialog input[type="checkbox"]::before {
+  color: var(--fe2-gray-text);
+}
+.fraggedempiredialog input[type="checkbox"]:checked::before {
+  color: var(--fe2-off-white);
+}
+.fraggedempiredialog input[type="checkbox"]:checked::after {
+  color: var(--fe2-gray-text);
+}
+
+/* Dialog button borders — override Foundry's groove style */
+.fraggedempiredialog .form-footer button {
+  border: 1px solid var(--fe2-border);
+}
+
+/* Roll/submit button (primary emphasis) */
+.fraggedempiredialog .form-footer button,
+.fe2-roll-dialog button[type="submit"] {
+  background: var(--fe2-btn-primary-bg);
+  color: var(--fe2-btn-primary-text);
+  font-family: var(--fe2-font-heading);
+  border: none;
+  padding: var(--fe2-space-xs) var(--fe2-space-md);
+  border-radius: var(--fe2-border-radius);
+  cursor: pointer;
+}
+
+.fraggedempiredialog .form-footer button:hover {
+  filter: brightness(1.1);
+}
+
+/* Cancel button — dark secondary appearance */
+.fraggedempiredialog .form-footer button[data-action="cancel"] {
+  background: var(--fe2-black);
+  color: var(--fe2-off-white);
+  border: 1px solid var(--fe2-border);
+}
+
+/* Weapon summary display for roll dialogs (read-only, matches Fight tab) */
+.fe2-weapon-summary-dialog {
+  margin: var(--fe2-space-sm) 0;
+}
+
+.fe2-weapon-summary-header {
+  display: flex;
+  background: var(--fe2-header-bg);
+  color: var(--fe2-text-heading);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-sm);
+}
+
+.fe2-weapon-summary-header span {
+  flex: 1;
+  text-align: center;
+}
+
+.fe2-weapon-summary-values {
+  display: flex;
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+}
+
+.fe2-weapon-summary-values span {
+  flex: 1;
+  text-align: center;
+  color: var(--fe2-text-value);
+  font-size: var(--fe2-font-size-sm);
+}
+
+/* Keywords row inside roll dialogs — chip-style layout */
+.fe2-weapon-summary-dialog .fe2-item-keywords-row {
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  gap: var(--fe2-space-sm);
+}
+
+/* Keyword tags in roll dialogs — chip appearance with alternating colors */
+.fe2-weapon-summary-dialog .fe2-keyword-tag-inline {
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid var(--fe2-green);
+  font-size: var(--fe2-font-size-xs);
+}
+.fe2-weapon-summary-dialog .fe2-keyword-tag-inline:nth-child(odd) {
+  background: var(--fe2-green-light);
+}
+.fe2-weapon-summary-dialog .fe2-keyword-tag-inline:nth-child(even) {
+  background: var(--fe2-bg);
+  border-color: var(--fe2-blue);
+}
+
+/* ============================================================
+   Section I: Chat Cards
+   ============================================================ */
+
 .chat-message-header {
   background: rgba(220,220,210,0.5);
   font-size: 1.1rem;
@@ -82,25 +1209,27 @@ ul, li {
   text-align: center;
   vertical-align: middle;
   display: flex;
-  align-items: center; 
+  align-items: center;
 }
 
-.chat-message .message-header .flavor-text, .chat-message .message-header .whisper-to { 
+.chat-message .message-header .flavor-text,
+.chat-message .message-header .whisper-to {
   font-size: 0.9rem;
 }
+
 .chat-actor-name {
   padding: 4px;
 }
 
 .chat-img {
-  width: 64px;
-  height: 64px;
+  width: var(--fe2-icon-lg);
+  height: var(--fe2-icon-lg);
 }
 
 .actor-icon {
   float: left;
-  width: 48px;
-  height: 48px;
+  width: var(--fe2-icon-md);
+  height: var(--fe2-icon-md);
   padding: 2px 6px 2px 2px;
 }
 
@@ -117,7 +1246,7 @@ ul, li {
 }
 
 .dice-image-reroll {
-  background-color:rgba(115, 224, 115, 0.25);
+  background-color: rgba(115, 224, 115, 0.25);
   border-color: #011d33;
   box-sizing: border-box;
   border: 1px;
@@ -130,7 +1259,6 @@ ul, li {
   height: 15%;
   font-size: 15px;
   padding: 10px;
-  padding-bottom: 20px;
   padding-top: .2rem;
   padding-bottom: .2rem;
 }
@@ -144,77 +1272,786 @@ ul, li {
   background: rgba(220,220,210,0.75);
   border: 2px solid #545469;
 }
+
 .chat-message .chat-icon {
   border: 0;
   padding: 2px 6px 2px 2px;
   float: left;
-  width: 64px;
-  height: 64px;
+  width: var(--fe2-icon-lg);
+  height: var(--fe2-icon-lg);
 }
 
-
-.carac-roll {
-  color: white;
-  background: black;
-  padding-left: 10px;
-  clip-path: polygon(0% 0%, 100% 0%, calc(100% - 5px) 50%, 100% 100%, 0% 100%, 0% 50%);
-  background-color: #000000
+/* System-styled chat cards */
+.fe2-chat-card {
+  background: var(--fe2-bg);
+  padding: var(--fe2-space-sm);
+  font-family: var(--fe2-font-body);
+  color: var(--fe2-text);
+  border-radius: var(--fe2-border-radius);
 }
 
-.carac-roll:first-child {
-  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 5px) 50%, 100% 100%, 10px 100%, 0% 50%);
+.fe2-chat-card .chat-message-header {
+  background: var(--fe2-header-bg);
+  color: var(--fe2-text-heading);
+  border-radius: var(--fe2-border-radius);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
 }
-/* Ul style for the characteristics */
-.carac-ul {
-  gap: 5px;
+
+.fe2-chat-card .chat-actor-name {
+  color: var(--fe2-text-heading);
+  font-family: var(--fe2-font-heading);
+}
+
+.fe2-chat-card h4 {
+  color: var(--fe2-text-value);
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-md);
+}
+
+.fe2-chat-card ul {
+  padding-left: var(--fe2-space-sm);
+}
+
+.fe2-chat-card li {
+  padding: var(--fe2-space-xs) 0;
+  color: var(--fe2-text);
+}
+
+/* Alert color for damage/critical values */
+.fe2-alert {
+  color: var(--fe2-alert);
+  font-weight: bold;
+}
+
+/* fe2-row utility */
+.fe2-row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--fe2-space-sm);
+  align-items: center;
+}
+
+/* ============================================================
+   Section J: Active Effects
+   - Effects section, effect config sheet
+   ============================================================ */
+
+/* Effects list */
+.effects-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.effect-entry {
+  display: flex;
+  align-items: center;
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  border-bottom: 1px solid var(--fe2-border);
+  gap: var(--fe2-space-xs);
+}
+
+.effect-entry:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.effect-icon-wrapper {
+  flex: 0 0 var(--fe2-icon-sm);
+}
+
+.effect-icon {
+  width: var(--fe2-icon-sm);
+  height: var(--fe2-icon-sm);
+  background-color: gray;
+}
+
+.effect-icon-tint {
+  float: left;
+  width: var(--fe2-icon-sm);
+  height: var(--fe2-icon-sm);
+  position: absolute;
+  mix-blend-mode: overlay;
+  z-index: 2;
+}
+
+.effect-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.effect-source {
+  flex: 0 0 auto;
+  font-size: var(--fe2-font-size-xs);
+  color: var(--fe2-text);
+  font-style: italic;
+}
+
+.effect-controls {
+  flex: 0 0 auto;
+  display: flex;
+  gap: var(--fe2-space-xs);
+}
+
+.effect-control {
+  cursor: pointer;
+  color: var(--fe2-text);
+}
+
+.effect-control:hover {
+  color: var(--fe2-text-value);
+}
+
+/* Effect states */
+.effect-inactive {
+  opacity: 0.5;
+}
+
+.effect-suppressed {
+  opacity: 0.4;
+  font-style: italic;
+}
+
+/* Effect category headers */
+.foundry-fe2 .effect-category-header {
+  margin: var(--fe2-space-sm) 0 var(--fe2-space-xs);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  background: var(--fe2-header-bg);
+  color: var(--fe2-text-heading);
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-sm);
+  border-bottom: none;
+  border-radius: var(--fe2-border-radius);
+}
+
+/* Conditional effects in roll dialogs */
+.fe2-roll-dialog .conditional-effects-section {
+  margin-top: var(--fe2-space-sm);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  border: 1px solid var(--fe2-border);
+  border-radius: var(--fe2-border-radius);
+}
+
+.fe2-roll-dialog .conditional-effects-section h4 {
+  margin: 0 0 var(--fe2-space-xs);
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-sm);
+  color: var(--fe2-text-value);
+}
+
+.fe2-roll-dialog .conditional-effect-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: var(--fe2-space-xs);
+  padding: 2px 0;
+  cursor: pointer;
+}
+
+.fe2-roll-dialog .conditional-effect-toggle-label img {
+  border: none;
+  border-radius: 2px;
+}
+
+/* Conditional effects in chat cards */
+.fe2-chat-card .conditional-effects-applied {
+  margin-top: var(--fe2-space-xs);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  border-left: 3px solid var(--fe2-header-bg);
+  border-radius: 0 var(--fe2-border-radius) var(--fe2-border-radius) 0;
+}
+
+.fe2-chat-card .conditional-effect-tag {
+  display: inline-block;
+  margin-left: var(--fe2-space-xs);
+  font-style: italic;
+}
+
+/* Add effect button */
+.effect-add {
+  padding: var(--fe2-space-xs);
+  text-align: center;
+  margin-top: var(--fe2-space-sm);
+}
+
+.effect-add a {
+  cursor: pointer;
+  color: var(--fe2-text);
+}
+
+.effect-add a:hover {
+  color: var(--fe2-text-value);
+}
+
+/* No effects message */
+.effects-empty {
+  text-align: center;
+  color: var(--fe2-text);
+  font-style: italic;
+  padding: var(--fe2-space-sm);
+}
+
+/* Effect modifier color indicators */
+.fe2-mod-up {
+  color: var(--fe2-green);
+  font-weight: bold;
+}
+
+.fe2-mod-down {
+  color: var(--fe2-red);
+  font-weight: bold;
+}
+
+.attribute-max-label {
+  font-size: var(--fe2-font-size-xs);
+  color: var(--fe2-text);
+  margin-left: var(--fe2-space-xs);
+}
+
+/* Attribute row — inline layout */
+.foundry-fe2 .fe2-attribute-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.foundry-fe2 .fe2-attribute-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fe2-space-xs);
+  padding: var(--fe2-space-xs) 0;
+  width: 100%;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--fe2-border);
+}
+
+.foundry-fe2 .fe2-attribute-name {
+  font-family: var(--fe2-font-heading);
+  font-weight: bold;
+  min-width: 5rem;
+}
+
+.foundry-fe2 .fe2-attribute-name a {
+  color: var(--fe2-text-value);
+}
+
+.foundry-fe2 .fe2-attribute-field-label {
+  font-size: var(--fe2-font-size-xs);
+  color: var(--fe2-text-label);
+}
+
+.foundry-fe2 .fe2-attribute-field-label--spaced {
+  margin-left: var(--fe2-space-sm);
+}
+
+.foundry-fe2 .fe2-attribute-effective {
+  color: var(--fe2-text);
+}
+
+.foundry-fe2 .fe2-attribute-effective.fe2-mod-up {
+  color: var(--fe2-green);
+}
+
+.foundry-fe2 .fe2-attribute-effective.fe2-mod-down {
+  color: var(--fe2-red);
+}
+
+.foundry-fe2 .fe2-attribute-species-max {
+  font-size: var(--fe2-font-size-sm);
+  font-weight: bold;
+}
+
+.foundry-fe2 .fe2-attribute-edit {
+  margin-left: auto;
+}
+
+/* Active Effect Config Sheet */
+.foundry-fe2.active-effect .standard-form {
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
+  height: 100%;
+  overflow: hidden;
 }
 
-.carac-input {
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-  flex: 0 0 30px;
-  width: 30px;
+/* Header: matches character sheet .sheet-header + .profile-img + .charname pattern */
+.foundry-fe2.active-effect .standard-form > header {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: visible;
+  background: var(--fe2-bg);
+  padding: var(--fe2-space-sm);
+}
+
+.foundry-fe2.active-effect .standard-form > header img {
+  flex: 0 0 var(--fe2-profile-size);
+  width: var(--fe2-profile-size);
+  height: var(--fe2-profile-size);
+  object-fit: cover;
+  border: 2px solid var(--fe2-border);
+  border-radius: var(--fe2-border-radius);
+  margin-right: var(--fe2-space-sm);
+  background: var(--fe2-img-bg);
+}
+
+.foundry-fe2.active-effect .standard-form > header input[type="text"] {
+  flex: 1;
+  height: var(--fe2-input-height);
+  line-height: var(--fe2-input-height);
+  padding: 0 var(--fe2-space-sm);
+  margin: 0;
+  width: 100%;
+  font-family: var(--fe2-font-heading);
+  color: var(--fe2-text-value);
+  font-size: 3rem;
+}
+
+/* Tab bar: matches character sheet tab navigation (Section D) */
+.foundry-fe2.active-effect .sheet-tabs.tabs {
+  flex: 0 0 auto;
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 0;
+  border: none;
+  background: var(--fe2-tab-bg);
+}
+
+.foundry-fe2.active-effect .sheet-tabs.tabs [data-tab] {
+  color: var(--fe2-tab-text);
+  font-family: var(--fe2-font-heading);
+  font-size: var(--fe2-font-size-sm);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  text-decoration: none;
+  text-shadow: none;
+  border: none;
+  background: none;
+  cursor: pointer;
+  flex: 1;
+}
+
+.foundry-fe2.active-effect .sheet-tabs.tabs [data-tab]:hover {
+  background: rgba(255, 255, 255, 0.1);
+  text-shadow: none;
+}
+
+.foundry-fe2.active-effect .sheet-tabs.tabs [data-tab].active {
+  background: var(--fe2-tab-active-bg);
+  color: var(--fe2-tab-active-text);
+  text-shadow: none;
+}
+
+/* Tab content: inactive tabs hidden, active tab fills remaining space */
+.foundry-fe2.active-effect .tab[data-group="sheet"] {
+  display: none;
+}
+
+.foundry-fe2.active-effect .tab[data-group="sheet"].active {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: var(--fe2-space-sm);
+  padding: var(--fe2-space-sm);
+}
+
+/* Fix form-group layout: the global [data-application-part] > div rule
+   turns all form-group divs into flex columns with flex:1.  Restore
+   Foundry's standard-form row layout and prevent horizontal overflow. */
+.foundry-fe2.active-effect .form-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  flex: none;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  gap: 0.5rem;
+}
+
+.foundry-fe2.active-effect .form-group.stacked {
+  flex-direction: row; /* stacked wraps children at 100% width each */
+}
+
+.foundry-fe2.active-effect .form-group .form-fields {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.foundry-fe2.active-effect .form-group .form-fields input,
+.foundry-fe2.active-effect .form-group .form-fields select,
+.foundry-fe2.active-effect .form-group .form-fields multi-select {
+  min-width: 0;
+}
+
+/* Prose-mirror in effect details: restore Foundry flex layout
+   (our global `prose-mirror { display: block }` breaks the internal
+   editor-container/editor-content flex structure) */
+.foundry-fe2.active-effect prose-mirror {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Footer: submit button uses primary action styling */
+.foundry-fe2.active-effect .form-footer {
+  flex: 0 0 auto;
+}
+
+.foundry-fe2.active-effect .form-footer button {
+  background: var(--fe2-btn-primary-bg);
+  color: var(--fe2-btn-primary-text);
+  font-family: var(--fe2-font-heading);
+  border: none;
+  padding: var(--fe2-space-xs) var(--fe2-space-md);
+  border-radius: var(--fe2-border-radius);
+  cursor: pointer;
+}
+
+.foundry-fe2.active-effect .form-footer button:hover {
+  filter: brightness(1.1);
+}
+
+/* Effect changes tab */
+.foundry-fe2.active-effect .tab.changes {
+  overflow-y: auto;
+}
+
+.foundry-fe2.active-effect .tab.changes ol.effect-changes-list {
+  display: flex;
+  flex-direction: column;
+  grid-template-columns: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.foundry-fe2.active-effect .tab.changes ol.effect-changes-list li.effect-change-entry {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fe2-space-xs);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  border-bottom: 1px solid var(--fe2-border);
+  width: 100%;
+  margin-bottom: 0;
+}
+
+/* Alternating row backgrounds for change entries */
+.foundry-fe2.active-effect .effect-change-entry:nth-child(even) {
+  background: var(--fe2-row-alt);
+}
+
+/* Change entry form controls: consistent with character sheet inputs */
+.foundry-fe2.active-effect .effect-change-entry select,
+.foundry-fe2.active-effect .effect-change-entry input {
+  height: var(--fe2-input-compact-height);
+  border: 1px solid var(--fe2-input-border);
+  background: var(--fe2-input-bg);
+  color: var(--fe2-text-value);
+  font-family: var(--fe2-font-body);
+  font-size: var(--fe2-font-size-sm);
+  border-radius: var(--fe2-border-radius);
+}
+
+.foundry-fe2.active-effect .effect-change-entry select:focus,
+.foundry-fe2.active-effect .effect-change-entry input:focus {
+  outline: 2px solid var(--fe2-highlight);
+  outline-offset: -1px;
+}
+
+.effect-field-target {
+  flex: 1 1 100%;
+}
+
+.effect-field-skill,
+.effect-field-attribute {
+  flex: 1 1 40%;
+}
+
+.effect-field-mode {
+  flex: 1 1 20%;
+}
+
+.effect-field-value {
+  flex: 1 1 var(--fe2-input-compact-width);
+}
+
+/* Delete button: matches character sheet control styling */
+.effect-field-delete {
+  flex: 0 0 var(--fe2-icon-sm);
+  background: var(--fe2-bg);
+  border: 1px solid var(--fe2-border);
+  border-radius: var(--fe2-border-radius);
+  cursor: pointer;
+  padding: var(--fe2-space-xs);
+  color: var(--fe2-text);
+}
+
+.effect-field-delete:hover {
+  background: var(--fe2-highlight);
+  color: var(--fe2-text-heading);
+}
+
+/* Add change button: matches character sheet action button styling */
+.foundry-fe2.active-effect .effect-add button {
+  background: var(--fe2-bg);
+  border: 1px solid var(--fe2-border);
+  border-radius: var(--fe2-border-radius);
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
+  cursor: pointer;
+  color: var(--fe2-text);
+  font-family: var(--fe2-font-body);
+  font-size: var(--fe2-font-size-sm);
+}
+
+.foundry-fe2.active-effect .effect-add button:hover {
+  background: var(--fe2-highlight);
+  color: var(--fe2-text-heading);
+}
+
+/* ============================================================
+   Section K: Carry States & Equipment Limits
+   ============================================================ */
+
+/* Carry state indicator on equip toggle */
+.foundry-fe2 .fe2-carry-state--active {
+  color: var(--fe2-green);
+}
+
+.foundry-fe2 .fe2-carry-state--inHand {
+  color: var(--fe2-blue);
+}
+
+.foundry-fe2 .fe2-carry-state--carried {
+  color: var(--fe2-text);
+}
+
+/* Over-capacity warning (hands, slots, utilities, weapons) */
+.foundry-fe2 .fe2-over-capacity {
+  color: var(--fe2-red);
+  font-weight: bold;
+}
+
+/* ============================================================
+   Section L: Keyword Tags
+   ============================================================ */
+
+.foundry-fe2 .fe2-keywords-section {
+  margin-top: 0.5rem;
+}
+
+.foundry-fe2 .fe2-keywords-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  min-height: 28px;
+  padding: 2px 0;
+}
+
+.foundry-fe2 .fe2-keyword-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--fe2-green-light);
+  border: 1px solid var(--fe2-green);
+  border-radius: 12px;
+  padding: 2px 6px 2px 10px;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.foundry-fe2 .fe2-keyword-label {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.foundry-fe2 .fe2-keyword-param {
+  width: 32px;
+  height: 20px;
+  padding: 0 4px;
+  border: 1px solid var(--fe2-border);
+  border-radius: 3px;
   text-align: center;
-  background-color: black;
-  color: white
+  font-size: 0.8rem;
+  background: var(--fe2-off-white);
 }
 
-.hex-label {
-  clip-path: polygon(10px 0%, calc(100% - 10px) 0%, 100% 50%, calc(100% - 10px) 100%, 10px 100%, 0% 50%);
-  background-color: black;
-  color: white;
-  text-align: center;
+.foundry-fe2 .fe2-keyword-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fe2-red);
+  cursor: pointer;
+  font-size: 0.7rem;
 }
 
-h3.hex-label {
-  /* margin-bottom: 10px; */
-  text-align: left;
-  padding-left: 10px;
+.foundry-fe2 .fe2-keyword-remove:hover {
+  background: var(--fe2-red);
+  color: var(--fe2-off-white);
 }
 
-.attribute-column {
+.foundry-fe2 .fe2-keywords-empty {
+  color: var(--fe2-gray-text);
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+/* Propagated items visual distinction */
+.foundry-fe2 .fe2-keyword-tag--propagated {
+  background: var(--fe2-bg, #e8e8e8);
+  border-style: dashed;
+  cursor: default;
+}
+.foundry-fe2 .fe2-keyword-tag--propagated .fe2-keyword-remove {
+  display: none;
+}
+.foundry-fe2 .fe2-keyword-tag--propagated .fe2-keyword-param {
+  border: none;
+  background: transparent;
+  pointer-events: none;
+  width: auto;
+}
+
+.foundry-fe2 .fe2-stronghit-entry--propagated {
+  opacity: 0.7;
+  border-left: 2px dashed var(--fe2-gray-text, #888);
+  padding-left: 4px;
+  cursor: default;
+}
+.foundry-fe2 .fe2-stronghit-entry--propagated .item-controls {
+  display: none;
+}
+
+.foundry-fe2 .effect-entry--propagated {
+  opacity: 0.7;
+  border-left: 2px dashed var(--fe2-gray-text, #888);
+  padding-left: 4px;
+  cursor: default;
+}
+.foundry-fe2 .effect-entry--propagated .effect-controls {
+  display: none;
+}
+
+
+/* ============================================================
+   Section L.2: Keyword Item Sheet
+   ============================================================ */
+
+.foundry-fe2 .fe2-keyword-field-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.foundry-fe2 .fe2-keyword-field-row > label {
+  flex: 0 0 140px;
+  font-weight: bold;
+  color: var(--fe2-text);
+}
+.foundry-fe2 .fe2-keyword-field-row > input,
+.foundry-fe2 .fe2-keyword-field-row > select {
+  flex: 1;
+}
+
+.foundry-fe2 .fe2-keyword-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+}
+.foundry-fe2 .fe2-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.foundry-fe2 .fe2-keyword-params-grid {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+.foundry-fe2 .fe2-keyword-params-grid label {
+  font-weight: bold;
+  color: var(--fe2-text);
+}
+.foundry-fe2 .fe2-keyword-params-grid input {
+  flex: 1;
+  max-width: 100px;
+}
+
+.foundry-fe2 .fe2-keyword-statmod-grid {
   display: grid;
-  grid-column: span 2 / span 2;
-  grid-template-columns: 40% 60%;
-  /* gap: 10px; */
-  /* margin: 10px 0; */
+  grid-template-columns: 100px 1fr 80px;
+  gap: 0.25rem 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.foundry-fe2 .fe2-keyword-statmod-header {
+  display: contents;
+  font-weight: bold;
+  font-size: 0.85rem;
+  color: var(--fe2-text);
+}
+.foundry-fe2 .fe2-keyword-statmod-header > span {
+  font-weight: bold;
+}
+.foundry-fe2 .fe2-keyword-statmod-row {
+  display: contents;
+}
+.foundry-fe2 .fe2-keyword-statmod-row label {
+  font-weight: bold;
+  color: var(--fe2-text);
+}
+
+/* L.1b: Item group — weapon/outfit/utility + keywords in a single li for consistent alternation */
+.foundry-fe2 .fe2-item-group {
   padding: 0;
 }
-
-.fight-column {
-  display: grid;
-  grid-column: span 2 / span 2;
-  grid-template-columns: 50% 50%;
-  /* gap: 10px; */
-  margin: 10px 0;
-  padding: 0;
+.foundry-fe2 .fe2-item-group > .list-item {
+  padding: var(--fe2-space-xs) var(--fe2-space-sm);
 }
 
-
-
-.input-numeric-short{
-  flex: 0 1 30px;
-  text-align: center;
+/* L.2: Inline keyword tags for fight tab item lists */
+.foundry-fe2 .fe2-item-keywords-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fe2-space-xs);
+  padding: 0 0 var(--fe2-space-xs) calc(var(--fe2-icon-sm) + 0.25rem);
 }
+
+.foundry-fe2 .fe2-keyword-tag-inline {
+  display: inline-block;
+  padding: 1px var(--fe2-space-xs);
+  font-size: var(--fe2-font-size-xs);
+  background: var(--fe2-green-light);
+  border-radius: var(--fe2-border-radius);
+  color: var(--fe2-text);
+  cursor: default;
+}
+
+/* L.3: Utility description row in fight tab */
+.foundry-fe2 .fe2-item-description-row {
+  padding: 0 var(--fe2-space-sm) var(--fe2-space-xs) calc(var(--fe2-icon-sm) + 0.25rem);
+  font-size: var(--fe2-font-size-sm);
+  color: var(--fe2-text);
+  line-height: 1.3;
+}
+
+.foundry-fe2 .fe2-item-description-row p {
+  margin: 0;
+}
+
+/* ============================================================
+   Section M: Utility Classes
+   ============================================================ */

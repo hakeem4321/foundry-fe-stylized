@@ -1,0 +1,61 @@
+{{!-- Custom changes tab for the Fragged Empire effect configuration sheet --}}
+<section class="tab changes{{#if tab.active}} active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+
+  <ol class="effect-changes-list">
+    {{#each changes as |change idx|}}
+    <li class="effect-change-entry" data-index="{{idx}}" data-target-type="{{change.targetType}}" data-target-id="{{change.targetId}}">
+
+      {{!-- Target Type --}}
+      <select class="effect-field-target" data-index="{{idx}}" data-field="targetType">
+        <option value="">{{localize "FE2.Effects.UI.SelectTargetType"}}</option>
+        {{#each ../targetTypeOptions as |category catKey|}}
+        <optgroup label="{{localize category.label}}">
+          {{#each category.types as |type tKey|}}
+          <option value="{{type.type}}" {{#if (eq type.type change.targetType)}}selected{{/if}}>{{localize type.label}}</option>
+          {{/each}}
+        </optgroup>
+        {{/each}}
+      </select>
+
+      {{!-- Skill subtype (always rendered, shown/hidden via CSS) --}}
+      <select class="effect-field-skill" data-index="{{idx}}" data-field="skillId"
+        style="{{#unless (or (eq change.targetType 'skill') (eq change.targetType 'skillToolbox') (eq change.targetType 'skillWorkshop'))}}display:none{{/unless}}">
+        <option value="">{{localize "FE2.Effects.UI.SelectSubtype"}}</option>
+        <option value="all" {{#if (eq change.targetId "all")}}selected{{/if}}>{{localize "FE2.Effects.TargetTypes.AllSkills"}}</option>
+        {{#each ../skillOptions as |opt oKey|}}
+        <option value="{{opt.value}}" {{#if (eq opt.value change.targetId)}}selected{{/if}}>{{opt.label}}</option>
+        {{/each}}
+      </select>
+
+      {{!-- Attribute subtype (always rendered, shown/hidden via CSS) --}}
+      <select class="effect-field-attribute" data-index="{{idx}}" data-field="attributeId"
+        style="{{#unless (or (eq change.targetType 'attribute') (eq change.targetType 'attributeMax'))}}display:none{{/unless}}">
+        <option value="">{{localize "FE2.Effects.UI.SelectSubtype"}}</option>
+        {{#each ../attributeOptions as |opt oKey|}}
+        <option value="{{opt.value}}" {{#if (eq opt.value change.targetId)}}selected{{/if}}>{{opt.label}}</option>
+        {{/each}}
+      </select>
+
+      {{!-- Mode --}}
+      <select class="effect-field-mode" data-index="{{idx}}" data-field="mode">
+        <option value="2" {{#if (eq change.mode 2)}}selected{{/if}}>{{localize "FE2.Effects.Modes.Add"}}</option>
+        <option value="1" {{#if (eq change.mode 1)}}selected{{/if}}>{{localize "FE2.Effects.Modes.Multiply"}}</option>
+      </select>
+
+      {{!-- Value --}}
+      <input type="number" class="effect-field-value fe2-stat-input" data-index="{{idx}}" data-field="value" value="{{change.value}}" step="any" />
+
+      {{!-- Delete --}}
+      <button type="button" class="effect-field-delete" data-action="deleteChange" data-index="{{idx}}" title="{{localize "FE2.Effects.UI.DeleteChange"}}">
+        <i class="fas fa-trash"></i>
+      </button>
+    </li>
+    {{/each}}
+  </ol>
+
+  <div class="effect-add">
+    <button type="button" data-action="addChange">
+      <i class="fas fa-plus"></i> {{localize "FE2.Effects.UI.AddChange"}}
+    </button>
+  </div>
+</section>

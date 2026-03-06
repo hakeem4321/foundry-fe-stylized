@@ -1,30 +1,37 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
-        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <img class="profile-img" src="{{img}}" data-action="editImage" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="{{localize "FE2.Sheet.Common.Name"}}"/></h1>
         </div>
     </header>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
 
-        <div class="tab" data-group="primary">
-          <ul>
-            <li class="flexrow"><label class="generic-label">Equipped ?</label>
-              <label class="attribute-value checkbox"><input type="checkbox" name="system.equipped" {{checked system.equipped}}/></label>
+        {{> "systems/foundry-fe2/templates/partial-item-tabs-nav.html"}}
+
+        <div class="tab" data-group="primary" data-tab="details">
+          <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Description"}}</h3>
+          <prose-mirror button="true" toggled="true" name="system.description" value="{{system.description}}">{{{enrichedDescription}}}</prose-mirror>
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="system">
+          <ul class="fe2-system-fields">
+            <li class="flexrow"><label class="generic-label">{{localize "FE2.Stats.Equipment.Acquire"}}</label>
+              {{numericStepper name="system.acquire" value=system.acquire min=0}}
             </li>
-            <li class="flexrow"><label class="generic-label">Weight</label>
-              <input type="text" name="data.weight" value="{{system.weight}}" data-dtype="Number"/>
-            </li>
-            <li class="flexrow"><label class="generic-label">Cost</label>
-              <input type="text" name="data.cost" value="{{system.cost}}" data-dtype="Number"/>
+            <li class="flexrow"><label class="generic-label">{{localize "FE2.Stats.Equipment.Resource"}}</label>
+              {{numericStepper name="system.resource" value=system.resource min=0}}
             </li>
           </ul>
-          <h3>Description</h3>
-          {{editor system.description target="system.description" engine="prosemirror"}}
-          
+
+          {{> "systems/foundry-fe2/templates/partial-keywords-section.html"}}
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="effects">
+          {{> "systems/foundry-fe2/templates/effects-section.html"}}
         </div>
 
     </section>
-</form>
+</div>

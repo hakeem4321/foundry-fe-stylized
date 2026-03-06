@@ -1,45 +1,53 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
-        <img class="profile-img" src="icons/svg/item-bag.svg" data-edit="img" title="{{name}}"/>
+        <img class="profile-img" src="{{img}}" data-action="editImage" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="{{localize "FE2.Sheet.Common.Name"}}"/></h1>
         </div>
     </header>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
 
-        <div class="tab" data-group="primary">
-          <ul class="carac-ul">
-            <li class="flexrow"><label class="generic-label">Type</label>
-              <select class="competence-base flexrow" type="text" name="system.type" value="{{system.type}}" data-dtype="String" disabled>
-                <option value="primary">Primary</option>
-                <option value="personalcombat">Personal Combat</option>
-                <option value="spaceshipcombat">Spaceship Combat</option>
-              </select> 
+        {{> "systems/foundry-fe2/templates/partial-item-tabs-nav.html"}}
+
+        <div class="tab" data-group="primary" data-tab="details">
+          <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Description"}}</h3>
+          <prose-mirror button="true" toggled="true" name="system.description" value="{{system.description}}">{{{enrichedDescription}}}</prose-mirror>
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="system">
+          <ul class="fe2-system-fields">
+            <li class="flexrow"><label class="generic-label">{{localize "FE2.Sheet.Common.Type"}}</label>
+              <select class="competence-base" name="system.type" value="{{system.type}}" data-dtype="String" disabled>
+                <option value="primary">{{localize "FE2.Items.Types.Primary"}}</option>
+                <option value="personalcombat">{{localize "FE2.Items.Types.PersonalCombat"}}</option>
+                <option value="spaceshipcombat">{{localize "FE2.Items.Types.SpaceshipCombat"}}</option>
+              </select>
             </li>
-            <li class="flexrow"><label class="generic-label">Trained ?</label>
+            <li class="flexrow"><label class="generic-label">{{localize "FE2.Items.Skill.Trained"}}</label>
               <label class="attribute-value checkbox"><input type="checkbox" name="system.trained" {{checked system.trained}}/></label>
             </li>
-            <li class="flexrow"><label class="generic-label">Attribute Boost</label>
-              <label class="attribute-value checkbox"><input type="text" name="foo" value="{{system.attribute}}" data-dtype="Number" disabled/></label>
+            <li class="flexrow"><label class="generic-label">{{localize "FE2.Items.Skill.AttributeBoost"}}</label>
+              <label class="attribute-value"><input type="text" name="foo" value="{{system.attribute}}" data-dtype="Number" disabled/></label>
             </li>
-            <li class="flexrow"><label class="generic-label">Static Modifier</label>
-              <label class="attribute-value checkbox"><input type="text" name="system.staticmod" value="{{system.staticmod}}" data-dtype="Number"/></label>
+            <li class="flexrow"><label class="generic-label">{{localize "FE2.Items.Skill.StaticModifier"}}</label>
+              <label class="attribute-value">{{numericStepper name="system.staticmod" value=system.staticmod}}</label>
             </li>
-            <li class="flexrow"><label class="generic-label">Toolbox?</label>
+            <li class="flexrow"><label class="generic-label">{{localize "FE2.Items.Skill.Toolbox"}}</label>
               <label class="attribute-value checkbox"><input type="checkbox" name="system.toolbox" {{checked system.toolbox}}/></label>
             </li>
-            <li class="flexrow"><label class="generic-label">Workshop?</label>
+            <li class="flexrow"><label class="generic-label">{{localize "FE2.Items.Skill.Workshop"}}</label>
               <label class="attribute-value checkbox"><input type="checkbox" name="system.workshop" {{checked system.workshop}}/></label>
             </li>
           </ul>
 
-            {{> "systems/foundry-fe2/templates/skill-traits-section.html"}}
-            
-          <h3>Description</h3>
-          {{editor system.description target="system.description" engine="prosemirror"}}
+          {{> "systems/foundry-fe2/templates/skill-traits-section.html"}}
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="effects">
+          {{> "systems/foundry-fe2/templates/effects-section.html"}}
         </div>
 
     </section>
-</form>
+</div>

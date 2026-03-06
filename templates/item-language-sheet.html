@@ -1,14 +1,26 @@
-
-<form class="{{cssClass}}" autocomplete="off">
+<div class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
-        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <img class="profile-img" src="{{img}}" data-action="editImage" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="{{localize "FE2.Sheet.Common.Name"}}"/></h1>
         </div>
     </header>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
 
+        {{> "systems/foundry-fe2/templates/partial-item-tabs-nav.html"}}
+
+        <div class="tab" data-group="primary" data-tab="details">
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="system">
+          <p class="fe2-no-system-props">{{localize "FE2.Items.Common.NoSystemProperties"}}</p>
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="effects">
+          {{> "systems/foundry-fe2/templates/effects-section.html"}}
+        </div>
+
     </section>
-</form>
+</div>

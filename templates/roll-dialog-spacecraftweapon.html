@@ -1,70 +1,73 @@
-<form class="skill-roll-dialog">
+<div class="skill-roll-dialog fe2-roll-dialog">
   <h2 class="dialog-roll-title">{{title}}</h2>
 
-  <div class="floxrow">
+  <div class="flexcol">
     <div class="flexrow">
-      <span class="competence-base flexrow" >Hit bonus : {{weapon.system.statstotal.hit.value}}</span>
-      <span class="competence-base flexrow" >Rate of Fire : {{rofValue}}</span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitBonus"}} : {{weapon.system.statstotal.hit.value}}</span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.RateOfFire"}} : {{rofValue}}</span>
     </div>
-    
+
     {{#if weaponRoFOptions}}
     <div class="flexrow">
-      <span class="competence-base flexrow" >Rate of Fire : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.RateOfFire"}} : </span>
       <select class="competence-base flexrow" type="text" id="rof" name="rof" value="rofValue" data-dtype="Number">
-        {{#select rofValue}}
-          {{#each weaponRoFOptions as |rof idx|}}
-          <option value="{{idx}}">{{rof}}</option>
-          {{/each}}
-        {{/select}}
-      </select> 
+        {{selectOptions weaponRoFOptions selected=rofValue}}
+      </select>
     </div>
     {{/if}}
 
     <div class="flexrow">
-      <span class="competence-base flexrow" >Skill to use : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.SkillToUse"}} : </span>
       <select class="competence-base flexrow" type="text" id="skill-spacecraft" name="skill" value="skill" data-dtype="String">
-        {{#select skill}}
-          {{#each actorList as |actor key|}}
-            {{#each actor.skills as |skill key|}}
-            <option value="{{skill.id}}">{{actor.name}} - {{skill.name}} ({{skill.system.total}})</option>
-            {{/each}}
-          {{/each}}
-        {{/select}}
-      </select> 
+        {{selectOptions spacecraftSkillChoices selected=skillId}}
+      </select>
     </div>
 
     <div class="flexrow">
-      <span class="competence-base flexrow" >Bonus/Malus : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.BonusMalus"}} : </span>
       <select class="competence-base flexrow" type="text" id="bonusMalus" name="bonusMalus" value="bonusMalus" data-dtype="Number">
-        {{#select bonusMalus}}
-        {{{optionsBonusMalus}}}
-        {{/select}}
+        {{selectOptions optionsBonusMalus selected=bonusMalus}}
       </select>
     </div>
     <div class="flexrow">
-      <span class="competence-base flexrow" >Hit Dice Modifier : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitDiceModifier"}} : </span>
       <select class="competence-base flexrow" type="text" id="bMHitDice" name="bMHitDice" value="bMHitDice" data-dtype="Number">
-        {{#select bMHitDice}}
-        {{{optionsBonusMalus}}}
-        {{/select}}
+        {{selectOptions optionsBonusMalus selected=bMHitDice}}
       </select>
     </div>
     <div class="flexrow">
       <span class="competence-base flexrow">
-        {{#ifThen (ne munitions "0") "" "Munitions zero, chamber is empty!"}}{{/ifThen}}
+        {{#ifThen (ne munitions "0") "" (localize "FE2.Roll.Labels.MunitionsEmpty")}}{{/ifThen}}
       </span>
     </div>
 
     <div class="flexrow">
       <span class="competence-base flexrow">
-        <label class="generic-label">Use munitions ({{munitions}}) ?</label>
-        <label class="attribute-value checkbox"><input type="text" id="munitionsUsed" class="input-numeric-short padd-right" name="munitionsUsed" value="0" data-dtype="Number"/>
+        <label class="generic-label">{{localize "FE2.Roll.Labels.UseMunitions"}} ({{munitions}}) ?</label>
+        <label class="attribute-value checkbox"><input type="text" id="munitionsUsed" class="input-numeric-short fe2-stat-input padd-right" name="munitionsUsed" value="0" data-dtype="Number"/>
       </span>
     </div>
 
-    <h3>Stats</h3>
-    {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=weapon.system.statstotal isfinal=false title="Final stats reminder" header=true}}
+    {{> "systems/foundry-fe2/templates/partials/roll-conditional-effects.html"}}
+
+    <div class="fe2-weapon-summary-dialog">
+      <div class="fe2-weapon-summary-header">
+        <span>{{localize "FE2.Stats.Spacecraft.HitDice"}}</span>
+        <span>{{localize "FE2.Stats.Spacecraft.HitBonus"}}</span>
+        <span>{{localize "FE2.Stats.Spacecraft.ShieldDamage"}}</span>
+        <span>{{localize "FE2.Stats.Spacecraft.CriticalDamage"}}</span>
+        <span>{{localize "FE2.Stats.Spacecraft.RangeIncrement"}}</span>
+      </div>
+      <div class="fe2-weapon-summary-values">
+        <span>{{weapon.system.statstotal.hitdice.value}}</span>
+        <span>{{weapon.system.statstotal.hit.value}}</span>
+        <span>{{weapon.system.statstotal.shielddmg.value}}</span>
+        <span>{{weapon.system.statstotal.crit.value}}</span>
+        <span>{{weapon.system.statstotal.range.value}}</span>
+      </div>
+      {{> "systems/foundry-fe2/templates/partial-item-keywords-row.html" keywords=weapon.system.keywords}}
+    </div>
 
   </div>
-  
-</form>
+
+</div>

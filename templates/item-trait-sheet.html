@@ -1,43 +1,44 @@
-
-<form class="{{cssClass}}" autocomplete="off">
+<div class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
-        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <img class="profile-img" src="{{img}}" data-action="editImage" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="{{localize "FE2.Sheet.Common.Name"}}"/></h1>
         </div>
     </header>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
 
-        <div class="tab" data-group="primary">
-          <ul>
-            <li class="flexrow"><label class="item-sheet-label">Type</label>
-              <select class="competence-base flexrow" type="text" name="system.type" value="{{system.type}}" data-dtype="String">
-                {{#select system.type}}
-                <option value="advancement">Advancement</option>
-                <option value="attribute">Attribute</option>
-                <option value="primaryskill">Primary Skill</option>
-                <option value="personalcombat">Personal Combat</option>
-                <option value="spaceshipcombat">Spaceship Combat</option>
-                <option value="npc">NPC</option>
-                {{/select}}
-              </select> 
+        {{> "systems/foundry-fe2/templates/partial-item-tabs-nav.html"}}
+
+        <div class="tab" data-group="primary" data-tab="details">
+          <h3 class="fe2-section-header">{{localize "FE2.Items.Common.Requirements"}}</h3>
+          <div class="small-editor item-text-long-line">
+            <prose-mirror button="true" toggled="true" name="system.requirements" value="{{system.requirements}}">{{{enrichedRequirements}}}</prose-mirror>
+          </div>
+          <h3 class="fe2-section-header">{{localize "FE2.Items.Common.Benefits"}}</h3>
+          <div class="small-editor item-text-long-line">
+            <prose-mirror button="true" toggled="true" name="system.benefits" value="{{system.benefits}}">{{{enrichedBenefits}}}</prose-mirror>
+          </div>
+          <h3 class="fe2-section-header">{{localize "FE2.Items.Common.Disadvantages"}}</h3>
+          <div class="small-editor item-text-long-line">
+            <prose-mirror button="true" toggled="true" name="system.disadvantages" value="{{system.disadvantages}}">{{{enrichedDisadvantages}}}</prose-mirror>
+          </div>
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="system">
+          <ul class="fe2-system-fields">
+            <li class="flexrow"><label class="generic-label">{{localize "FE2.Sheet.Common.Type"}}</label>
+              <select class="competence-base" name="system.type" value="{{system.type}}" data-dtype="String">
+                {{selectOptions traitTypeChoices selected=system.type}}
+              </select>
             </li>
           </ul>
-        <div class="tab" data-group="primary">
-          <span class="generic-label"><h3>Requirements</h3></span>
-          <span class="small-editor item-text-long-line">
-            {{editor system.requirements target="system.requirements" engine="prosemirror"}}
-          </span>
-          <span class="generic-label"><h3>Benefits</h3></span>
-          <span class="small-editor item-text-long-line">
-            {{editor system.benefits target="system.benefits" engine="prosemirror"}}
-          </span>
-          <span class="generic-label"><h3>Disadvantages</h3></span>
-          <span class="small-editor item-text-long-line">
-            {{editor system.disadvantages target="system.disadvantages" engine="prosemirror"}}
-          </span>
         </div>
+
+        <div class="tab" data-group="primary" data-tab="effects">
+          {{> "systems/foundry-fe2/templates/effects-section.html"}}
+        </div>
+
     </section>
-</form>
+</div>

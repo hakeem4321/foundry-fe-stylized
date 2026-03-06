@@ -1,28 +1,34 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
-        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <img class="profile-img" src="{{img}}" data-action="editImage" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="{{localize "FE2.Sheet.Common.Name"}}"/></h1>
         </div>
     </header>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
 
-        <div class="tab" data-group="primary">
-          <ul>
-            <span class="generic-label"><h3>Type</h3>
-            <select class="competence-base flexrow" type="text" name="system.type" value="{{system.type}}" data-dtype="String">
-              {{#select system.type}}
-              <option value="money">Money</option>
-              <option value="loot">Loot</option>
-              <option value="freight">Freight</option>
-              {{/select}}
-            </select> </span>
+        {{> "systems/foundry-fe2/templates/partial-item-tabs-nav.html"}}
+
+        <div class="tab" data-group="primary" data-tab="details">
+          <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Description"}}</h3>
+          <prose-mirror button="true" toggled="true" name="system.description" value="{{system.description}}">{{{enrichedDescription}}}</prose-mirror>
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="system">
+          <ul class="fe2-system-fields">
+            <li class="flexrow"><label class="generic-label">{{localize "FE2.Sheet.Common.Type"}}</label>
+              <select class="competence-base" name="system.type" value="{{system.type}}" data-dtype="String">
+                {{selectOptions tradeGoodTypeChoices selected=system.type}}
+              </select>
+            </li>
           </ul>
-          <h3>Description</h3>
-          {{editor system.description target="system.description" engine="prosemirror"}}
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="effects">
+          {{> "systems/foundry-fe2/templates/effects-section.html"}}
         </div>
 
     </section>
-</form>
+</div>

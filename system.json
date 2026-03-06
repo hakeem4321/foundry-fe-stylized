@@ -25,6 +25,11 @@
       "lang": "en",
       "name": "English",
       "path": "lang/en.json"
+    },
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json"
     }
   ],
   "manifest": "https://github.com/jkknorr/foundry-fe2/releases/latest/download/system.json",
@@ -60,6 +65,27 @@
         "items"
       ],
       "type": "Item"
+    },
+    {
+      "label": "Perícias (Português)",
+      "name": "skills-pt-br",
+      "path": "./packs/skills-pt-br.db",
+      "system": "foundry-fe2",
+      "tags": [
+        "skill",
+        "pt-br"
+      ],
+      "type": "Item"
+    },
+    {
+      "label": "Keywords",
+      "name": "keywords",
+      "path": "./packs/keywords",
+      "system": "foundry-fe2",
+      "tags": [
+        "keyword"
+      ],
+      "type": "Item"
     }
   ],
   "primaryTokenAttribute": "endurance.endurance",
@@ -68,6 +94,6 @@
   "styles": ["styles/simple.css"],
   "title": "Fragged Empire 2E",
   "url": "https://gitlab.com/jkknorr/foundry-fe2",
-  "version": "1.02",
+  "version": "1.09",
   "background" : "./systems/foundry-fe2/images/ui/FE_Welcome_Page.webp"
 }

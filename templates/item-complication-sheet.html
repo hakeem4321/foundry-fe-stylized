@@ -1,33 +1,35 @@
-
-<form class="{{cssClass}}" autocomplete="off">
+<div class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
-        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <img class="profile-img" src="{{img}}" data-action="editImage" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="{{localize "FE2.Sheet.Common.Name"}}"/></h1>
         </div>
     </header>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
 
-        <div class="tab" data-group="primary">
-          <ul>
-            <li class="flexrow"><label class="generic-label">Type</label>
-              <select class="competence-base flexrow" type="text" name="data.type" value="{{data.type}}" data-dtype="String">
-                {{#select data.type}}
-                <option value="enemy">Enemy</option>
-                <option value="bounty">Bounty</option>
-                <option value="prejudice">Prejudice</option>
-                <option value="reputation">Reputation</option>
-                <option value="condition">Condition</option>
-                {{/select}}
-              </select> 
-              </li>      
-            <li class="flexrow"><label class="generic-label">Influence level</label>
-              <input type="text" name="data.influence" value="{{data.influence}}" data-dtype="String"/>
+        {{> "systems/foundry-fe2/templates/partial-item-tabs-nav.html"}}
+
+        <div class="tab" data-group="primary" data-tab="details">
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="system">
+          <ul class="fe2-system-fields">
+            <li class="flexrow"><label class="generic-label">{{localize "FE2.Sheet.Common.Type"}}</label>
+              <select class="competence-base" name="system.type" value="{{system.type}}" data-dtype="String">
+                {{selectOptions complicationTypeChoices selected=system.type}}
+              </select>
+            </li>
+            <li class="flexrow"><label class="generic-label">{{localize "FE2.Items.Complication.InfluenceLevel"}}</label>
+              <input type="text" name="system.influence" value="{{system.influence}}" data-dtype="String"/>
             </li>
           </ul>
         </div>
 
+        <div class="tab" data-group="primary" data-tab="effects">
+          {{> "systems/foundry-fe2/templates/effects-section.html"}}
+        </div>
+
     </section>
-</form>
+</div>

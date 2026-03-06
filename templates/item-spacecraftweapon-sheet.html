@@ -1,58 +1,40 @@
-<form class="{{cssClass}}" autocomplete="off">
+<div class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
-        <img class="profile-img" src="{{img}}" data-edit="img" title="{{name}}"/>
+        <img class="profile-img" src="{{img}}" data-action="editImage" data-edit="img" title="{{name}}"/>
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="Name"/></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{name}}" placeholder="{{localize "FE2.Sheet.Common.Name"}}"/></h1>
         </div>
     </header>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
 
-        <div class="tab" data-group="primary">
-          
+        {{> "systems/foundry-fe2/templates/partial-item-tabs-nav.html"}}
+
+        <div class="tab" data-group="primary" data-tab="details">
+          <h3 class="fe2-section-header">{{localize "FE2.Sheet.Common.Description"}}</h3>
+          <prose-mirror button="true" toggled="true" name="system.description" value="{{system.description}}">{{{enrichedDescription}}}</prose-mirror>
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="system">
+          {{> "systems/foundry-fe2/templates/partial-keywords-section.html"}}
+
           {{> "systems/foundry-fe2/templates/variations-section.html"}}
           {{> "systems/foundry-fe2/templates/modifications-section.html"}}
+          {{> "systems/foundry-fe2/templates/partial-stronghits-section.html"}}
 
-          <h3> Keywords</h3>
-          <div class="grid grid-3col">
-            {{#each keywords as |keywordArray key|}}
-            <div>
-              <ul>
-                {{#each keywordArray as |keyword key|}}
-                <li class="item-list item flexrow stack-left">
-                  <input type="checkbox" name="system.keywords.{{keyword.key}}.flag" {{checked keyword.flag}}/>
-                  <label class="generic-label keyword-label packed-left">{{keyword.label}}</label>
-                  {{#if keyword.X}}
-                    <input type="text" class="input-numeric-short padd-right" name="system.keywords.{{keyword.key}}.X" value="{{keyword.X}}" data-dtype="String"/>
-                  {{/if}}
-                  {{#if keyword.Y}}
-                    {{#if keyword.labelY}}
-                    <label class="generic-label keyword-label  packed-left">{{keyword.labelY}}</label>
-                    {{/if}}
-                    <input type="text" class="input-numeric-short padd-right" name="system.keywords.{{keyword.key}}.Y" value="{{keyword.Y}}" data-dtype="String"/>
-                  {{/if}}
-                </li>
-                {{/each}}
-              </ul>
-            </div>
-            {{/each}}
-          </div>
-
-
-          <h3>Stats</h3>
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=system.statstotal isfinal=true title="Final stats" header=true}}
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=system.stats  isbase=true title="Weapon stats"}}
+          {{> "systems/foundry-fe2/templates/partial-item-stats-vertical.html" stats=system.stats statstotal=system.statstotal dualMode=true title=(localize "FE2.Items.Common.Stats")}}
           {{#each system.variations as |variation key|}}
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=variation.system.stats  isfinal=false title="Variation" subtitle=variation.name}}
+          {{> "systems/foundry-fe2/templates/partial-item-stats-vertical.html" stats=variation.system.stats readonly=true title=(localize "FE2.Items.Common.Variation") subtitle=variation.name}}
           {{/each}}
           {{#each system.modifications as |modification key|}}
-          {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=modification.system.stats  isfinal=false title="Modification" subtitle=modification.name}}
+          {{> "systems/foundry-fe2/templates/partial-item-stats-vertical.html" stats=modification.system.stats readonly=true title=(localize "FE2.Items.Common.Modification") subtitle=modification.name}}
           {{/each}}
-        
-          <h3>Description</h3>
-          {{editor system.description target="system.description" engine="prosemirror"}}
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="effects">
+          {{> "systems/foundry-fe2/templates/effects-section.html"}}
         </div>
 
     </section>
-</form>
+</div>

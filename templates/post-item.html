@@ -1,35 +1,35 @@
-<div class="post-item" data-transfer="{{transfer}}">
+<div class="post-item fe2-chat-card" data-transfer="{{transfer}}">
   <h3><b>{{name}}</b></h3>
   {{#if img}}
   <img class="chat-img" src="{{img}}" title="{{name}}" />
   {{/if}}
   
-  {{#if data.statstotal}}
-    {{> "systems/foundry-fe2/templates/weapon-stats-section-tchat.html" stats=data.statstotal isfinal=false title="" header=true}}
+  {{#if system.statstotal}}
+    {{> "systems/foundry-fe2/templates/weapon-stats-section-tchat.html" stats=system.statstotal isfinal=false title="" header=true}}
   {{else}}
-    {{#if data.stats}}
-    {{> "systems/foundry-fe2/templates/weapon-stats-section-tchat.html" stats=data.stats isfinal=false title="" header=true}}
+    {{#if system.stats}}
+    {{> "systems/foundry-fe2/templates/weapon-stats-section-tchat.html" stats=system.stats isfinal=false title="" header=true}}
     {{/if}}
   {{/if}}
   
-  {{#if data.requirements}}
-  <h4><b>Requirements : </b></h4>
-  <p class="card-content">{{{data.requirements}}}</p>
+  {{#if system.requirements}}
+  <h4><b>{{localize "FE2.Items.Common.Requirements"}} : </b></h4>
+  <p class="card-content">{{{system.requirements}}}</p>
   {{/if}}
 
-  {{#if data.disadvantages}}
-  <h4><b>Disadvantages : </b></h4>
-  <p class="card-content">{{{data.disadvantages}}}</p>
+  {{#if system.disadvantages}}
+  <h4><b>{{localize "FE2.Items.Common.Disadvantages"}} : </b></h4>
+  <p class="card-content">{{{system.disadvantages}}}</p>
   {{/if}}
 
-  {{#if data.benefits}}
-  <h4><b>Benefits : </b></h4>
-  <p class="card-content">{{{data.benefits}}}</p>
+  {{#if system.benefits}}
+  <h4><b>{{localize "FE2.Items.Common.Benefits"}} : </b></h4>
+  <p class="card-content">{{{system.benefits}}}</p>
   {{/if}}
 
-  {{#if (ne data.description "")}}
-  <h4><b>Description : </b></h4>
-  <p class="card-content">{{{data.description}}}</p>
+  {{#if (ne system.description "")}}
+  <h4><b>{{localize "FE2.Sheet.Common.Description"}} : </b></h4>
+  <p class="card-content">{{{system.description}}}</p>
   {{/if}}
 
 </div>

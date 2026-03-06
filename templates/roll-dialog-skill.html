@@ -1,65 +1,49 @@
-<form class="skill-roll-dialog">
+<div class="skill-roll-dialog fe2-roll-dialog">
   <h2 class="dialog-roll-title">{{title}}</h2>
 
-  <div class="floxrow">
+  <div class="flexcol">
     <div class="flexrow">
-      <span class="competence-base flexrow" >{{#if skill.system.trained}}Trained (+1){{else}}Not Trained (-2){{/if}}</span>
-      <span class="competence-base flexrow" >Bonus : {{skill.system.bonus}}</span>
-      <span class="competence-base flexrow" ><strong>Total : {{skill.system.total}}</strong></span>
+      <span class="competence-base flexrow" >{{#if skill.system.trained}}{{localize "FE2.Roll.Labels.Trained"}}{{else}}{{localize "FE2.Roll.Labels.NotTrained"}}{{/if}}</span>
+      <span class="competence-base flexrow" >{{localize "FE2.Sheet.Common.Bonus"}} : {{skill.system.bonus}}</span>
+      <span class="competence-base flexrow" ><strong>{{localize "FE2.Sheet.Common.Total"}} : {{skill.system.total}}</strong></span>
     </div>
 
-    <h3>Available tools : </h3>
+    <h3>{{localize "FE2.Roll.Labels.AvailableTools"}} : </h3>
     <div class="flexrow">
-      <label class="generic-label">Toolbox ?</label>
+      <label class="generic-label">{{localize "FE2.Roll.Labels.Toolbox"}}</label>
       <label class="attribute-value checkbox"><input type="checkbox" name="skill.system.toolbox" {{checked skill.system.toolbox}} disabled/></label>
-      <label class="generic-label">Workshop ?</label>
+      <label class="generic-label">{{localize "FE2.Roll.Labels.Workshop"}}</label>
       <label class="attribute-value checkbox"><input type="checkbox" name="skill.system.workshop" {{checked skill.system.workshop}} disabled/></label>
     </div>
 
     {{#if toolsAvailable}}
-    <h3>Apply Tools Bonus : </h3>
+    <h3>{{localize "FE2.Roll.Labels.ApplyToolsBonus"}} : </h3>
     <div class="flexrow">
-      {{#if skill.system.toolbox}}
-      <label class="generic-label">Apply Toolbox bonus (+1) ?</label>
+      {{#if hasToolbox}}
+      <label class="generic-label">{{localize "FE2.Roll.Labels.ApplyToolboxBonus"}}</label>
       <label class="attribute-value checkbox"><input type="checkbox" id="useToolbox" name="useToolbox" {{checked useToolbox}}/></label>
       {{/if}}
-      {{#if skill.system.dedicatedworkshop}}
-      <label class="generic-label">Apply Dedicated Workshop bonus (+2) ?</label>
+      {{#if hasWorkshop}}
+      <label class="generic-label">{{localize "FE2.Roll.Labels.ApplyDedicatedWorkshopBonus"}}</label>
       <label class="attribute-value checkbox"><input type="checkbox" id="useDedicatedworkshop" name="useDedicatedworkshop" {{checked useDedicatedworkshop}}/></label>
       {{/if}}
     </div>
     {{/if}}
 
     <div class="flexrow">
-      <span class="competence-base flexrow" >Bonus/Malus : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.BonusMalus"}} : </span>
       <select class="competence-base flexrow" type="text" id="bonusMalus" name="bonusMalus" value="bonusMalus" data-dtype="Number">
-        <option value="6">6</option>
-        <option value="5">5</option>
-        <option value="4">4</option>
-        <option value="3">3</option>
-        <option value="2">2</option>
-        <option value="1">1</option>
-        <option value="0" selected>0</option>
-        <option value="-1">-1</option>
-        <option value="-2">-2</option>
-        <option value="-3">-3</option>
-        <option value="-4">-4</option>
-        <option value="-5">-5</option>
-        <option value="-6">-6</option>
-      </select> 
+        {{selectOptions optionsBonusMalus selected=bonusMalus}}
+      </select>
     </div>
 
     <div class="flexrow">
-      <span class="competence-base flexrow" >Difficulty : </span>
-      <select class="competence-base flexrow" type="text" id="difficulty" name="difficulty" value="difficulty" data-dtype="Number">
-        <option value="0">None (0)</option>
-        <option value="8">Easy (8)</option>
-        <option value="12">Moderate (12)</option>
-        <option value="16">Difficult (16)</option>
-        <option value="18">Very Difficult (18)</option>
-      </select> 
+      <label class="generic-label">{{localize "FE2.Roll.Labels.ArcaneRoll"}}</label>
+      <label class="attribute-value checkbox"><input type="checkbox" id="isArcane" name="isArcane"/></label>
     </div>
 
+    {{> "systems/foundry-fe2/templates/partials/roll-conditional-effects.html"}}
+
   </div>
-  
-</form>
+
+</div>

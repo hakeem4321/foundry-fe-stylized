@@ -1,66 +1,58 @@
-<form class="skill-roll-dialog">
+<div class="skill-roll-dialog fe2-roll-dialog">
   <h2 class="dialog-roll-title">{{title}}</h2>
 
-  <div class="floxrow">
+  <div class="flexcol">
     <div class="flexrow">
-      <span class="competence-base flexrow" >Hit bonus : {{weapon.system.statstotal.hit.value}}  Range penalty: {{rangepenalty}}</span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitBonus"}} : {{weapon.system.statstotal.hit.value}}</span>
     </div>
-    
+
+    {{#if weaponSkillChoices}}
     <div class="flexrow">
-      <span class="competence-base flexrow" >Skill to use : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.SkillToUse"}} : </span>
       <select class="competence-base flexrow" type="text" id="skillId" name="skillId" value="skillId" data-dtype="String">
-        {{#select skillId}}
-          {{#each weaponSkills as |skill key|}}
-          <option value="{{skill.id}}">{{skill.name}} ({{skill.system.total}})</option>
-          {{/each}}
-        {{/select}}
-      </select> 
+        {{selectOptions weaponSkillChoices selected=skillId}}
+      </select>
     </div>
+    {{/if}}
 
     <div class="flexrow">
-      <span class="competence-base flexrow" >Bonus/Malus : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.BonusMalus"}} : </span>
       <select class="competence-base flexrow" type="text" id="bonusMalus" name="bonusMalus" value="bonusMalus" data-dtype="Number">
-        {{#select bonusMalus}}
-          {{{optionsBonusMalus}}}
-        {{/select}}
-      </select> 
+        {{selectOptions optionsBonusMalus selected=bonusMalus}}
+      </select>
     </div>
 
     <div class="flexrow">
-      <span class="competence-base flexrow" >Hit Dice Modifier : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.HitDiceModifier"}} : </span>
       <select class="competence-base flexrow" type="text" id="bMHitDice" name="bMHitDice" value="bMHitDice" data-dtype="Number">
-        {{#select bMHitDice}}
-        {{{optionsBonusMalus}}}
-        {{/select}}
+        {{selectOptions optionsBonusMalus selected=bMHitDice}}
       </select>
     </div>
 
     <div class="flexrow">
       <span class="competence-base flexrow">
-        {{#ifThen (ne weapon.system.munitions "0") "" "Munitions zero, chamber is empty!"}}{{/ifThen}}
+        {{#ifThen (ne weapon.system.munitions "0") "" (localize "FE2.Roll.Labels.MunitionsEmpty")}}{{/ifThen}}
       </span>
     </div>
 
     <div class="flexrow">
       <span class="competence-base flexrow">
-        <label class="generic-label">Use munitions ({{weapon.system.munitions}}) ?</label>
+        <label class="generic-label">{{localize "FE2.Roll.Labels.UseMunitions"}} ({{weapon.system.munitions}}) ?</label>
         <label class="attribute-value checkbox"><input type="checkbox" id="useMunitions" name="useMunitions" {{checked useMunitions}}/></label>
       </span>
     </div>
 
     <div class="flexrow">
-      <span class="competence-base flexrow" >Cover : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.Cover"}} : </span>
       <select class="competence-base flexrow" type="text" id="cover" name="cover" value="cover" data-dtype="Number">
-        <option value="0">No Cover</option>
-        <option value="1">Light Cover</option>
-        <option value="2">Heavy Cover</option>
-        <option value="3">Entrenched Cover</option>
-      </select> 
+        {{selectOptions coverChoices selected=cover}}
+      </select>
     </div>
 
-    <h3>Stats</h3>
-    {{> "systems/foundry-fe2/templates/weapon-stats-section.html" stats=weapon.system.statstotal isfinal=false title="Final stats reminder" header=true}}
+    {{> "systems/foundry-fe2/templates/partials/roll-conditional-effects.html"}}
+
+    {{> "systems/foundry-fe2/templates/partial-weapon-summary-dialog.html" weapon=weapon}}
 
   </div>
-  
-</form>
+
+</div>

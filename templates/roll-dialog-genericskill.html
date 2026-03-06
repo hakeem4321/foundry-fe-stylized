@@ -1,17 +1,17 @@
-<form class="skill-roll-dialog">
+<div class="skill-roll-dialog fe2-roll-dialog">
   <h2 class="dialog-roll-title">{{title}}</h2>
 
-  <div class="floxrow">
+  <div class="flexcol">
 
     <div class="flexrow">
-      <span class="competence-base flexrow" >Bonus/Malus : </span>
+      <span class="competence-base flexrow" >{{localize "FE2.Roll.Labels.BonusMalus"}} : </span>
       <select class="competence-base flexrow" type="text" id="bonusMalus" name="bonusMalus" value="bonusMalus" data-dtype="Number">
-        {{#select bonusMalus}}
-        {{{optionsBonusMalus}}}
-        {{/select}}
-      </select> 
+        {{selectOptions optionsBonusMalus selected=bonusMalus}}
+      </select>
     </div>
 
+    {{> "systems/foundry-fe2/templates/partials/roll-conditional-effects.html"}}
+
   </div>
-  
-</form>
+
+</div>

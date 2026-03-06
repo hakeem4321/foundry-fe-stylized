@@ -3,11 +3,11 @@
 {{/if}}
 
 <div class="stats-table">
-  <table class="stats-table">
+  <table class="stats-table fe2-stat-table">
     {{#if header}}
     <tr>
       {{#each stats as |stat key|}}
-        <td>{{stat.label}}</td>
+        <td>{{localize stat.label}}</td>
       {{/each}}
     </tr>
     {{/if}}
