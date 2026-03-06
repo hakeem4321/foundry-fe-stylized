@@ -178,6 +178,12 @@ export class FraggedEmpireUtility  {
     console.log(rollData)
     let skillLevel = rollData.skill?.system.total ||  0;
     let nbDice = 3;
+    let actor = game.actors.get(rollData.actorId);
+    let actorToken = actor.getActiveTokens()[0];
+    if (rollData.target) {
+      let targetToken = rollData.target.getActiveTokens()[0];
+      console.log(actorToken,targetToken)
+    }
 
     // Bonus/Malus total
     rollData.weaponHit = 0;
@@ -227,6 +233,7 @@ export class FraggedEmpireUtility  {
       rollData.rollTotal += Number(myRoll.dice[0].results[i].result); // Update result
     }
     rollData.rollTotal += Number(rollData.weaponHit) + Number(rollData.finalBM) + Number(skillLevel);
+    rollData.rollTotal = rollData.rollTotal - rollData.rangepenalty
 
     // Stockage resultats
     rollData.nbStrongHit = nbStrongHit;
@@ -252,6 +259,8 @@ export class FraggedEmpireUtility  {
     console.log("ROLLLL!!!!", rollData);
 
     let actor = game.actors.get(rollData.actorId);
+    
+    
     switch (actor.type) {
       case "npc":
         rollData.endDmgAdd = Number(actor.system.stats.Attribute.value)
@@ -319,7 +328,8 @@ export class FraggedEmpireUtility  {
           actor.updateShipMunitions(rollData.actorId,rollData.munitionsUsed)
           actor.update
         } else {
-          actor.updateWeaponMunitions(rollData.weapon._id,rollData.munitionsUsed)
+          console.log("munitionsUsed",rollData,rollData.munitionsUsed)
+          actor.updateWeaponMunitions(rollData.weapon._id, rollData.weapon.system.munitions - rollData.munitionsUsed)
           actor.update
         }
       }

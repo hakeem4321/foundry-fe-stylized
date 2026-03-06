@@ -76,8 +76,9 @@ export class FraggedEmpireRoll extends Dialog {
     html.find('#useToolbox').change((event) => {
       this.rollData.useToolbox = event.currentTarget.value == "on";
     });
-    html.find('#munitionsUsed').change((event) => {
-      this.rollData.munitionsUsed = Number(event.currentTarget.value);
+    html.find('#useMunitions').change((event) => {
+      console.log(Number(event.currentTarget.checked))
+      this.rollData.munitionsUsed = Number(event.currentTarget.checked);
     });
     html.find('#cover').change((event) => {
       this.rollData.cover = Number(event.currentTarget.value);

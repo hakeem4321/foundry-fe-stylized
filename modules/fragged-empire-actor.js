@@ -279,6 +279,7 @@ export class FraggedEmpireActor extends Actor {
   async updateWeaponMunitions(weaponId, newValue) {
     let item = this.items.find( item => item._id == weaponId );
     let update = { _id: item.id, "system.munitions": newValue  };
+    console.log("Munitions update",newValue,update)
     await this.updateEmbeddedDocuments('Item',[update]);
   }
 
@@ -716,6 +717,9 @@ export class FraggedEmpireActor extends Actor {
       ui.notifications.error("Target not found!  You must have a target before firing a weapon.");
       return
     }
+    const shotdistance = canvas.grid.measurePath([this.getActiveTokens()[0].center, target.actor.getActiveTokens()[0].center]).distance;
+    const rangepenalty = (Math.ceil(shotdistance / weapon.system.statstotal.range.value) - 1) * 2;
+    console.log('Range penalty is',rangepenalty)
     console.log("WEAPON :", weaponId, weapon );
     console.log("TARGET", target.actor)
     
@@ -745,6 +749,7 @@ export class FraggedEmpireActor extends Actor {
         intmod: 0,
         optionsBonusMalus: FraggedEmpireUtility.buildListOptions(-6, +6),
         bonusMalus: 0,
+        rangepenalty: rangepenalty,
         optionsDifficulty: FraggedEmpireUtility.buildDifficultyOptions( )
       }
       // Add skill for character only
