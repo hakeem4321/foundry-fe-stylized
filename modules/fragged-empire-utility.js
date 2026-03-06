@@ -321,6 +321,12 @@ export class FraggedEmpireUtility  {
 
     let skillLevel = rollData.skill?.system.total ||  0;
     let nbDice = 3;
+    let actor = game.actors.get(rollData.actorId);
+    let actorToken = actor.getActiveTokens()[0];
+    if (rollData.target) {
+      let targetToken = rollData.target.getActiveTokens()[0];
+      console.log(actorToken,targetToken)
+    }
 
     // Apply skill effect modifiers
     if (rollData.effectModifiers) {
@@ -397,6 +403,7 @@ export class FraggedEmpireUtility  {
       rollData.rollTotal += Number(myRoll.dice[0].results[i].result); // Update result
     }
     rollData.rollTotal += Number(rollData.weaponHit) + Number(rollData.finalBM) + Number(skillLevel);
+    rollData.rollTotal = rollData.rollTotal - rollData.rangepenalty
 
     // Stockage resultats
     rollData.nbStrongHit = nbStrongHit;
@@ -407,6 +414,8 @@ export class FraggedEmpireUtility  {
       rollData.strongHitAvailable = true;
     }
     let actor = game.actors.get(rollData.actorId);
+    
+    
     switch (actor.type) {
       case "npc":
         rollData.endDmgAdd = Number(actor.system.stats.Attribute.value)
